@@ -58,21 +58,21 @@ void road::iterate()
 	// скопировать дороги
 	copy_roads();
 	// итерировать все машины
-	for(int i = 0; i < rw; i++)
-		for(int j = 0; j < rl;)
+	for(int i = 0; i < rl; i++)
+		for(int j = 0; j < rw; j++)
 //	for(int i = rw - 1; i >= 0; i--)
 //		for(int j = rl - 1; j >= 0;)
 		{
-			if(temp_roaddata[i][j].is_occupied()) // если ячейка занята
+			if(temp_roaddata[j][i].is_occupied()) // если ячейка занята
 			{
-				vehicle_ptr veh = temp_roaddata[i][j].get_vehicle();
+				vehicle_ptr veh = temp_roaddata[j][i].get_vehicle();
 				stat_data->update_avg_speed(veh->get_kmh_velocity());
 				veh->update_velocity(velocity_limit);
-				drive(veh, i, j);
-				j += veh->get_length();
+				drive(veh, j, i);
+//				j += veh->get_length();
 //				j -= veh->get_length();
 			}
-			else j++;
+//			else j++;
 //			else j--;
 		}
 
@@ -320,15 +320,15 @@ void road::release_vehicles_source()
 bool road::has_free_space(short len, short velocity, COORD *coord)
 {
 	bool source_empty = vehicles_source.empty();
-	for(int i = 0; i < rw; i++)
-		if(has_free_space_at_lane(roaddata ,i, len, velocity, coord))
-			return true && source_empty;
-	return false && source_empty;
+		for(int i = 0; i < rw; i++)
+			if(has_free_space_at_lane(temp_roaddata ,i, len, velocity, coord))
+				return true && source_empty;
+		return false && source_empty;
 }
 
 bool road::has_free_space_at_lane(cell** &data, int lane, short len, short velocity, COORD *coord)
 {
-	for(int j = 0; j <= len && j < rl; j++)
+	for(int j = 0; j <= len && j < rl - velocity; j++)
 	{
 		if(!data[lane][j].is_occupied())
 		{
@@ -342,12 +342,14 @@ bool road::has_free_space_at_lane(cell** &data, int lane, short len, short veloc
 						coord->y = j+vel_t;
 						coord->x = lane;
 					}
-					else return true;
+					else
+					{
+						return !roaddata[lane][coord->y].is_occupied();
+					}
+
 					vel_t++;
 				}
-//				coord->y = j;
-//				coord->x = lane;
-				return true;
+				return !roaddata[lane][coord->y].is_occupied();
 			}
 		}
 		else
@@ -355,16 +357,6 @@ bool road::has_free_space_at_lane(cell** &data, int lane, short len, short veloc
 	}
 	return false;
 }
-
-bool road::has_free_space_temp(short len, short velocity, COORD *coord)
-{
-	bool source_empty = vehicles_source.empty();
-	for(int i = 0; i < rw; i++)
-		if(has_free_space_at_lane(temp_roaddata ,i, len, velocity, coord))
-			return true && source_empty;
-	return false && source_empty;
-}
-
 
 road::~road()
 {

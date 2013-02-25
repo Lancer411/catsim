@@ -29,8 +29,8 @@ public:
 		// init parameters
 		float init_density = 0.01;
 		float step = 0.01;
-		int iteration_num = 3600;
-		int road_length = 800;
+		int iteration_num = 900;
+		int road_length = 200;
 		int lanes_num = 1;
 		// entity factories
 		road_factory roadf;
@@ -68,15 +68,6 @@ public:
 				k++;
 //				std::cout<<road;
 				roadf.iterate();
-
-				// to circle the road. constant the density
-//				cross->transfer();
-//				vehicle_ptr veh = road->pop_vehicle();
-//				while(veh!=NULL)
-//				{
-//					road->push_vehicle(veh);
-//					veh = road->pop_vehicle();
-//				}
 			}
 
 			// statistic data

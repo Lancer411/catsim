@@ -87,7 +87,6 @@ private:
 	void put_vehicle2(vehicle_ptr veh, int16 w, int16 l);
 	void init (int16 linesnum, int16 length, short limit);
 	// свободное место в начале дороги
-	bool has_free_space_temp(short len, short velocity, COORD *coord);
 	bool has_free_space(short len, short velocity, COORD *coord);
 	bool has_free_space_at_lane(cell** &data, int lane, short len, short velocity, COORD *coord);
 	// выпустить машины в очереди на дорогу (кол-во машин = кол-во полос)
