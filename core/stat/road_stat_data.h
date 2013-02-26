@@ -16,6 +16,7 @@ class road_stat_data
 	int16 road_lanes_count;				// число полос
 	int16 passed_vehicles_number;		// число машин, прошедших дорогу
 	int16 current_vehicles_number;		// текущее число машин
+	int16 current_vehicles_length;		// длина машин на дороге
 	float current_road_density;			// текущая плотность на дороге
 	float avg_road_density;				// средняя плотность
 	float avg_road_speed;				// средняя скорость за итерацию
@@ -36,9 +37,9 @@ public:
 	// вызывать когда ТС проезжает дорогу, передается время проезда дороги
 	void inc_passed_vehicles_num(int16 time);
 	// вызывать когда ТС заезжает на дорогу
-	void inc_current_vehicles_num(){current_vehicles_number++;};
+	void inc_current_vehicles_num(short veh_length);
 	// вызывать когда ТС проезжает дорогу
-	void dec_current_vehicles_num(){current_vehicles_number--;};
+	void dec_current_vehicles_num(short veh_length);
 	// вызывать для каждого ТС на дороге
 	void update_avg_speed(short speed){avg_speed_accumulator += speed;};
 

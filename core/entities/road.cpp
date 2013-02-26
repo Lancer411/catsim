@@ -58,21 +58,21 @@ void road::iterate()
 	// скопировать дороги
 	copy_roads();
 	// итерировать все машины
-	for(int i = 0; i < rl; i++)
-		for(int j = 0; j < rw; j++)
+	for(int i = 0; i < rw; i++)
+		for(int j = 0; j < rl;)
 //	for(int i = rw - 1; i >= 0; i--)
 //		for(int j = rl - 1; j >= 0;)
 		{
-			if(temp_roaddata[j][i].is_occupied()) // если ячейка занята
+			if(temp_roaddata[i][j].is_occupied()) // если ячейка занята
 			{
-				vehicle_ptr veh = temp_roaddata[j][i].get_vehicle();
+				vehicle_ptr veh = temp_roaddata[i][j].get_vehicle();
 				stat_data->update_avg_speed(veh->get_kmh_velocity());
 				veh->update_velocity(velocity_limit);
-				drive(veh, j, i);
-//				j += veh->get_length();
+				drive(veh, i, j);
+				j += veh->get_length();
 //				j -= veh->get_length();
 			}
-//			else j++;
+			else j++;
 //			else j--;
 		}
 
@@ -176,7 +176,7 @@ void road::try_crossroad(vehicle_ptr veh, int i, int j)
 			return;
 		}
 		stat_data->inc_passed_vehicles_num(time_on_road);
-		stat_data->dec_current_vehicles_num();
+		stat_data->dec_current_vehicles_num(veh->get_length());
 	}
 }
 
@@ -279,7 +279,7 @@ void road::push_vehicle(vehicle_ptr veh)
 	if(has_free_space(veh->get_length(), veh->get_cell_velocity(), &coord))
 	{
 		put_vehicle2(veh, coord.x, coord.y);
-		stat_data->inc_current_vehicles_num();
+		stat_data->inc_current_vehicles_num(veh->get_length());
 	}
 	else
 		vehicles_source.push(veh);
@@ -308,7 +308,7 @@ void road::release_vehicles_source()
 		while(has_free_space_at_lane(roaddata, i, veh->get_length(), veh->get_cell_velocity(), &coord))
 		{
 			put_vehicle2(veh, coord.x, coord.y);
-			stat_data->inc_current_vehicles_num();
+			stat_data->inc_current_vehicles_num(veh->get_length());
 			vehicles_source.pop();
 			if(vehicles_source.empty())
 				return;
@@ -344,12 +344,16 @@ bool road::has_free_space_at_lane(cell** &data, int lane, short len, short veloc
 					}
 					else
 					{
-						return !roaddata[lane][coord->y].is_occupied();
+						bool already_occupied = roaddata[lane][coord->y].is_occupied()
+								||  roaddata[lane][j].is_occupied();
+						return !already_occupied;
 					}
 
 					vel_t++;
 				}
-				return !roaddata[lane][coord->y].is_occupied();
+				bool already_occupied = roaddata[lane][coord->y].is_occupied()
+												||  roaddata[lane][j].is_occupied();
+				return !already_occupied;
 			}
 		}
 		else

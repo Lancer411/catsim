@@ -31,7 +31,9 @@ public:
 		float step = 0.01;
 		int iteration_num = 900;
 		int road_length = 200;
-		int lanes_num = 1;
+		int lanes_num = 4;
+		float car_prob = 0.75,
+			  truck_prob = 0.2;
 		// entity factories
 		road_factory roadf;
 		vehicle_factory vehf;
@@ -52,7 +54,15 @@ public:
 			while (dens < density)
 			{
 				int16 init_speed = 20, max_speed = 80;
-				vehicle_type veh_type = Car;
+				vehicle_type veh_type = Bus;
+				float typerand = random::std_random();
+				if (typerand < car_prob)
+					veh_type = Car;
+				else
+					if (typerand < car_prob + truck_prob)
+						veh_type = Truck;
+					else
+						veh_type = Bus;
 				vehicle_ptr veh = vehf.create_vehicle(max_speed, init_speed, veh_type);
 				created_veh_length += veh->get_length();
 				dens = created_veh_length/(float)(road_length * lanes_num);

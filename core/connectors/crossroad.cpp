@@ -24,7 +24,7 @@ bool crossroad::transfer(road_ptr road, vehicle_ptr veh, short passed_distance)
 		veh->set_cell_velocity(veh->get_cell_velocity() - passed_distance + 1);
 		veh->reset_time_counter();
 		road->move_vehicle(veh, coord);
-		road->stat_data->inc_current_vehicles_num();
+		road->stat_data->inc_current_vehicles_num(veh->get_length());
 //		road->push_vehicle(veh);
 		return true;
 	}
