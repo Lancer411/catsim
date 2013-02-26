@@ -42,7 +42,7 @@ public:
 //		road->push_vehicle(vehf.create_vehicle(80, 20, Truck));
 
 		// initiation parameters
-		float density = 0.25;
+		float density = 0.95;
 		// fill road with vehicles to density
 		float dens = 0;
 		int16 created_veh_length = 0;
@@ -99,7 +99,7 @@ public:
 		std::cout<<"Road Flow: "<<stat->get_road_flow()<<std::endl;
 		std::cout<<"Passed Vehicles: "<<stat->get_passed_vehicles_number()<<std::endl;
 		std::cout<<"Current Vehicles: "<<stat->get_current_vehicles_number()<<std::endl<<std::endl;
-
+		std::cout<<"Avegare Passage Time: "<<stat->get_avg_road_passage_time()<<std::endl<<std::endl;
 
 	};
 };

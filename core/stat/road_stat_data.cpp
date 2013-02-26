@@ -12,7 +12,6 @@ road_stat_data::road_stat_data(int16 linesnum, int16 length)
 	road_length = length;
 	road_lanes_count = linesnum;
 	reset();
-	reset_timer();
 }
 
 void road_stat_data::update_parameters()
@@ -29,7 +28,7 @@ void road_stat_data::update_parameters()
 	if(stat_timer == stat_accumulation_time)
 	{
 		avg_road_density = density_accumulator/stat_accumulation_time;
-		avg_road_passage_time = passage_time_accumulator/passed_vehicles_number;
+		avg_road_passage_time = (float)passage_time_accumulator/ (float)passed_vehicles_number;
 		avg_road_speed_total = total_speed_accumulator/stat_accumulation_time;
 		road_flow = avg_road_density * avg_road_speed_total;
 		reset_timer();
@@ -51,13 +50,13 @@ void road_stat_data::reset_timer()
 
 void road_stat_data::reset()
 {
-
 	passed_vehicles_number = current_vehicles_number =
 	current_vehicles_length =
 	current_road_density = avg_road_density =
 	avg_road_speed = avg_road_speed_total =
 	avg_road_passage_time = road_flow = 0;
 	stat_accumulation_time = DEFAULT_STAT_ACCUMULATION_TIME;
+	reset_timer();
 }
 
 void road_stat_data::inc_current_vehicles_num(short veh_length)

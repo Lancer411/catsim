@@ -26,7 +26,7 @@ class road_stat_data
 	double density_accumulator;			// накопитель для подсчета avg_road_density
 	double avg_speed_accumulator;		// накопитель для подсчета avg_road_speed
 	double total_speed_accumulator;		// накопитель для подсчета avg_road_speed_total
-	double passage_time_accumulator;	// накопитель для подсчета avg_road_passage_time
+	long passage_time_accumulator;	// накопитель для подсчета avg_road_passage_time
 
 	long stat_accumulation_time;		// время итерации подсчета
 	long stat_timer;					// таймер итераций подсчета

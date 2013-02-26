@@ -31,21 +31,22 @@ public:
 		float step = 0.01;
 		int iteration_num = 900;
 		int road_length = 200;
-		int lanes_num = 4;
+		int lanes_num = 1;
 		float car_prob = 0.75,
 			  truck_prob = 0.2;
 		// entity factories
 		road_factory roadf;
 		vehicle_factory vehf;
 		road_ptr road = roadf.create_road(lanes_num ,road_length);
-		// set accumulation time
-		roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/4);
+
 		// init road loop
 		crossroad_ptr cross = roadf.get_crossroad(road->get_id());
 		cross->set_road_output(road);
 		// start model
 		while(init_density <= 1)
 		{
+			// set accumulation time
+			roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/4);
 			// initiation parameters
 			float density = init_density;
 			// fill road with vehicles to density
@@ -54,7 +55,7 @@ public:
 			while (dens < density)
 			{
 				int16 init_speed = 20, max_speed = 80;
-				vehicle_type veh_type = Bus;
+				vehicle_type veh_type = Car;
 				float typerand = random::std_random();
 				if (typerand < car_prob)
 					veh_type = Car;
@@ -89,7 +90,7 @@ public:
 				<<stat->get_road_flow()<<"|"
 				<<stat->get_passed_vehicles_number()<<"|"
 				<<stat->get_current_vehicles_number()<<"|"
-//				<<stat->get_avg_road_passage_time()<<"|"
+				<<stat->get_avg_road_passage_time()<<"|"
 				<<std::endl;
 
 
