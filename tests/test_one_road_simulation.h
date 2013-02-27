@@ -29,22 +29,24 @@ public:
 		// init parameters
 		float init_density = 0.01;
 		float step = 0.01;
-		int iteration_num = 900;
-		int road_length = 200;
-		int lanes_num = 1;
+		int iteration_num = 7200;
+		int road_length = 800;
+		int lanes_num = 8;
 		float car_prob = 0.75,
 			  truck_prob = 0.2;
-		// entity factories
-		road_factory roadf;
-		vehicle_factory vehf;
-		road_ptr road = roadf.create_road(lanes_num ,road_length);
 
-		// init road loop
-		crossroad_ptr cross = roadf.get_crossroad(road->get_id());
-		cross->set_road_output(road);
+
 		// start model
 		while(init_density <= 1)
 		{
+			// entity factories
+			road_factory roadf;
+			vehicle_factory vehf;
+			road_ptr road = roadf.create_road(lanes_num ,road_length);
+			// init road loop
+			crossroad_ptr cross = roadf.get_crossroad(road->get_id());
+			cross->set_road_output(road);
+
 			// set accumulation time
 			roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/4);
 			// initiation parameters
@@ -56,14 +58,14 @@ public:
 			{
 				int16 init_speed = 20, max_speed = 80;
 				vehicle_type veh_type = Car;
-				float typerand = random::std_random();
-				if (typerand < car_prob)
-					veh_type = Car;
-				else
-					if (typerand < car_prob + truck_prob)
-						veh_type = Truck;
-					else
-						veh_type = Bus;
+//				float typerand = random::std_random();
+//				if (typerand < car_prob)
+//					veh_type = Car;
+//				else
+//					if (typerand < car_prob + truck_prob)
+//						veh_type = Truck;
+//					else
+//						veh_type = Bus;
 				vehicle_ptr veh = vehf.create_vehicle(max_speed, init_speed, veh_type);
 				created_veh_length += veh->get_length();
 				dens = created_veh_length/(float)(road_length * lanes_num);
@@ -95,9 +97,9 @@ public:
 
 
 			init_density += step;
-			road->clear();
-			vehf.delete_all_vehicles();
-			stat->reset();
+//			road->clear();
+//			vehf.delete_all_vehicles();
+//			stat->reset();
 		}
 	};
 };

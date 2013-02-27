@@ -47,7 +47,8 @@ void road::free_temp_road()
 {
 	for(int i = 0; i < rw; i++)
 	{
-		delete temp_roaddata[i];
+		delete[] temp_roaddata[i];
+		temp_roaddata[i] = new cell[rl];
 	}
 }
 
@@ -241,21 +242,10 @@ void road::clear()
 		for (int j = 0; j < rl; j++)
 		{
 			roaddata[i][j].clear();
-//			temp_roaddata[i][j].clear();
+			temp_roaddata[i][j].clear();
 		}
 	}
-	while(!vehicles_source.empty())
-	{
-		vehicle_ptr veh = vehicles_source.front();
-		vehicles_source.pop();
-		veh.reset();
-	}
-	while(!vehicles_runoff.empty())
-	{
-		vehicle_ptr veh = vehicles_runoff.front();
-		vehicles_runoff.pop();
-		veh.reset();
-	}
+	free_queues();
 }
 
 void road::put_vehicle(vehicle_ptr veh, int16 w, int16 l)
@@ -362,6 +352,13 @@ bool road::has_free_space_at_lane(cell** &data, int lane, short len, short veloc
 	return false;
 }
 
+void road::free_queues()
+{
+	vehicle_queue empty;
+	std::swap(vehicles_source, empty);
+	std::swap(vehicles_runoff, empty);
+}
+
 road::~road()
 {
 	for(int i = 0; i < rw; i++)
@@ -371,4 +368,5 @@ road::~road()
 	}
 	delete[] roaddata;
 	delete[] temp_roaddata;
+	free_queues();
 }

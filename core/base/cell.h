@@ -17,7 +17,7 @@ class cell
 public:
 	cell();
 	cell(const cell &cell);
-	virtual ~cell();
+	~cell();
 
 	bool is_occupied() const{return this->occupied;};
 	vehicle_ptr get_vehicle() const {return this->vehicle;};

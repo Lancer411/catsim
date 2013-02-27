@@ -106,6 +106,8 @@ private:
 	void copy_roads();
 	// освободить временный массив
 	void free_temp_road();
+	// освободить сток и исток
+	void free_queues();
 
 	friend class crossroad;
 };
