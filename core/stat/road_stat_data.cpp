@@ -44,7 +44,7 @@ void road_stat_data::reset_timer()
 {
 	stat_timer = 0;
 	density_accumulator = passage_time_accumulator =
-	total_speed_accumulator = 0;
+	avg_speed_accumulator = total_speed_accumulator = 0;
 //	passed_vehicles_number = 0;
 }
 
