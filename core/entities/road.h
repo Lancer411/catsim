@@ -14,7 +14,6 @@
 #include "core/tools/conversion.h"
 #include "core/tools/random.h"
 #include "core/entities/vehicle.h"
-//#include "core/connectors/crossroad.h"
 #include "core/stat/road_stat_data.h"
 #include "core/stat/stat_data_handler.h"
 #include "core/tools/road_iterating_tools.h"
@@ -24,9 +23,9 @@
 typedef std::queue<vehicle_ptr> vehicle_queue;
 typedef std::set<vehicle_ptr> vehicle_set;
 
-class crossroad;
-typedef boost::shared_ptr<crossroad> crossroad_ptr;
-typedef boost::weak_ptr<crossroad> crossroad_ptr_weak;
+class connector;
+typedef boost::shared_ptr<connector> connector_ptr;
+typedef boost::weak_ptr<connector> connector_ptr_weak;
 
 class road;
 typedef boost::shared_ptr<road> road_ptr;
@@ -39,7 +38,7 @@ class road : public entity, iautomat
 	vehicle_queue vehicles_source;			// источник машин
 	vehicle_queue vehicles_runoff;			// сток машин; машина попадает в сток когда выезжает с дороги
 	road_stat_data_ptr stat_data;			// статистические данные с дороги
-	crossroad_ptr_weak crossroad;
+	connector_ptr_weak front_crossroad;
 public:
 	road(int16 linesnum, int16 length);
 	road(int16 linesnum, int16 length, short velocity_limit);
@@ -50,7 +49,7 @@ public:
 	int16 get_lane_length() const {return rl;};
 	short get_velocity_limit() const {return velocity_limit;};
 	void set_velocity_limit(short limit){velocity_limit = limit;};
-	void set_crossroad(crossroad_ptr cross){ crossroad = cross; };
+	void set_connector(connector_ptr cross){ front_crossroad = cross; };
 	void push_vehicle(vehicle_ptr veh);
 	vehicle_ptr pop_vehicle();
 	int get_source_size(){return vehicles_source.size();};

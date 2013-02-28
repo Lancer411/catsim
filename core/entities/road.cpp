@@ -156,7 +156,7 @@ bool road::change_lanes(vehicle_ptr veh, int i, int j, COORD &coord)
 
 void road::try_crossroad(vehicle_ptr veh, int i, int j)
 {
-	crossroad_ptr cr = crossroad.lock();
+	crossroad_ptr cr = boost::shared_polymorphic_downcast<crossroad>(front_crossroad.lock());
 //	short velocity_decceleration = veh->get_cell_velocity() - (rl-j-1);
 	if(cr)
 	{

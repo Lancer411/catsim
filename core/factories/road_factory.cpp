@@ -22,7 +22,7 @@ road_ptr road_factory::create_road(int16 linesnum, int16 length)
 	roads[id] = p;
 	crossroad_ptr cross(new crossroad());
 	cross->set_road_input(p);
-	p->set_crossroad(cross);
+	p->set_connector(cross);
 	crossroads[id] = cross;
 	return p;
 }
@@ -37,7 +37,7 @@ road_ptr road_factory::create_road(int16 linesnum, int16 length, short velocity_
 	roads[id] = p;
 	crossroad_ptr cross(new crossroad());
 	cross->set_road_input(p);
-	p->set_crossroad(cross);
+	p->set_connector(cross);
 	crossroads[id] = cross;
 	return p;
 }

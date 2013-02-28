@@ -7,13 +7,9 @@
 
 #ifndef CROSSROAD_H_
 #define CROSSROAD_H_
-#include "define/cadef.h"
-#include "core/entities/road.h"
+#include "core/connectors/connector.h"
 
-//class road;
-//typedef boost::shared_ptr<road> road_ptr;
-
-class crossroad
+class crossroad : public connector
 {
 	road_ptr road_input;
 	road_ptr road_output;
