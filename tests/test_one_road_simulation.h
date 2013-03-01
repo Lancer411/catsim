@@ -29,9 +29,9 @@ public:
 		// init parameters
 		float init_density = 0.01;
 		float step = 0.01;
-		int iteration_num = 7200;
-		int road_length = 800;
-		int lanes_num = 8;
+		int iteration_num = 900;
+		int road_length = 200;
+		int lanes_num = 2;
 		float car_prob = 0.75,
 			  truck_prob = 0.2;
 
@@ -42,10 +42,10 @@ public:
 			// entity factories
 			road_factory roadf;
 			vehicle_factory vehf;
-			road_ptr road = roadf.create_road(lanes_num ,road_length);
+			road_ptr road = roadf.create_road(lanes_num, road_length);
 			// init road loop
 			crossroad_ptr cross = roadf.get_crossroad(road->get_id());
-			cross->set_road_output(road);
+			cross->connect(road, road->get_id(), DIRECTION_STRAIGHT);
 
 			// set accumulation time
 			roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/4);

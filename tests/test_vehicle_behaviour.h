@@ -18,7 +18,7 @@ public:
 	{
 		int iteration_num = 200;
 		int road_length = 100;
-		int lane_num = 1;
+		int lane_num = 2;
 		float car_prob = 0.75,
 			  truck_prob = 0.2;
 		road_factory roadf;
@@ -26,23 +26,10 @@ public:
 		road_ptr road = roadf.create_road(lane_num, road_length);
 		roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/2);
 		crossroad_ptr cross = roadf.get_crossroad(road->get_id());
-		cross->set_road_output(road);
-//		road->push_vehicle(vehf.create_vehicle(80, 20, Car));
-//		road->push_vehicle(vehf.create_vehicle(20, 0, Bus));
-//		road->push_vehicle(vehf.create_vehicle(60, 0, Bus));
-//		road->push_vehicle(vehf.create_vehicle(40, 20, Bus));
-//		road->push_vehicle(vehf.create_vehicle(80, 40, Car));
-//		road->push_vehicle(vehf.create_vehicle(80, 20, Bus));
-//		road->push_vehicle(vehf.create_vehicle(40, 40, Bus));
-//		road->push_vehicle(vehf.create_vehicle(40, 20, Bus));
-//		road->push_vehicle(vehf.create_vehicle(80, 40, Bus));
-//		road->push_vehicle(vehf.create_vehicle(40, 20, Bus));
-//		road->push_vehicle(vehf.create_vehicle(40, 20, Bus));
-
-//		road->push_vehicle(vehf.create_vehicle(80, 20, Truck));
+		cross->connect(road, road->get_id(), DIRECTION_STRAIGHT);
 
 		// initiation parameters
-		float density = 0.95;
+		float density = 0.65;
 		// fill road with vehicles to density
 		float dens = 0;
 		int16 created_veh_length = 0;
@@ -50,14 +37,14 @@ public:
 		{
 			int16 init_speed = 20, max_speed = 80;
 			vehicle_type veh_type = Car;
-//			float typerand = random::std_random();
-//			if (typerand < car_prob)
-//				veh_type = Car;
-//			else
-//				if (typerand < car_prob + truck_prob)
-//					veh_type = Truck;
-//				else
-//					veh_type = Bus;
+			float typerand = random::std_random();
+			if (typerand < car_prob)
+				veh_type = Car;
+			else
+				if (typerand < car_prob + truck_prob)
+					veh_type = Truck;
+				else
+					veh_type = Bus;
 			vehicle_ptr veh = vehf.create_vehicle(max_speed, init_speed, veh_type);
 			created_veh_length += veh->get_length();
 			dens = created_veh_length/(float)(road_length*lane_num);

@@ -17,7 +17,7 @@ class connector
 {
 public:
 	virtual bool transfer(road_ptr road, vehicle_ptr veh, short passed_distance) = 0;
-	virtual road_ptr get_next_road() = 0;
+	virtual road_ptr get_next_road(std::string road_id, relative_direction direction) = 0;
 };
 
 #endif /* CONNECTOR_H_ */

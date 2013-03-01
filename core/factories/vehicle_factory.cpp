@@ -17,7 +17,7 @@ vehicle_ptr vehicle_factory::create_vehicle(int16 max_velocity,
 											vehicle_type type)
 {
 	vehicle_ptr p(new vehicle(max_velocity, start_velocity, type));
-	std::string id = "VEH_"+id_counter++;
+	std::string id = "VEH_" + boost::lexical_cast<std::string> (id_counter++);
 	p->set_id(id);
 	vehicles[id] = p;
 	return p;

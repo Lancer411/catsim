@@ -19,6 +19,7 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 
 
 const float DEFAULT_CELL_LENGTH = 5.5;					// Размер ячейки в метрах по умолчанию
@@ -33,6 +34,7 @@ const short MIN_POSSIBLE_DISTANCE = 1; 					// Дистанция, котора�
 const short DEFAULT_BLINK_DURATION = 3;					// Время мигания зеленого сигнала светофора
 const short DEFAULT_GET_READY_DURATION = 2;				// Продолжительность сигнала готовности светофора
 const long DEFAULT_STAT_ACCUMULATION_TIME = 60;			// Время накопления статистическаз данных п.у. (время итерации подсчета) = 1 мин.
+const static short ROAD_COUNT = 4;
 
 typedef uint16_t int16;
 
@@ -42,6 +44,20 @@ enum direction
 	EAST = 1,
 	SOUTH = 2,
 	WEST = 3
+};
+
+enum relative_direction
+{
+	DIRECTION_LEFT = 0,
+	DIRECTION_STRAIGHT = 1,
+	DIRECTION_RIGHT = 2
+};
+
+enum road_status
+{
+	ROAD_ABLE = 1,
+	ROAD_UNABLE = 0,
+	ROAD_NONE = -1
 };
 
 enum vehicle_type

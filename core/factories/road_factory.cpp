@@ -15,13 +15,13 @@ road_factory::road_factory()
 road_ptr road_factory::create_road(int16 linesnum, int16 length)
 {
 	road_ptr p(new road(linesnum, length));
-	std::string id = "ROAD_"+id_counter++;
+	std::string id = "ROAD_" + boost::lexical_cast<std::string> (id_counter++);
 	p->set_id(id);
 	road_stat_data_ptr data = stat_data.register_data(id, linesnum, length);
 	p->set_road_stat_data(data);
 	roads[id] = p;
 	crossroad_ptr cross(new crossroad());
-	cross->set_road_input(p);
+	cross->add_first_road(p);
 	p->set_connector(cross);
 	crossroads[id] = cross;
 	return p;
@@ -30,13 +30,13 @@ road_ptr road_factory::create_road(int16 linesnum, int16 length)
 road_ptr road_factory::create_road(int16 linesnum, int16 length, short velocity_limit)
 {
 	road_ptr p(new road(linesnum, length, velocity_limit));
-	std::string id = "ROAD_"+id_counter++;
+	std::string id = "ROAD_" + boost::lexical_cast<std::string> (id_counter++);
 	p->set_id(id);
 	road_stat_data_ptr data = stat_data.register_data(id, linesnum, length);
 	p->set_road_stat_data(data);
 	roads[id] = p;
 	crossroad_ptr cross(new crossroad());
-	cross->set_road_input(p);
+	cross->add_first_road(p);
 	p->set_connector(cross);
 	crossroads[id] = cross;
 	return p;

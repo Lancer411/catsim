@@ -51,6 +51,49 @@ public:
 		coord.y = (coord.y < 0) ? 0:coord.y;
 
 	};
+
+	static int get_road_position (int position, relative_direction direction)
+	{
+		int pos;
+		switch(direction)
+		{
+			case DIRECTION_LEFT:
+				pos = get_left_road_position(position);
+				break;
+			case DIRECTION_RIGHT:
+				pos = get_right_road_position(position);
+				break;
+			case DIRECTION_STRAIGHT:
+				pos =  get_straight_road_position(position);
+				break;
+		}
+		return pos;
+	}
+
+	static int get_left_road_position(int position)
+	{
+		return fix_position (position + 1);
+	};
+
+	static int get_straight_road_position(int position)
+	{
+		return fix_position (position + 2);
+	};
+
+	static int get_right_road_position(int position)
+	{
+		return fix_position (position - 1);
+	};
+
+	static int fix_position(int position)
+	{
+		if(position > ROAD_COUNT - 1)
+			return position - ROAD_COUNT;
+		if(position < 0)
+			return ROAD_COUNT + position;
+		return position;
+	};
+
 };
 
 #endif /* CONVERSION_H_ */

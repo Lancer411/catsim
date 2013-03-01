@@ -61,8 +61,6 @@ void road::iterate()
 	// итерировать все машины
 	for(int i = 0; i < rw; i++)
 		for(int j = 0; j < rl;)
-//	for(int i = rw - 1; i >= 0; i--)
-//		for(int j = rl - 1; j >= 0;)
 		{
 			if(temp_roaddata[i][j].is_occupied()) // если ячейка занята
 			{
@@ -161,8 +159,21 @@ void road::try_crossroad(vehicle_ptr veh, int i, int j)
 	if(cr)
 	{
 		COORD coord;
+		road_ptr null_ptr;
 		// выбрать следующую дорогу
-		road_ptr next_road = cr->get_next_road();
+		road_ptr next_road = cr->get_next_road(this->get_id(), DIRECTION_STRAIGHT);
+		// если дороги нет
+		if(next_road == null_ptr)
+		{
+			// тормозить в конце дороги
+			coord.x = i;
+			coord.y = rl - 1;
+			conversion::check_coord(coord,rw,rl);
+			vehicle_ptr front_vehicle;
+			slow_down_vehicle(veh, front_vehicle, 0, coord);
+			return;
+		}
+
 		// если дорога свободна переехать
 		int16 time_on_road = veh->get_time_on_road();
 		bool transfered = cr->transfer(next_road, veh, (rl-j-1));

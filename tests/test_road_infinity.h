@@ -26,7 +26,7 @@ public:
 		road_ptr road = roadf.create_road(lane_num, road_length);
 		roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/2);
 		crossroad_ptr cross = roadf.get_crossroad(road->get_id());
-		cross->set_road_output(road);
+//		cross->set_road_output(road);
 
 		// initiation parameters
 		float density = 0.75;

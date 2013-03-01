@@ -56,22 +56,12 @@ public:
 	int get_runoff_size(){return vehicles_runoff.size();};
 	friend std::ostream& operator <<( std::ostream &stream, const road_ptr &road)
 	{
-		stream<<"current"<<std::endl;
 		for(int i = 0; i<road->rw; i++)
 		{
 			for(int j = 0; j<road->rl; j++)
 				stream<<road->roaddata[i][j];
 			stream<<std::endl;
 		}
-
-		stream<<"temp"<<std::endl;
-		for(int i = 0; i<road->rw; i++)
-		{
-			for(int j = 0; j<road->rl; j++)
-				stream<<road->temp_roaddata[i][j];
-			stream<<std::endl;
-		}
-
 		return stream;
 	};
 
