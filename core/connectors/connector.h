@@ -16,7 +16,7 @@ typedef boost::shared_ptr<road> road_ptr;
 class connector
 {
 public:
-	virtual bool transfer(road_ptr road, vehicle_ptr veh, short passed_distance) = 0;
+	virtual bool transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance) = 0;
 	virtual road_ptr get_next_road(std::string road_id, relative_direction direction) = 0;
 };
 

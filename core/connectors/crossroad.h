@@ -21,7 +21,7 @@ public:
 	virtual ~crossroad();
 	bool add_first_road(road_ptr road);
 	bool connect(road_ptr road, std::string road_id, relative_direction direction);
-	bool transfer(road_ptr road, vehicle_ptr veh, short passed_distance);
+	bool transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance);
 	road_ptr get_next_road(std::string road_id, relative_direction direction);
 private:
 	int get_road_position(std::string road_id);

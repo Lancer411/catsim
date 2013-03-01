@@ -161,7 +161,7 @@ void road::try_crossroad(vehicle_ptr veh, int i, int j)
 		COORD coord;
 		road_ptr null_ptr;
 		// выбрать следующую дорогу
-		road_ptr next_road = cr->get_next_road(this->get_id(), DIRECTION_LEFT);
+		road_ptr next_road = cr->get_next_road(this->get_id(), DIRECTION_STRAIGHT);
 		// если дороги нет
 		if(next_road == null_ptr)
 		{
@@ -176,7 +176,7 @@ void road::try_crossroad(vehicle_ptr veh, int i, int j)
 
 		// если дорога свободна переехать
 		int16 time_on_road = veh->get_time_on_road();
-		bool transfered = cr->transfer(next_road, veh, (rl-j-1));
+		bool transfered = cr->transfer(this->get_id(), next_road, veh, (rl-j-1));
 		if(!transfered)
 		{
 			// иначе затормозить в конце дороги

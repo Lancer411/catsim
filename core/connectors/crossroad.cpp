@@ -12,21 +12,26 @@ crossroad::crossroad()
 {
 	for (int i = 0; i < ROAD_COUNT; ++i)
 		for (int j = 0; j < ROAD_COUNT; ++j)
-			road_mtx[i][j] = ROAD_NONE;
+			(i != j) ?
+			road_mtx[i][j] = ROAD_NONE :
+			road_mtx[i][j] = ROAD_ABLE;
 }
 
-bool crossroad::transfer(road_ptr road, vehicle_ptr veh, short passed_distance)
+bool crossroad::transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance)
 {
 	COORD coord;
-	bool road_free = road->has_free_space(veh->get_length(), veh->get_cell_velocity() - passed_distance + 1, &coord);
-	if(road_free)
+	int from = get_road_position(from_road_id);
+	int to = get_road_position(to_road->get_id());
+	bool road_able = (get_status(from, to) == ROAD_ABLE);
+	bool road_free = to_road->has_free_space(veh->get_length(), veh->get_cell_velocity() - passed_distance + 1, &coord);
+	if(road_free && road_able)
 	{
 //		short vel = passed_distance + coord.y + 1;
 //		veh->set_cell_velocity(vel);
 		veh->set_cell_velocity(veh->get_cell_velocity() - passed_distance + 1);
 		veh->reset_time_counter();
-		road->move_vehicle(veh, coord);
-		road->stat_data->inc_current_vehicles_num(veh->get_length());
+		to_road->move_vehicle(veh, coord);
+		to_road->stat_data->inc_current_vehicles_num(veh->get_length());
 //		road->push_vehicle(veh);
 		return true;
 	}
@@ -85,10 +90,13 @@ road_ptr crossroad::get_next_road(std::string road_id, relative_direction direct
 
 int crossroad::get_road_position(std::string road_id)
 {
+	road_ptr null_ptr;
 	for (int i = 0; i < ROAD_COUNT; ++i)
 	{
+		if(roads_direct[i] != null_ptr)
 		if(road_id.compare(roads_direct[i]->get_id())==0)
 			return i;
+		if(roads_opposite[i] != null_ptr)
 		if(road_id.compare(roads_opposite[i]->get_id())==0)
 			return i;
 	}
