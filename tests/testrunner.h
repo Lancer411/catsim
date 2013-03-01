@@ -25,10 +25,10 @@ void runtests()
 //	celltest.runtest();
 //	test_vehicle_factory vehfactorytest;
 //	vehfactorytest.runtest();
-	test_vehicle_behaviour behtest;
-	behtest.runtest();
-//	test_one_road_simulation roadtest;
-//	roadtest.runtest();
+//	test_vehicle_behaviour behtest;
+//	behtest.runtest();
+	test_one_road_simulation roadtest;
+	roadtest.runtest();
 //	test_vehicle_generation gentest;
 //	gentest.runtest();
 //	test_vehicle_puasson_generation puastest;

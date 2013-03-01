@@ -37,7 +37,7 @@ bool crossroad::add_first_road(road_ptr road)
 {
 	if(road_mtx[0][1] != ROAD_NONE)
 		return false;
-	roads[0] = road;
+	roads_direct[0] = road;
 	set_road_status (0, ROAD_UNABLE);
 	return true;
 }
@@ -50,9 +50,18 @@ bool crossroad::connect(road_ptr road, std::string road_id, relative_direction d
 	int y = conversion::get_road_position(x, direction);
 	if(get_status(x, y) != ROAD_NONE)
 	{
-		roads[y] = road;
 		set_road_status (x, ROAD_ABLE);
 		set_road_status (y, ROAD_ABLE);
+		switch(direction)
+		{
+			case DIRECTION_RIGHT:
+			case DIRECTION_STRAIGHT:
+				roads_direct[y] = road;
+				break;
+			case DIRECTION_LEFT:
+				roads_opposite[y] = road;
+				break;
+		}
 	}
 	return false;
 }
@@ -64,14 +73,23 @@ road_ptr crossroad::get_next_road(std::string road_id, relative_direction direct
 	if(position == NO_ROAD)
 		return null_ptr;
 	int pos = conversion::get_road_position(position, direction);
-	return roads[pos];
+	switch(direction)
+	{
+		case DIRECTION_RIGHT:
+		case DIRECTION_STRAIGHT:
+			return roads_direct[pos];
+		case DIRECTION_LEFT:
+			return roads_opposite[pos];
+	}
 }
 
 int crossroad::get_road_position(std::string road_id)
 {
 	for (int i = 0; i < ROAD_COUNT; ++i)
 	{
-		if(road_id.compare(roads[i]->get_id())==0)
+		if(road_id.compare(roads_direct[i]->get_id())==0)
+			return i;
+		if(road_id.compare(roads_opposite[i]->get_id())==0)
 			return i;
 	}
 	return NO_ROAD;

@@ -45,7 +45,7 @@ public:
 			road_ptr road = roadf.create_road(lanes_num, road_length);
 			// init road loop
 			crossroad_ptr cross = roadf.get_crossroad(road->get_id());
-			cross->connect(road, road->get_id(), DIRECTION_STRAIGHT);
+			cross->connect(road, road->get_id(), DIRECTION_LEFT);
 
 			// set accumulation time
 			roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/4);

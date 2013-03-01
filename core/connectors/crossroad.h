@@ -13,7 +13,8 @@
 class crossroad : public connector
 {
 	const static int NO_ROAD = -1;
-	road_ptr roads[ROAD_COUNT];
+	road_ptr roads_direct[ROAD_COUNT];
+	road_ptr roads_opposite[ROAD_COUNT];
 	short road_mtx[ROAD_COUNT][ROAD_COUNT];
 public:
 	crossroad();
