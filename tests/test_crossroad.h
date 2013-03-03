@@ -1,16 +1,22 @@
 /*
- * test_one_road_simulation.h
- *
- *  Created on: Nov 17, 2012
- *      Author: ngh
- *
- * single road test
- * parameters:
- * constant vehicles: CAR, init speed = 20 , max speed = 80
- * road_length = 100
- * iterations = 1000
- * output: statistics data for density range = 0.01 - 1
- */
+	test_crossroad.h
+
+	Catsim source code
+	Copyright (C) 2012-2013  naghtarr
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef TEST_CROSSROAD_H_
 #define TEST_CROSSROAD_H_
