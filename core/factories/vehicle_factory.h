@@ -23,7 +23,6 @@
 #include "define/cadef.h"
 //#include "factory.h"
 #include "core/entities/vehicle.h"
-#include <map>
 
 //typedef std::map<std::string, vehicle_ptr> factory_container;
 
@@ -31,7 +30,9 @@ class vehicle_factory //: factory<vehicle_ptr>
 {
 	std::map<std::string, vehicle_ptr> vehicles;
 	long id_counter;
+//	static vehicle_factory* instance;
 public:
+//	static boost::shared_ptr<vehicle_factory> get();
 	vehicle_factory();
 	vehicle_ptr create_vehicle(int16 max_velocity, int16 start_velocity, vehicle_type type);
 	void delete_vehicle(std::string id);
@@ -39,6 +40,10 @@ public:
 	size_t count();
 	void delete_all_vehicles();
 	virtual ~vehicle_factory();
+private:
+//	vehicle_factory();
 };
+
+typedef boost::shared_ptr<vehicle_factory> vehicle_factory_ptr;
 
 #endif /* VEHICLE_FACTORY_H_ */

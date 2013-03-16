@@ -112,6 +112,7 @@ private:
 	void free_queues();
 
 	friend class crossroad;
+	friend class vehicle_feeder;
 };
 
 

@@ -28,6 +28,7 @@
 #include "test_one_road_simulation.h"
 #include "test_road_infinity.h"
 #include "test_crossroad.h"
+#include "test_vehicle_feeder.h"
 
 void runtests()
 {
@@ -45,7 +46,9 @@ void runtests()
 //	vehptrtest.runtest();
 //	test_road_infinity inftest;
 //	inftest.runtest();
-	test_crossroad crosstest;
-	crosstest.runtest();
+//	test_crossroad crosstest;
+//	crosstest.runtest();
+	test_vehicle_feeder feedertest;
+	feedertest.runtest();
 }
 #endif /* TESTRUNNER_H_ */

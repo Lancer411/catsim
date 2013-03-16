@@ -25,6 +25,15 @@ vehicle_factory::vehicle_factory()
 	id_counter = 0;
 }
 
+//boost::shared_ptr<vehicle_factory> vehicle_factory::get()
+//{
+//	if (!instance)
+//	{
+//		instance = new vehicle_factory();
+//	}
+//	return boost::shared_ptr<vehicle_factory>(instance);
+//}
+
 vehicle_ptr vehicle_factory::create_vehicle(int16 max_velocity,
 											int16 start_velocity,
 											vehicle_type type)
@@ -66,4 +75,5 @@ vehicle_factory::~vehicle_factory()
 ////		it = vehicles.erase(it);
 //	}
 	delete_all_vehicles();
+//	instance = NULL;
 }

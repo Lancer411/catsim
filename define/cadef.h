@@ -30,6 +30,7 @@
 #include <cstdint>
 #include <ctime>
 #include <vector>
+#include <map>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/lexical_cast.hpp>
@@ -48,6 +49,13 @@ const short DEFAULT_BLINK_DURATION = 3;					// Время мигания зел�
 const short DEFAULT_GET_READY_DURATION = 2;				// Продолжительность сигнала готовности светофора
 const long DEFAULT_STAT_ACCUMULATION_TIME = 60;			// Время накопления статистическаз данных п.у. (время итерации подсчета) = 1 мин.
 const static short ROAD_COUNT = 4;
+
+const float DEFAULT_FEEDER_DENSITY = 0.2;
+const short DEFAULT_FEEDER_INIT_SPEED = 20;
+const short DEFAULT_FEEDER_MAX_SPEED = 80;
+const float DEFAULT_FEEDER_CAR_PROB = 0.7;
+const float DEFAULT_FEEDER_BUS_PROB = 0.25;
+const float DEFAULT_FEEDER_TRUCK_PROB = 0.05;
 
 typedef uint16_t int16;
 

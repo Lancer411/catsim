@@ -22,7 +22,6 @@
 
 stat_data_handler::stat_data_handler()
 {
-	// TODO Auto-generated constructor stub
 
 }
 
@@ -46,5 +45,5 @@ void stat_data_handler::delete_data(std::string road_id)
 
 stat_data_handler::~stat_data_handler()
 {
-	// TODO Auto-generated destructor stub
+
 }

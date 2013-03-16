@@ -28,7 +28,7 @@ test::test()
 
 test::~test()
 {
-	// TODO Auto-generated destructor stub
+
 }
 
 void test::assert_equals(int a, int b)
