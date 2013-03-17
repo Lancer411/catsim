@@ -21,11 +21,10 @@
 #ifndef CADEF_H_
 #define CADEF_H_
 
-#include <cstddef>
 #include <iostream>
 #include <ctime>
 #include <cstring>
-//#include <map>
+#include <boost/pending/cstddef.hpp>
 #include <boost/container/map.hpp>
 #include <boost/cstdlib.hpp>
 #include <boost/cstdint.hpp>

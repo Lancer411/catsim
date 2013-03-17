@@ -23,6 +23,7 @@
 #include "test.h"
 #include "core/factories/road_factory.h"
 #include "core/factories/vehicle_factory.h"
+#include "core/connectors/vehicle_feeder.h"
 
 
 class test_one_road_simulation : public test
@@ -35,49 +36,29 @@ public:
 		// init parameters
 		float init_density = 0.01;
 		float step = 0.01;
-		int iteration_num = 900;
-		int road_length = 200;
+		int iteration_num = 3600;
+		int road_length = 800;
 		int lanes_num = 2;
-		float car_prob = 0.75,
-			  truck_prob = 0.2;
-
 
 		// start model
 		while(init_density <= 1)
 		{
 			// entity factories
 			road_factory roadf;
-			vehicle_factory vehf;
+			vehicle_factory_ptr vehf_p(new vehicle_factory());
 			road_ptr road = roadf.create_road(lanes_num, road_length);
 			// init road loop
+			vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
+			feeder_params params(init_density, 20, 80, 1, 0);
+			feeder_p->connect_feeding_road(road, params);
+
 			crossroad_ptr cross = roadf.get_crossroad(road->get_id());
-			cross->connect(road, road->get_id(), DIRECTION_LEFT);
+			cross->connect(road, road->get_id(), DIRECTION_STRAIGHT);
 
 			// set accumulation time
 			roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/4);
 			// initiation parameters
-			float density = init_density;
-			// fill road with vehicles to density
-			float dens = 0;
-			int16 created_veh_length = 0;
-			while (dens < density)
-			{
-				int16 init_speed = 20, max_speed = 80;
-				vehicle_type veh_type = Car;
-//				float typerand = random::std_random();
-//				if (typerand < car_prob)
-//					veh_type = Car;
-//				else
-//					if (typerand < car_prob + truck_prob)
-//						veh_type = Truck;
-//					else
-//						veh_type = Bus;
-				vehicle_ptr veh = vehf.create_vehicle(max_speed, init_speed, veh_type);
-				created_veh_length += veh->get_length();
-				dens = created_veh_length/(float)(road_length * lanes_num);
-				road->push_vehicle(veh);
-			}
-
+			feeder_p->feed_roads();
 			// iteration process start
 			int k = 0;
 
@@ -103,9 +84,6 @@ public:
 
 
 			init_density += step;
-//			road->clear();
-//			vehf.delete_all_vehicles();
-//			stat->reset();
 		}
 	};
 };

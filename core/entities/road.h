@@ -30,11 +30,11 @@
 #include "core/stat/road_stat_data.h"
 #include "core/stat/stat_data_handler.h"
 #include "core/tools/road_iterating_tools.h"
-#include <queue>
-#include <set>
+#include <boost/pending/queue.hpp>
+#include <boost/container/set.hpp>
 
-typedef std::queue<vehicle_ptr> vehicle_queue;
-typedef std::set<vehicle_ptr> vehicle_set;
+typedef boost::queue<vehicle_ptr> vehicle_queue;
+typedef boost::container::set<vehicle_ptr> vehicle_set;
 
 class connector;
 typedef boost::shared_ptr<connector> connector_ptr;
