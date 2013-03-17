@@ -86,18 +86,19 @@ public:
 				<<stat->get_road_flow()<<"|"
 				<<stat->get_passed_vehicles_number()<<"|"
 				<<stat->get_current_vehicles_number()<<"|"
-				<<stat->get_avg_road_passage_time();
-			std::cout<<"|||";
-			stat = roadf.get_road_statistics(road2->get_id());
-			std::cout.precision(5);
-			std::cout<<stat->get_current_road_density()<<"|"
-				<<stat->get_avg_road_density()<<"|"
-				<<stat->get_avg_road_speed_total()<<"|"
-				<<stat->get_road_flow()<<"|"
-				<<stat->get_passed_vehicles_number()<<"|"
-				<<stat->get_current_vehicles_number()<<"|"
-				<<stat->get_avg_road_passage_time()<<"|"
+				<<stat->get_avg_road_passage_time()
 				<<std::endl;
+//			std::cout<<"|||";
+//			stat = roadf.get_road_statistics(road2->get_id());
+//			std::cout.precision(5);
+//			std::cout<<stat->get_current_road_density()<<"|"
+//				<<stat->get_avg_road_density()<<"|"
+//				<<stat->get_avg_road_speed_total()<<"|"
+//				<<stat->get_road_flow()<<"|"
+//				<<stat->get_passed_vehicles_number()<<"|"
+//				<<stat->get_current_vehicles_number()<<"|"
+//				<<stat->get_avg_road_passage_time()<<"|"
+//				<<std::endl;
 
 			init_density += step;
 		}

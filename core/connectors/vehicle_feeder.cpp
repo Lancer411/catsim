@@ -44,13 +44,13 @@ bool vehicle_feeder::transfer(std::string from_road_id, road_ptr to_road, vehicl
 
 road_ptr vehicle_feeder::get_next_road(std::string road_id, relative_direction direction)
 {
-	std::map<std::string, road_ptr>::iterator it;
+	road_map::iterator it;
 	road_ptr null_ptr;
 	for (it = deadend_roads.begin(); it != deadend_roads.end();++it)
 	{
 		std::string next_road_id = it->first;
 		std::string dead_road_id = it->second->get_id();
-		if(dead_road_id.compare(road_id) == 0)
+		if(boost::algorithm::equals(dead_road_id, road_id))
 		{
 			return feeding_roads[next_road_id];
 		}
@@ -81,7 +81,7 @@ bool vehicle_feeder::connect_deadend_road(road_ptr road, std::string feeding_roa
 
 void vehicle_feeder::feed_roads()
 {
-	std::map<std::string, road_ptr>::iterator it;
+	road_map::iterator it;
 	for (it = feeding_roads.begin(); it != feeding_roads.end();++it)
 	{
 		std::string road_id = it->first;

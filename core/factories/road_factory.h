@@ -25,14 +25,14 @@
 #include "core/entities/road.h"
 #include "core/connectors/crossroad.h"
 #include "core/stat/stat_data_handler.h"
-#include <map>
 
-//typedef std::map<std::string, road_ptr> factory_container;
+typedef boost::container::map<std::string, road_ptr> road_map;
+typedef boost::container::map<std::string, crossroad_ptr> crossroad_map;
 
 class road_factory //: factory<road_ptr>
 {
-	std::map<std::string, road_ptr>  roads;
-	std::map<std::string, crossroad_ptr> crossroads;
+	road_map roads;
+	crossroad_map crossroads;
 	long id_counter;
 	stat_data_handler stat_data;
 public:

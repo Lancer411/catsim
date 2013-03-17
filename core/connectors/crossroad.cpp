@@ -107,10 +107,10 @@ int crossroad::get_road_position(std::string road_id)
 	for (int i = 0; i < ROAD_COUNT; ++i)
 	{
 		if(roads_direct[i] != null_ptr)
-		if(road_id.compare(roads_direct[i]->get_id())==0)
+		if(boost::algorithm::equals(road_id, roads_direct[i]->get_id()))
 			return i;
 		if(roads_opposite[i] != null_ptr)
-		if(road_id.compare(roads_opposite[i]->get_id())==0)
+		if(boost::algorithm::equals(road_id, roads_opposite[i]->get_id()))
 			return i;
 	}
 	return NO_ROAD;

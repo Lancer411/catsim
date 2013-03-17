@@ -26,14 +26,18 @@
 #include "core/factories/vehicle_factory.h"
 #include "core/entities/vehicle.h"
 #include "core/tools/random.h"
+#include "boost/algorithm/string/predicate.hpp"
+
+typedef boost::container::map<std::string, road_ptr> road_map;
+typedef boost::container::map<std::string, feeder_params> params_map;
 /*
  *
  */
 class vehicle_feeder : public connector
 {
-	std::map<std::string, road_ptr> feeding_roads;
-	std::map<std::string, feeder_params> feeding_roads_params;
-	std::map<std::string, road_ptr> deadend_roads;
+	road_map feeding_roads;
+	params_map feeding_roads_params;
+	road_map deadend_roads;
 	vehicle_factory_ptr veh_factory;
 public:
 	vehicle_feeder(vehicle_factory_ptr veh_factory);

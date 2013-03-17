@@ -22,6 +22,7 @@
 #define CROSSROAD_H_
 #include "core/connectors/connector.h"
 #include "core/tools/conversion.h"
+#include "boost/algorithm/string/predicate.hpp"
 
 class crossroad : public connector
 {

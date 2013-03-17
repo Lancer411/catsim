@@ -23,9 +23,8 @@
 #include "define/cadef.h"
 #include "core/entities/road.h"
 #include "core/stat/road_stat_data.h"
-#include <map>
 
-typedef std::map<std::string, road_stat_data_ptr> road_stat_data_map;
+typedef boost::container::map<std::string, road_stat_data_ptr> road_stat_data_map;
 
 class stat_data_handler
 {

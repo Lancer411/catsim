@@ -24,7 +24,7 @@ using namespace std;
 
 int main()
 {
-
+	std::srand(std::time(0));
 	runtests();
 	return 0;
 }

@@ -23,14 +23,12 @@
 
 #include <cstddef>
 #include <iostream>
-#include <cstring>
-#include <cmath>
-#include <algorithm>
-#include <cstdlib>
-#include <cstdint>
 #include <ctime>
-#include <vector>
-#include <map>
+#include <cstring>
+//#include <map>
+#include <boost/container/map.hpp>
+#include <boost/cstdlib.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/lexical_cast.hpp>

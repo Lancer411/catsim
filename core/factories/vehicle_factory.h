@@ -24,11 +24,11 @@
 //#include "factory.h"
 #include "core/entities/vehicle.h"
 
-//typedef std::map<std::string, vehicle_ptr> factory_container;
+typedef boost::container::map<std::string, vehicle_ptr> vehicle_map;
 
 class vehicle_factory //: factory<vehicle_ptr>
 {
-	std::map<std::string, vehicle_ptr> vehicles;
+	vehicle_map vehicles;
 	long id_counter;
 //	static vehicle_factory* instance;
 public:

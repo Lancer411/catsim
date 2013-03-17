@@ -74,7 +74,7 @@ size_t road_factory::count()
 
 void road_factory::iterate()
 {
-	std::map<std::string, road_ptr>::iterator it;
+	road_map::iterator it;
 	for (it = roads.begin(); it != roads.end();++it)
 	{
 		it->second->iterate();
