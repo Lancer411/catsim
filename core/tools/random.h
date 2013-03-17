@@ -25,6 +25,11 @@
 class random
 {
 public:
+	static void initialize()
+	{
+		std::srand(std::time(0));
+	}
+
 	static float std_random(int offset, int top)
 	{
 		return std::rand()%top + offset;
