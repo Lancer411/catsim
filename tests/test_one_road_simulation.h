@@ -30,15 +30,15 @@ class test_one_road_simulation : public test
 {
 public:
 	test_one_road_simulation(){};
-	virtual ~test_one_road_simulation(){};
+	~test_one_road_simulation(){};
 	void runtest()
 	{
 		// init parameters
 		float init_density = 0.01;
 		float step = 0.01;
-		int iteration_num = 3600;
-		int road_length = 800;
-		int lanes_num = 2;
+		int iteration_num = 900;
+		int road_length = 200;
+		int lanes_num = 1;
 
 		// start model
 		while(init_density <= 1)

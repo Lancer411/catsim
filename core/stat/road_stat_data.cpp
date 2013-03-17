@@ -32,17 +32,16 @@ void road_stat_data::update_parameters()
 	stat_timer++;
 
 	current_road_density = current_vehicles_length/(float)(road_length*road_lanes_count);
-	density_accumulator += current_road_density;
+	density_accumulator(current_road_density);
 
-	avg_road_speed = avg_speed_accumulator/current_vehicles_number;
-	total_speed_accumulator += avg_road_speed;
-	avg_speed_accumulator = 0;
+	avg_road_speed = boost::accumulators::mean(avg_speed_accumulator);
+	total_speed_accumulator(avg_road_speed);
 
 	if(stat_timer == stat_accumulation_time)
 	{
-		avg_road_density = density_accumulator/stat_accumulation_time;
-		avg_road_passage_time = (float)passage_time_accumulator/ (float)passed_vehicles_number;
-		avg_road_speed_total = total_speed_accumulator/stat_accumulation_time;
+		avg_road_density = boost::accumulators::mean(density_accumulator);
+		avg_road_passage_time = boost::accumulators::mean(passage_time_accumulator);
+		avg_road_speed_total = boost::accumulators::mean(total_speed_accumulator);
 		road_flow = avg_road_density * avg_road_speed_total;
 		reset_timer();
 	}
@@ -51,14 +50,21 @@ void road_stat_data::update_parameters()
 void road_stat_data::inc_passed_vehicles_num(int16 time)
 {
 	passed_vehicles_number++;
-	passage_time_accumulator += time;
+	passage_time_accumulator(time);
 }
+
+void road_stat_data::update_avg_speed(short speed)
+{
+	avg_speed_accumulator((float)speed);
+}
+
 void road_stat_data::reset_timer()
 {
 	stat_timer = 0;
-	density_accumulator = passage_time_accumulator =
-	avg_speed_accumulator = total_speed_accumulator = 0;
-//	passed_vehicles_number = 0;
+	density_accumulator = float_acc();
+	avg_speed_accumulator = float_acc();
+	total_speed_accumulator = float_acc();
+	passage_time_accumulator = long_acc();
 }
 
 void road_stat_data::reset()

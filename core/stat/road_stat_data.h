@@ -22,6 +22,17 @@
 #define ROAD_STAT_DATA_H_
 #include "define/cadef.h"
 #include <boost/shared_ptr.hpp>
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+
+typedef boost::accumulators::accumulator_set<float,
+						boost::accumulators::features<boost::accumulators::tag::mean> >
+						float_acc;
+
+typedef boost::accumulators::accumulator_set<long,
+						boost::accumulators::features<boost::accumulators::tag::mean> >
+						long_acc;
 
 class road_stat_data
 {
@@ -36,10 +47,10 @@ class road_stat_data
 	float avg_road_speed_total;			// средняя скорость за время итерации подсчета
 	float avg_road_passage_time;		// среднее время проезда
 	float road_flow;					// поток (ср плотность*ср скорость)
-	double density_accumulator;			// накопитель для подсчета avg_road_density
-	double avg_speed_accumulator;		// накопитель для подсчета avg_road_speed
-	double total_speed_accumulator;		// накопитель для подсчета avg_road_speed_total
-	long passage_time_accumulator;	// накопитель для подсчета avg_road_passage_time
+	float_acc density_accumulator;		// накопитель для подсчета avg_road_density
+	float_acc avg_speed_accumulator;	// накопитель для подсчета avg_road_speed
+	float_acc total_speed_accumulator;	// накопитель для подсчета avg_road_speed_total
+	long_acc passage_time_accumulator;	// накопитель для подсчета avg_road_passage_time
 
 	long stat_accumulation_time;		// время итерации подсчета
 	long stat_timer;					// таймер итераций подсчета
@@ -54,7 +65,7 @@ public:
 	// вызывать когда ТС проезжает дорогу
 	void dec_current_vehicles_num(short veh_length);
 	// вызывать для каждого ТС на дороге
-	void update_avg_speed(short speed){avg_speed_accumulator += speed;};
+	void update_avg_speed(short speed);
 
 	int16 get_passed_vehicles_number() const{return passed_vehicles_number;};
 	int16 get_current_vehicles_number() const{return current_vehicles_number;};
