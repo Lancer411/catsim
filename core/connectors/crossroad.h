@@ -43,6 +43,7 @@ private:
 	void set_status(int pos_x, int pos_y, road_status status);
 	void set_road_status(int position, road_status status);
 	void set_direction_status(int pos_x, int pos_y, road_status status);
+	relative_direction get_any_available_direction(int position);
 };
 
 typedef boost::shared_ptr<crossroad> crossroad_ptr;

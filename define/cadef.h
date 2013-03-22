@@ -56,19 +56,12 @@ const float DEFAULT_FEEDER_TRUCK_PROB = 0.05;
 
 typedef uint16_t int16;
 
-enum direction
-{
-	NORTH = 0,
-	EAST = 1,
-	SOUTH = 2,
-	WEST = 3
-};
-
 enum relative_direction
 {
-	DIRECTION_LEFT = 0,
-	DIRECTION_STRAIGHT = 1,
-	DIRECTION_RIGHT = 2
+	DIRECTION_LEFT = 1,
+	DIRECTION_STRAIGHT = 2,
+	DIRECTION_RIGHT = 4,
+	DIRECTION_ANY = 8
 };
 
 enum road_status

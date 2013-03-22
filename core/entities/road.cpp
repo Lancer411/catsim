@@ -175,7 +175,7 @@ void road::try_crossroad(vehicle_ptr veh, int i, int j)
 		COORD coord;
 		road_ptr null_ptr;
 		// выбрать следующую дорогу
-		road_ptr next_road = cr->get_next_road(this->get_id(), DIRECTION_STRAIGHT);
+		road_ptr next_road = cr->get_next_road(this->get_id(), DIRECTION_ANY);
 		// если дороги нет
 		if(next_road == null_ptr)
 		{
