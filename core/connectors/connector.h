@@ -37,8 +37,8 @@ public:
 	 * \param	veh				Vehicle for transfer
 	 * \param	passed_distance	Distance (in cells) that vehicle has already passed on previous road
 	 *
-	 * \return	true	- if transfering possible
-	 * 			false	- if transfering impossible (e.g. next road is busy)
+	 * \return	true			- if transfering possible
+	 * 			false			- if transfering impossible (e.g. next road is busy)
 	 */
 	virtual bool transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance) = 0;
 

@@ -1,6 +1,7 @@
 /*
  vehicle_feeder.h - connector which aim is to fill roads with
- vehicles with some density
+ vehicles with some density and transfer input vehicles from
+ deadend roads to feeding
 
  Catsim source code
  Copyright (C) 2012-2013  naghtarr
@@ -30,27 +31,55 @@
 
 typedef boost::container::map<std::string, road_ptr> road_map;
 typedef boost::container::map<std::string, feeder_params> params_map;
-/*
- *
- */
+
 class vehicle_feeder : public connector
 {
+	// a map of roads to feed
 	road_map feeding_roads;
+	// a map of roads' feeding params
 	params_map feeding_roads_params;
+	// a map of deadend roads
 	road_map deadend_roads;
+	// pointer to existing vehicle factory
 	vehicle_factory_ptr veh_factory;
 public:
+	/**
+	 * Constructor of vehicle feeder with vehicle factory as parameter
+	 */
 	vehicle_feeder(vehicle_factory_ptr veh_factory);
 	~vehicle_feeder();
 
 	bool transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance);
 	road_ptr get_next_road(std::string road_id, relative_direction direction);
 
+	/**
+	 * Adds road to feed with feeding \p params
+	 *
+	 * \return	true	- if successfully added
+	 * 			false	- if road already been added
+	 */
 	bool connect_feeding_road(road_ptr road, feeder_params params);
+
+	/**
+	 * Add road which is input to feeder
+	 *
+	 * \param	road				a road to add
+	 * \param	feeding_road_id		identifier of feeding road. added road
+	 * 								will be transfered to this feeding road
+	 *
+	 * \return	true	- if successfully added
+	 * 			false	- if road already been added or feeding road is not exist
+	 */
 	bool connect_deadend_road(road_ptr road, std::string feeding_road_id);
 
+	/**
+	 * Feeds all the roads with their params
+	 */
 	void feed_roads();
 private:
+	/**
+	 * Fills specified road with params
+	 */
 	void fill_road_to_density(road_ptr road, feeder_params params);
 };
 
