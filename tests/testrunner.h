@@ -26,6 +26,7 @@
 #include "test_vehicle_ptr.h"
 #include "test_vehicle_behaviour.h"
 #include "test_one_road_simulation.h"
+//#include "test_direct_road_simulation.h"
 #include "test_road_infinity.h"
 #include "test_crossroad.h"
 #include "test_vehicle_feeder.h"
@@ -42,6 +43,8 @@ void runtests()
 //	behtest.runtest();
 	test_one_road_simulation roadtest;
 	roadtest.runtest();
+//	test_direct_road_simulation roadtest;
+//	roadtest.runtest();
 //	test_vehicle_ptr vehptrtest;
 //	vehptrtest.runtest();
 //	test_road_infinity inftest;

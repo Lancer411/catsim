@@ -30,10 +30,10 @@ public:
 	void runtest()
 	{
 		int iteration_num = 200;
-		int road_length = 100;
-		int lane_num = 2;
-		float car_prob = 0.75,
-			  truck_prob = 0.2;
+		int road_length = 50;
+		int lane_num = 1;
+		float car_prob = 1,
+			  truck_prob = 0;
 		road_factory roadf;
 		vehicle_factory vehf;
 		road_ptr road = roadf.create_road(lane_num, road_length);
@@ -42,33 +42,35 @@ public:
 		cross->connect(road, road->get_id(), DIRECTION_STRAIGHT);
 
 		// initiation parameters
-		float density = 0.65;
+		float density = 0.5;
 		// fill road with vehicles to density
 		float dens = 0;
+		float prob  = random::std_random();
 		int16 created_veh_length = 0;
-		while (dens < density)
-		{
-			int16 init_speed = 20, max_speed = 80;
-			vehicle_type veh_type = Car;
-			float typerand = random::std_random();
-			if (typerand < car_prob)
-				veh_type = Car;
-			else
-				if (typerand < car_prob + truck_prob)
-					veh_type = Truck;
-				else
-					veh_type = Bus;
-			vehicle_ptr veh = vehf.create_vehicle(max_speed, init_speed, veh_type);
-			created_veh_length += veh->get_length();
-			dens = created_veh_length/(float)(road_length*lane_num);
-			road->push_vehicle(veh);
-		}
+
 		// statistic data
 		road_stat_data_ptr  stat = roadf.get_road_statistics(road->get_id());
 		int k = 0;
 		while(k < iteration_num)
 //		while(true)
 		{
+			if (prob < density)
+					{
+						int16 init_speed = 20, max_speed = 80;
+						vehicle_type veh_type = Car;
+						float typerand = random::std_random();
+						if (typerand < car_prob)
+							veh_type = Car;
+						else
+							if (typerand < car_prob + truck_prob)
+								veh_type = Truck;
+							else
+								veh_type = Bus;
+						vehicle_ptr veh = vehf.create_vehicle(max_speed, init_speed, veh_type);
+						created_veh_length += veh->get_length();
+						//dens = created_veh_length/(float)(road_length*lane_num);
+						road->push_vehicle(veh);
+					}
 
 			if(k==18)
 				std::cout<<75<<std::endl;

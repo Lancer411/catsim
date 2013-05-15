@@ -19,12 +19,14 @@
 */
 
 #include "tests/testrunner.h"
+#include "command_line.h"
 
 using namespace std;
 
-int main()
+int main(int ac, char* av[])
 {
-	std::srand(std::time(0));
 	runtests();
+	//command_line cl;
+	//cl.parser(ac, av);
 	return 0;
 }

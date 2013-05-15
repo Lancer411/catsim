@@ -50,8 +50,10 @@ public:
 	bool connect_deadend_road(road_ptr road, std::string feeding_road_id);
 
 	void feed_roads();
+	void feed_direct_roads();
 private:
 	void fill_road_to_density(road_ptr road, feeder_params params);
+	void fill_direct_road_to_density (road_ptr road, feeder_params params);
 };
 
 typedef boost::shared_ptr<vehicle_feeder> vehicle_feeder_ptr;

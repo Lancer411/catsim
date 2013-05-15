@@ -41,6 +41,7 @@ class road_stat_data
 	int16 passed_vehicles_number;		// число машин, прошедших дорогу
 	int16 current_vehicles_number;		// текущее число машин
 	int16 current_vehicles_length;		// длина машин на дороге
+	int16 passed_vehicles_number_iter;
 	float current_road_density;			// текущая плотность на дороге
 	float avg_road_density;				// средняя плотность
 	float avg_road_speed;				// средняя скорость за итерацию
@@ -50,6 +51,8 @@ class road_stat_data
 	float_acc density_accumulator;		// накопитель для подсчета avg_road_density
 	float_acc avg_speed_accumulator;	// накопитель для подсчета avg_road_speed
 	float_acc total_speed_accumulator;	// накопитель для подсчета avg_road_speed_total
+	float_acc passed_veh_acc;
+	float flow;
 	long_acc passage_time_accumulator;	// накопитель для подсчета avg_road_passage_time
 
 	long stat_accumulation_time;		// время итерации подсчета
@@ -74,6 +77,7 @@ public:
 	float get_avg_road_speed() const{return avg_road_speed;};
 	float get_avg_road_speed_total() const{return avg_road_speed_total;};
 	float get_avg_road_passage_time() const{return avg_road_passage_time;};
+	float get_flow () const {return flow;};
 	float get_road_flow() const{return road_flow;};
 	// подсчет параметров, вызывается раз в итерацию
 	void update_parameters();
