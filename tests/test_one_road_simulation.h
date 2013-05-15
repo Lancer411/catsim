@@ -39,7 +39,7 @@ public:
 		int iteration_num = 900;
 		int road_length = 200;
 		int lanes_num = 1;
-		random::initialize();
+
 		// start model
 		while(init_density <= 1)
 		{
