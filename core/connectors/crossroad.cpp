@@ -68,8 +68,7 @@ bool crossroad::connect(road_ptr road, std::string road_id, relative_direction d
 	int y = conversion::get_road_position(x, direction);
 	if(get_status(x, y) != ROAD_NONE)
 	{
-		set_road_status (x, ROAD_ABLE);
-		set_road_status (y, ROAD_ABLE);
+		set_status (x, y, ROAD_ABLE);
 		switch(direction)
 		{
 			case DIRECTION_RIGHT:
@@ -78,6 +77,8 @@ bool crossroad::connect(road_ptr road, std::string road_id, relative_direction d
 				break;
 			case DIRECTION_LEFT:
 				roads_opposite[y] = road;
+				break;
+			case DIRECTION_ANY:
 				break;
 		}
 	}
@@ -90,6 +91,10 @@ road_ptr crossroad::get_next_road(std::string road_id, relative_direction direct
 	int position = get_road_position(road_id);
 	if(position == NO_ROAD)
 		return null_ptr;
+	if(direction == DIRECTION_ANY)
+	{
+		direction = get_any_available_direction(position);
+	}
 	int pos = conversion::get_road_position(position, direction);
 	switch(direction)
 	{
@@ -98,6 +103,8 @@ road_ptr crossroad::get_next_road(std::string road_id, relative_direction direct
 			return roads_direct[pos];
 		case DIRECTION_LEFT:
 			return roads_opposite[pos];
+		case DIRECTION_ANY:
+			return null_ptr;
 	}
 }
 
@@ -116,6 +123,40 @@ int crossroad::get_road_position(std::string road_id)
 	return NO_ROAD;
 }
 
+relative_direction crossroad::get_any_available_direction(int position)
+{
+	short dir = 0;
+	int left = conversion::get_left_road_position(position);
+	int right = conversion::get_right_road_position(position);
+	int straight = conversion::get_straight_road_position(position);
+	if(get_status(position, left) == ROAD_ABLE)
+		dir += DIRECTION_LEFT;
+	if(get_status(position, right) == ROAD_ABLE)
+		dir += DIRECTION_RIGHT;
+	if(get_status(position, straight) == ROAD_ABLE)
+		dir += DIRECTION_STRAIGHT;
+	switch (dir)
+	{
+		case 1:
+			return DIRECTION_LEFT;
+		case 2:
+			return DIRECTION_STRAIGHT;
+		case 4:
+			return DIRECTION_RIGHT;
+		case 5:
+			return (random::std_random(0,2) == 0 ? DIRECTION_LEFT : DIRECTION_RIGHT);
+		case 6:
+			return (random::std_random(0,2) == 0 ? DIRECTION_STRAIGHT : DIRECTION_RIGHT);
+		case 3:
+			return (random::std_random(0,2) == 0 ? DIRECTION_LEFT : DIRECTION_STRAIGHT);
+		case 7:
+			return (random::std_random(0,2) == 0 ?
+					DIRECTION_RIGHT :
+					(random::std_random(0,2) == 0) ? DIRECTION_LEFT : DIRECTION_STRAIGHT);;
+		default:
+			break;
+	}
+}
 
 road_status crossroad::get_status(int pos_x, int pos_y)
 {

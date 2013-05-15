@@ -35,12 +35,12 @@ public:
 					float bus_prob);
 	~feeder_params();
 
-	float density;
-	int16 init_speed;
-	int16 max_speed;
-	float car_prob;
-	float bus_prob;
-	float truck_prob;
+	float density;		// density of filled road
+	int16 init_speed;	// initial speed of vehicles to generate
+	int16 max_speed;	// maximum spped of vehicles to generate
+	float car_prob;		// probability of generating Cars
+	float bus_prob;		// probability of generating Buses
+	float truck_prob;	// probability of generating Trucks
 private:
 	void init_params(float density, int16 init_speed,
 					int16 max_speed, float car_prob,

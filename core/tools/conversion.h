@@ -76,6 +76,7 @@ public:
 			case DIRECTION_RIGHT:
 				pos = get_right_road_position(position);
 				break;
+			case DIRECTION_ANY:
 			case DIRECTION_STRAIGHT:
 				pos =  get_straight_road_position(position);
 				break;
