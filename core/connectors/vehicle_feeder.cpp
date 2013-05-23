@@ -63,7 +63,7 @@ bool vehicle_feeder::connect_feeding_road(road_ptr road, feeder_params params)
 	if(!feeding_roads.count(road->get_id()))
 	{
 		feeding_roads[road->get_id()] = road;
-		feeding_roads_params[road->get_id()] = params;
+		update_road_params(road->get_id(), params);
 		return true;
 	}
 	return false;
@@ -87,12 +87,27 @@ void vehicle_feeder::feed_roads()
 		std::string road_id = it->first;
 		road_ptr road = it->second;
 		feeder_params params = feeding_roads_params[road_id];
-		fill_road_to_density(road, params);
+		switch (params.get_mode())
+		{
+			case INITIAL:
+				fill_road_to_density(road, params);
+				break;
+			case CONTINUOUS:
+				feed_road_continuously(road, params);
+				break;
+			case DISTRIBUTIVE:
+				feed_road_by_distribution(road, params);
+				break;
+			default:
+				break;
+		}
 	}
 }
 
 void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params params)
 {
+	if(params.road_fed())
+		return;
 	// fill road with vehicles to density
 	float dens = 0;
 	int16 created_veh_length = 0;
@@ -115,6 +130,23 @@ void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params params)
 		dens = created_veh_length/(float)(road_length * lanes_num);
 		road->push_vehicle(veh);
 	}
+	params.set_fed();
+	update_road_params(road->get_id(), params);
+}
+
+void vehicle_feeder::feed_road_continuously(road_ptr road, feeder_params params)
+{
+
+}
+
+void vehicle_feeder::feed_road_by_distribution(road_ptr road, feeder_params params)
+{
+
+}
+
+void vehicle_feeder::update_road_params(std::string id, feeder_params params)
+{
+	feeding_roads_params[id] = params;
 }
 
 vehicle_feeder::~vehicle_feeder()

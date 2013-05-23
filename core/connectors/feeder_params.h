@@ -54,20 +54,27 @@ public:
 
 	float density;		// density of filled road
 	int16 init_speed;	// initial speed of vehicles to generate
-	feeder_mode mode;	// a mode of feeding
 	int16 max_speed;	// maximum spped of vehicles to generate
 	float car_prob;		// probability of generating Cars
 	float bus_prob;		// probability of generating Buses
 	float truck_prob;	// probability of generating Trucks
 
-	distribution distrib; // distribution that is used in DISTRIBUTIVE mode
+	void set_mode(feeder_mode mode) {this->mode = mode;};
+	void set_distribution (distribution distrib) {this->distrib = distrib;};
+
+	feeder_mode get_mode() const {return mode;};
+	distribution get_distribution() const {return distrib;};
+	bool road_fed() const {return road_is_fed;};
+	void set_fed() {road_is_fed = true;};
 private:
+	feeder_mode mode;	// a mode of feeding
+	distribution distrib; // distribution that is used in DISTRIBUTIVE mode
+	bool road_is_fed;	// indicator for initial distribution
+
 	void init_params(float density, feeder_mode mode, int16 init_speed,
 					int16 max_speed, float car_prob,
 					float bus_prob, float truck_prob);
 
-	void set_mode(feeder_mode mode) {this->mode = mode;};
-	void set_distribution (distribution distrib) {this->distrib = distrib;};
 };
 
 

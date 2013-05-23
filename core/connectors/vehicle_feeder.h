@@ -81,6 +81,10 @@ private:
 	 * Fills specified road with params
 	 */
 	void fill_road_to_density(road_ptr road, feeder_params params);
+	void feed_road_continuously(road_ptr road, feeder_params params);
+	void feed_road_by_distribution(road_ptr road, feeder_params params);
+
+	void update_road_params(std::string id, feeder_params params);
 };
 
 typedef boost::shared_ptr<vehicle_feeder> vehicle_feeder_ptr;

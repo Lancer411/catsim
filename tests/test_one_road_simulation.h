@@ -59,8 +59,6 @@ public:
 
 			// set accumulation time
 			roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/4);
-			// initiation parameters
-			feeder_p->feed_roads();
 			// iteration process start
 			int k = 0;
 
@@ -68,6 +66,7 @@ public:
 			{
 //				std::cout<<"iter "<<k<<std::endl;
 				k++;
+				feeder_p->feed_roads();
 //				std::cout<<road;
 				roadf.iterate();
 			}

@@ -79,6 +79,7 @@ void feeder_params::init_params(float density, feeder_mode mode,
 	this->car_prob = car_prob;
 	this->bus_prob = bus_prob;
 	this->truck_prob = truck_prob;
+	this->road_is_fed = false;
 }
 
 feeder_params::~feeder_params()
