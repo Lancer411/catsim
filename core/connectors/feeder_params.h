@@ -28,7 +28,6 @@ const short DEFAULT_FEEDER_MAX_SPEED = 80;
 const float DEFAULT_FEEDER_CAR_PROB = 0.7;
 const float DEFAULT_FEEDER_BUS_PROB = 0.25;
 const float DEFAULT_FEEDER_TRUCK_PROB = 0.05;
-const feeder_mode DEFAULT_FEEDER_MODE = INITIAL;
 const distribution DEFAULT_FEEDER_DISTRIBUTION = NORMAL;
 
 enum feeder_mode
@@ -36,8 +35,9 @@ enum feeder_mode
 	INITIAL,			// road is fed to density at start
 	CONTINUOUS,			// road is fed to keep required density
 	DISTRIBUTIVE		// vehicles appear according to distribution
-}
+};
 
+const feeder_mode DEFAULT_FEEDER_MODE = INITIAL;
 /*
  *
  */
@@ -66,8 +66,8 @@ private:
 					int16 max_speed, float car_prob,
 					float bus_prob, float truck_prob);
 
-	void set_mode(feeder_mode mode) const {this->mode = mode;};
-	void set_distribution (distribution distrib) const {this->distrib = distrib;};
+	void set_mode(feeder_mode mode) {this->mode = mode;};
+	void set_distribution (distribution distrib) {this->distrib = distrib;};
 };
 
 

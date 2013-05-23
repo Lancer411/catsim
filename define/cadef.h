@@ -95,6 +95,6 @@ enum distribution
 	NORMAL,
 	PUASSON,
 	TRIANGLE
-}
+};
 
 #endif /* CADEF_H_ */
