@@ -43,8 +43,8 @@ void road_stat_data::update_parameters()
 		avg_road_density = boost::accumulators::mean(density_accumulator);
 		avg_road_passage_time = boost::accumulators::mean(passage_time_accumulator);
 		avg_road_speed_total = boost::accumulators::mean(total_speed_accumulator);
-		road_flow = avg_road_density * avg_road_speed_total*road_lanes_count;
-		flow = boost::accumulators::mean(passed_veh_acc);
+		road_flow_as_speeddensity = avg_road_density * avg_road_speed_total*road_lanes_count;
+		passed_veh_flow = boost::accumulators::mean(passed_veh_acc);
 		reset_timer();
 	}
 	passed_vehicles_number_iter = 0;
@@ -79,7 +79,7 @@ void road_stat_data::reset()
 	current_vehicles_length =
 	current_road_density = avg_road_density =
 	avg_road_speed = avg_road_speed_total =
-	avg_road_passage_time = road_flow = flow = 0;
+	avg_road_passage_time = road_flow_as_speeddensity = passed_veh_flow = 0;
 	stat_accumulation_time = DEFAULT_STAT_ACCUMULATION_TIME;
 	reset_timer();
 }

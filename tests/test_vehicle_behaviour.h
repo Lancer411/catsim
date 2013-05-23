@@ -98,7 +98,7 @@ public:
 		std::cout<<"Average Density: "<<stat->get_avg_road_density()<<std::endl;
 		std::cout<<"Average Road Speed: "<<stat->get_avg_road_speed()<<std::endl;
 		std::cout<<"Average Total Road Speed: "<<stat->get_avg_road_speed_total()<<std::endl;
-		std::cout<<"Road Flow: "<<stat->get_road_flow()<<std::endl;
+		std::cout<<"Road Flow: "<<stat->get_road_flow_as_speeddensity()<<std::endl;
 		std::cout<<"Passed Vehicles: "<<stat->get_passed_vehicles_number()<<std::endl;
 		std::cout<<"Current Vehicles: "<<stat->get_current_vehicles_number()<<std::endl<<std::endl;
 		std::cout<<"Avegare Passage Time: "<<stat->get_avg_road_passage_time()<<std::endl<<std::endl;

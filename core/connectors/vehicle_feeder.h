@@ -76,13 +76,11 @@ public:
 	 * Feeds all the roads with their params
 	 */
 	void feed_roads();
-	void feed_direct_roads();
 private:
 	/**
 	 * Fills specified road with params
 	 */
 	void fill_road_to_density(road_ptr road, feeder_params params);
-	void fill_direct_road_to_density (road_ptr road, feeder_params params);
 };
 
 typedef boost::shared_ptr<vehicle_feeder> vehicle_feeder_ptr;

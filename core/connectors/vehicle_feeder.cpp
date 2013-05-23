@@ -91,20 +91,6 @@ void vehicle_feeder::feed_roads()
 	}
 }
 
-void vehicle_feeder::feed_direct_roads()
-{
-	road_map::iterator it;
-		for (it = feeding_roads.begin(); it != feeding_roads.end();++it)
-		{
-			std::string road_id = it->first;
-			road_ptr road = it->second;
-			feeder_params params = feeding_roads_params[road_id];
-			fill_direct_road_to_density(road,params);
-		}
-}
-
-
-
 void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params params)
 {
 	// fill road with vehicles to density
@@ -127,34 +113,6 @@ void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params params)
 		vehicle_ptr veh = veh_factory->create_vehicle(max_speed, init_speed, veh_type);
 		created_veh_length += veh->get_length();
 		dens = created_veh_length/(float)(road_length * lanes_num);
-		road->push_vehicle(veh);
-	}
-}
-
-
-void vehicle_feeder::fill_direct_road_to_density(road_ptr road, feeder_params params)
-{
-	// fill road with vehicles to density
-	//float dens = 0;
-	float prob = random::std_random();
-	int16 created_veh_length = 0;
-	int16 road_length = road->get_lane_length();
-	int16 lanes_num = road->get_lane_count();
-	if(prob < params.density)
-	{
-		int16 init_speed = params.init_speed, max_speed = params.max_speed;
-		vehicle_type veh_type = Car;
-		float typerand = random::std_random();
-		if (typerand < params.car_prob)
-			veh_type = Car;
-		else
-			if (typerand < params.car_prob + params.bus_prob)
-				veh_type = Bus;
-			else
-				veh_type = Truck;
-		vehicle_ptr veh = veh_factory->create_vehicle(max_speed, init_speed, veh_type);
-		created_veh_length += veh->get_length();
-		//dens = created_veh_length/(float)(road_length * lanes_num);
 		road->push_vehicle(veh);
 	}
 }
