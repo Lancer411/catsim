@@ -21,6 +21,23 @@ feeder_params.h - parameter for road's vehicle generation
 #ifndef FEEDER_PARAMS_H_
 #define FEEDER_PARAMS_H_
 #include "define/cadef.h"
+
+const float DEFAULT_FEEDER_DENSITY = 0.2;
+const short DEFAULT_FEEDER_INIT_SPEED = 20;
+const short DEFAULT_FEEDER_MAX_SPEED = 80;
+const float DEFAULT_FEEDER_CAR_PROB = 0.7;
+const float DEFAULT_FEEDER_BUS_PROB = 0.25;
+const float DEFAULT_FEEDER_TRUCK_PROB = 0.05;
+const feeder_mode DEFAULT_FEEDER_MODE = INITIAL;
+const distribution DEFAULT_FEEDER_DISTRIBUTION = NORMAL;
+
+enum feeder_mode
+{
+	INITIAL,			// road is fed to density at start
+	CONTINUOUS,			// road is fed to keep required density
+	DISTRIBUTIVE		// vehicles appear according to distribution
+}
+
 /*
  *
  */
@@ -37,14 +54,21 @@ public:
 
 	float density;		// density of filled road
 	int16 init_speed;	// initial speed of vehicles to generate
+	feeder_mode mode;	// a mode of feeding
 	int16 max_speed;	// maximum spped of vehicles to generate
 	float car_prob;		// probability of generating Cars
 	float bus_prob;		// probability of generating Buses
 	float truck_prob;	// probability of generating Trucks
+
+	distribution distrib; // distribution that is used in DISTRIBUTIVE mode
 private:
-	void init_params(float density, int16 init_speed,
+	void init_params(float density, feeder_mode mode, int16 init_speed,
 					int16 max_speed, float car_prob,
 					float bus_prob, float truck_prob);
+
+	void set_mode(feeder_mode mode) const {this->mode = mode;};
+	void set_distribution (distribution distrib) const {this->distrib = distrib;};
 };
+
 
 #endif /* FEEDER_PARAMS_H_ */

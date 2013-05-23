@@ -23,6 +23,7 @@
 feeder_params::feeder_params()
 {
 	this->init_params(DEFAULT_FEEDER_DENSITY,
+						DEFAULT_FEEDER_MODE,
 						DEFAULT_FEEDER_INIT_SPEED,
 						DEFAULT_FEEDER_MAX_SPEED,
 						DEFAULT_FEEDER_CAR_PROB,
@@ -33,6 +34,7 @@ feeder_params::feeder_params()
 feeder_params::feeder_params(float density)
 {
 	this->init_params(density,
+						DEFAULT_FEEDER_MODE,
 						DEFAULT_FEEDER_INIT_SPEED,
 						DEFAULT_FEEDER_MAX_SPEED,
 						DEFAULT_FEEDER_CAR_PROB,
@@ -43,6 +45,7 @@ feeder_params::feeder_params(float density)
 feeder_params::feeder_params(float density, int16 init_speed, int16 max_speed)
 {
 	this->init_params(density,
+						DEFAULT_FEEDER_MODE,
 						init_speed,
 						max_speed,
 						DEFAULT_FEEDER_CAR_PROB,
@@ -55,6 +58,7 @@ feeder_params::feeder_params(float density, int16 init_speed, int16 max_speed,
 							float bus_prob)
 {
 	this->init_params(density,
+						DEFAULT_FEEDER_MODE,
 						init_speed,
 						max_speed,
 						car_prob,
@@ -62,11 +66,14 @@ feeder_params::feeder_params(float density, int16 init_speed, int16 max_speed,
 						100 - (car_prob + bus_prob));
 }
 
-void feeder_params::init_params(float density, int16 init_speed,
+void feeder_params::init_params(float density, feeder_mode mode,
+								int16 init_speed,
 								int16 max_speed, float car_prob,
 								float bus_prob, float truck_prob)
 {
 	this->density = density;
+	this->mode = mode;
+	this->distrib = DEFAULT_FEEDER_DISTRIBUTION;
 	this->init_speed = init_speed;
 	this->max_speed = max_speed;
 	this->car_prob = car_prob;
