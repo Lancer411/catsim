@@ -39,7 +39,11 @@ public:
 	//				end.y = k-start.y;	//*--* (Дистанция=3) *-*(Дистанция=2) ** (Дистанция=1)
 					end.x = start.x;
 					end.y = k;
-					front_vehicle = cells[start.x][k].get_vehicle();
+					object_ptr obj = cells[start.x][k].get_object();
+					if(obj->is_dynamic())
+						front_vehicle = boost::shared_polymorphic_downcast<vehicle>(obj);
+					else
+						obj->react();
 					return true;
 				}
 		return false;

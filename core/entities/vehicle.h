@@ -20,11 +20,12 @@
 
 #ifndef VEHICLE_H_
 #define VEHICLE_H_
+#include "core/base/iobject.h"
 #include "entity.h"
 #include "core/tools/conversion.h"
 #include "core/tools/random.h"
 
-class vehicle : public entity
+class vehicle : public entity, public iobject
 {
 	int16 current_kmh_velocity;
 	int16 max_kmh_velocity;
@@ -64,6 +65,9 @@ public:
 
 	int16 update_velocity (short limit);
 	void reset_time_counter(){time_on_road = 0;};
+
+	bool is_dynamic(){return true;};
+	void react(){};
 private:
 	void init(int16 max_velocity, int16 start_velocity, vehicle_type type);
 };

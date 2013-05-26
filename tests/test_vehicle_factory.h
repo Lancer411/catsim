@@ -34,15 +34,17 @@ public:
 	{
 		cell cell;
 		vehicle_factory factory;
-		cell.set_vehicle(factory.create_vehicle(100,60,Car));
+		cell.set_object(factory.create_vehicle(100,60,Car));
 		factory.create_vehicle(100,60,Car);
 		std::cout<<"- vehicle_factory_test:"<<std::endl;
-		std::string id = cell.get_vehicle()->get_id();
-		assert_expression(cell.get_vehicle()==factory.get_vehicle(id));
+		object_ptr obj = cell.get_object();
+		vehicle_ptr veh = boost::shared_polymorphic_downcast<vehicle>(obj);
+		std::string id = veh->get_id();
+		assert_expression(cell.get_object()==factory.get_vehicle(id));
 		assert_equals(factory.count(),2);
 		cell.clear();
 		assert_expression(factory.get_vehicle(id)!=NULL);
-		assert_expression(cell.get_vehicle()==NULL);
+		assert_expression(cell.get_object()==NULL);
 		assert_equals(factory.count(),2);
 		factory.delete_vehicle(id);
 		assert_equals(factory.count(),1);

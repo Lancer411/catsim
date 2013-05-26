@@ -1,5 +1,5 @@
 /*
- 	cell.h - class represents a cell of cellular automata
+ 	iobject.h - <description>
 
 	Catsim source code
 	Copyright (C) 2012-2013  naghtarr
@@ -15,35 +15,22 @@
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.      
 */
 
-#include "cell.h"
+#ifndef IOBJECT_H_
+#define IOBJECT_H_
+#include "define/cadef.h"
 
-cell::cell()
+class iobject
 {
-	this->occupied = false;
-}
+public:
+	virtual bool is_dynamic() = 0;
+	virtual void react() = 0;
+protected:
+	bool is_static(){return !this->is_dynamic();};
+};
 
-cell::cell(const cell &cell)
-{
-	this->occupied = cell.occupied;
-	this->object = cell.object;
-}
+typedef boost::shared_ptr<iobject> object_ptr;
 
-void cell::set_object(object_ptr object)
-{
-	this->object = object;
-	occupied = true;
-}
-
-void cell::clear()
-{
-	occupied = false;
-	object.reset();
-}
-
-cell::~cell()
-{
-	object.reset();
-}
+#endif /* IOBJECT_H_ */

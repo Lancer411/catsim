@@ -35,7 +35,7 @@ public:
 		cell cell;
 		vehicle_factory factory;
 		vehicle_ptr veh = factory.create_vehicle(100,60,Car);
-		cell.set_vehicle(veh);
+		cell.set_object(veh);
 		std::cout << veh.use_count() << std::endl;
 		factory.delete_all_vehicles();
 		std::cout << veh.use_count() << std::endl;

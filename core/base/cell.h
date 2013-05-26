@@ -21,11 +21,11 @@
 #ifndef CELL_H_
 #define CELL_H_
 #include "define/cadef.h"
-#include "core/entities/vehicle.h"
+#include "core/base/iobject.h"
 
 class cell
 {
-	vehicle_ptr vehicle;
+	object_ptr object;
 	bool occupied;
 public:
 	cell();
@@ -33,15 +33,18 @@ public:
 	~cell();
 
 	bool is_occupied() const{return this->occupied;};
-	vehicle_ptr get_vehicle() const {return this->vehicle;};
+	object_ptr get_object() const {return this->object;};
 
 	void clear();
-	void set_vehicle(vehicle_ptr vehicle);
+	void set_object(object_ptr object);
 
 	friend std::ostream& operator <<( std::ostream &stream, const cell &cell)
 	{
 		if(cell.is_occupied())
-			stream<<"*";
+			if(cell.object->is_dynamic())
+				stream<<"*";
+			else
+				stream<<'|';
 		else
 			stream<<'-';
 		return stream;

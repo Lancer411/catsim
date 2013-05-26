@@ -34,14 +34,14 @@ public:
 		vehicle_ptr veh(new vehicle(100,60,Car));
 		cell cell;
 		std::cout<<"- cell_test:"<<std::endl;
-		cell.set_vehicle(veh);
-		assert_expression(veh==cell.get_vehicle());
+		cell.set_object(veh);
+		assert_expression(veh==cell.get_object());
 		assert_expression(cell.is_occupied()^!true);
 		veh.reset();
 		assert_expression(veh==NULL);
-		assert_expression(cell.get_vehicle()!=NULL);
+		assert_expression(cell.get_object()!=NULL);
 		cell.clear();
-		assert_expression(cell.get_vehicle()==NULL);
+		assert_expression(cell.get_object()==NULL);
 		assert_expression(cell.is_occupied()^!false);
 	};
 };

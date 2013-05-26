@@ -77,12 +77,16 @@ void road::iterate()
 		{
 			if(temp_roaddata[i][j].is_occupied()) // если ячейка занята
 			{
-				vehicle_ptr veh = temp_roaddata[i][j].get_vehicle();
-				stat_data->update_avg_speed(veh->get_kmh_velocity());
-				veh->update_velocity(velocity_limit);
-				drive(veh, i, j);
-				j += veh->get_length();
-//				j -= veh->get_length();
+				object_ptr obj = temp_roaddata[i][j].get_object();
+				if(obj->is_dynamic())
+				{
+					vehicle_ptr veh = boost::shared_polymorphic_downcast<vehicle>(obj);
+					stat_data->update_avg_speed(veh->get_kmh_velocity());
+					veh->update_velocity(velocity_limit);
+					drive(veh, i, j);
+					j += veh->get_length();
+	//				j -= veh->get_length();
+				}
 			}
 			else j++;
 //			else j--;
@@ -279,7 +283,7 @@ void road::put_vehicle(vehicle_ptr veh, int16 w, int16 l)
 	while(len)
 	{
 		len--;
-		roaddata[w][l+len].set_vehicle(veh);
+		roaddata[w][l+len].set_object(veh);
 	}
 }
 
