@@ -89,7 +89,7 @@ public:
 	void set_stat_accumulation_time(long time){stat_accumulation_time = time;};
 	void reset();
 
-	void add_marker(const road_marker marker);
+	void add_marker(const road_marker_ptr marker);
 private:
 	void reset_timer();
 };

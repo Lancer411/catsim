@@ -93,7 +93,7 @@ public:
 private:
 	void add_observer(const observer_ptr observer){};
 	void remove_observer(const observer_ptr observer){};
-
+	void notify_observers(){notify_markers();};
 	bool marker_exists(int position)
 	{
 		return (markers.find(position) != markers.end());

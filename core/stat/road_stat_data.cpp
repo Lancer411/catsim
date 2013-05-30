@@ -49,10 +49,10 @@ void road_stat_data::update_parameters()
 	}
 	passed_vehicles_number_iter = 0;
 
-	typedef boost::container::list<road_marker_ptr> marker_item;
-	BOOST_FOREACH(marker_item iter, markers_list)
+	typedef boost::container::list<road_marker_ptr>::value_type marker_item;
+	BOOST_FOREACH(marker_item item, markers_list)
 	{
-		iter.second->iterate();
+		item->iterate();
 	}
 }
 
@@ -102,9 +102,9 @@ void road_stat_data::dec_current_vehicles_num(short veh_length)
 	current_vehicles_length -= veh_length;
 }
 
-void road_stat_data::add_marker(const road_marker marker)
+void road_stat_data::add_marker(const road_marker_ptr marker)
 {
-	markers_list.insert(marker);
+	markers_list.push_back(marker);
 }
 
 road_stat_data::~road_stat_data()
