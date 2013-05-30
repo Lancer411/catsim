@@ -30,6 +30,7 @@
 #include "core/stat/road_stat_data.h"
 #include "core/stat/stat_data_handler.h"
 #include "core/tools/road_iterating_tools.h"
+#include "core/entities/road_marker.h"
 #include <boost/pending/queue.hpp>
 #include <boost/container/set.hpp>
 
@@ -42,7 +43,7 @@ typedef boost::weak_ptr<connector> connector_ptr_weak;
 
 class road;
 typedef boost::shared_ptr<road> road_ptr;
-class road : public entity, iautomat
+class road : public entity, public iautomat, public imarkable
 {
 	cell **roaddata;
 	cell **temp_roaddata;
