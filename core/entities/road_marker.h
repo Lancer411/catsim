@@ -21,26 +21,35 @@
 #ifndef ROAD_MARKER_H_
 #define ROAD_MARKER_H_
 #include "abstract/observer.h"
+#include "core/base/iautomat.h"
 #include "core/entities/entity.h"
 #include "abstract/listeners.h"
-#include <boost/foreach.hpp>
 
-class road_marker: public observer, public entity
+class road_marker: public observer, public entity, public iautomat
 {
 	int position;
+	int time_interval;
 	listener_void handler;
 public:
-	road_marker(int position);
-	int get_position() const {return position;};
-
-	void set_handler(const listener_void handler)
+	road_marker(int position, const listener_void handler)
 	{
+		this->position = position;
 		this->handler = handler;
+		this->time_interval = 0;
 	};
+
+	int get_position() const {return position;};
+	int get_time_interval() const {return time_interval;};
 
 	void handle_event()
 	{
 		handler->handle();
+		time_interval = 0;
+	};
+
+	void iterate()
+	{
+		time_interval++;
 	};
 
 	~road_marker()
@@ -51,9 +60,8 @@ public:
 
 typedef boost::shared_ptr<road_marker> road_marker_ptr;
 typedef boost::container::map<int, road_marker_ptr> marker_map;
-typedef marker_map::value_type marker_item;
 
-class imarkable : public iobservable
+class imarkable : private iobservable
 {
 	marker_map markers;
 public:
@@ -74,8 +82,9 @@ public:
 		markers[position]->handle_event();
 	};
 
-	void notify_observers()
+	void notify_markers()
 	{
+		typedef marker_map::value_type marker_item;
 		BOOST_FOREACH(marker_item iter, markers)
 		{
 			iter.second->handle_event();
@@ -84,6 +93,11 @@ public:
 private:
 	void add_observer(const observer_ptr observer){};
 	void remove_observer(const observer_ptr observer){};
+
+	bool marker_exists(int position)
+	{
+		return (markers.find(position) != markers.end());
+	};
 };
 
 

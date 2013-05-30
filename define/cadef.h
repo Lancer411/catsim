@@ -31,6 +31,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/foreach.hpp>
 
 
 const float DEFAULT_CELL_LENGTH = 5.5;					// Размер ячейки в метрах по умолчанию

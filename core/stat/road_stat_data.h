@@ -21,10 +21,12 @@
 #ifndef ROAD_STAT_DATA_H_
 #define ROAD_STAT_DATA_H_
 #include "define/cadef.h"
+#include "core/entities/road_marker.h"
 #include <boost/shared_ptr.hpp>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
+#include <boost/container/list.hpp>
 
 typedef boost::accumulators::accumulator_set<float,
 						boost::accumulators::features<boost::accumulators::tag::mean> >
@@ -57,6 +59,8 @@ class road_stat_data
 
 	long stat_accumulation_time;		// время итерации подсчета
 	long stat_timer;					// таймер итераций подсчета
+
+	boost::container::list<road_marker_ptr> markers_list;
 public:
 	road_stat_data(int16 linesnum, int16 length);
 	virtual ~road_stat_data();
@@ -84,6 +88,8 @@ public:
 
 	void set_stat_accumulation_time(long time){stat_accumulation_time = time;};
 	void reset();
+
+	void add_marker(const road_marker marker);
 private:
 	void reset_timer();
 };
