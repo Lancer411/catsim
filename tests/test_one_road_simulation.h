@@ -36,8 +36,8 @@ public:
 		// init parameters
 		float init_density = 0.01;
 		float step = 0.01;
-		int iteration_num = 450;
-		int road_length = 100;
+		int iteration_num = 3600;
+		int road_length = 900;
 		int lanes_num = 1;
 		random::initialize();
 
@@ -77,13 +77,19 @@ public:
 			std::cout<<stat->get_current_road_density()<<"|"
 				<<stat->get_avg_road_density()<<"|"
 				<<stat->get_avg_road_speed_total()<<"|"
-				<<stat->get_road_flow_as_speeddensity()<<"|"
+//				<<stat->get_road_flow_as_speeddensity()<<"|"
 				<<stat->get_road_flow_as_mean_passed_veh_num()<<"|"
 				<<stat->get_passed_vehicles_number()<<"|"
 				<<stat->get_current_vehicles_number()<<"|"
-				<<stat->get_avg_road_passage_time()<<"|"
-				<<std::endl;
+				<<stat->get_avg_road_passage_time()<<"|";
+//				<<std::endl;
 
+			position_time_interval_map map = stat->get_time_intervals();
+			BOOST_FOREACH(position_time_interval_map::value_type item, map)
+			{
+				std::cout<<item.first<<"|"<<boost::accumulators::mean(item.second)<<"|";
+			}
+			std::cout<<std::endl;
 
 			init_density += step;
 		}

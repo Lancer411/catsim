@@ -207,6 +207,7 @@ void road::try_crossroad(vehicle_ptr veh, int i, int j)
 		}
 		stat_data->inc_passed_vehicles_num(time_on_road);
 		stat_data->dec_current_vehicles_num(veh->get_length());
+		notify_marker(ROAD_MARKER_SPECIAL_POSITION);
 	}
 }
 

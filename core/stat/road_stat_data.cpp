@@ -52,6 +52,12 @@ void road_stat_data::update_parameters()
 	typedef boost::container::list<road_marker_ptr>::value_type marker_item;
 	BOOST_FOREACH(marker_item item, markers_list)
 	{
+		int position = item->get_position();
+		if(item->is_triggered())
+		{
+			markers_time_intervals[position](item->get_time_interval_prev());
+		}
+
 		item->iterate();
 	}
 }

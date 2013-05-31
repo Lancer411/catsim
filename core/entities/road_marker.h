@@ -25,36 +25,49 @@
 #include "core/entities/entity.h"
 #include "abstract/listeners.h"
 
+const static int ROAD_MARKER_SPECIAL_POSITION = -1;
+
 class road_marker: public observer, public entity, public iautomat
 {
 	int position;
 	int time_interval;
-	listener_void handler;
+	int time_interval_prev;
+	bool triggered;
+//	listener_void handler;
 public:
-	road_marker(int position, const listener_void handler)
+	road_marker(int position)
 	{
 		this->position = position;
-		this->handler = handler;
 		this->time_interval = 0;
+		time_interval_prev = 0;
+		triggered = false;
 	};
 
 	int get_position() const {return position;};
 	int get_time_interval() const {return time_interval;};
-
+	int get_time_interval_prev() const {return time_interval_prev;};
+	bool is_triggered() const {return triggered;};
+//	void set_handler(const listener_void handler)
+//	{
+//		this->handler = handler;
+//	};
 	void handle_event()
 	{
-		handler->handle();
+//		handler->handle();
+		time_interval_prev = time_interval;
 		time_interval = 0;
+		triggered = true;
 	};
 
 	void iterate()
 	{
 		time_interval++;
+		triggered = false;
 	};
 
 	~road_marker()
 	{
-		handler.reset();
+//		handler.reset();
 	};
 };
 

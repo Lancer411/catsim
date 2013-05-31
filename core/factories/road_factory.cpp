@@ -33,6 +33,12 @@ road_ptr road_factory::create_road(int16 linesnum, int16 length)
 	road_stat_data_ptr data = stat_data.register_data(id, linesnum, length);
 	p->set_road_stat_data(data);
 	roads[id] = p;
+
+	road_marker_ptr marker(new road_marker(ROAD_MARKER_SPECIAL_POSITION));
+	data->add_marker(marker);
+
+	p->add_marker(marker);
+
 	crossroad_ptr cross(new crossroad());
 	cross->add_first_road(p);
 	p->set_connector(cross);

@@ -27,6 +27,7 @@
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/container/list.hpp>
+#include <boost/container/map.hpp>
 
 typedef boost::accumulators::accumulator_set<float,
 						boost::accumulators::features<boost::accumulators::tag::mean> >
@@ -35,6 +36,12 @@ typedef boost::accumulators::accumulator_set<float,
 typedef boost::accumulators::accumulator_set<long,
 						boost::accumulators::features<boost::accumulators::tag::mean> >
 						long_acc;
+
+typedef boost::accumulators::accumulator_set<int,
+						boost::accumulators::features<boost::accumulators::tag::mean> >
+						int_acc;
+
+typedef boost::container::map<int, int_acc> position_time_interval_map;
 
 class road_stat_data
 {
@@ -61,6 +68,8 @@ class road_stat_data
 	long stat_timer;					// таймер итераций подсчета
 
 	boost::container::list<road_marker_ptr> markers_list;
+
+	position_time_interval_map markers_time_intervals;
 public:
 	road_stat_data(int16 linesnum, int16 length);
 	virtual ~road_stat_data();
@@ -83,6 +92,8 @@ public:
 	float get_avg_road_passage_time() const{return avg_road_passage_time;};
 	float get_road_flow_as_mean_passed_veh_num () const {return passed_veh_flow;};
 	float get_road_flow_as_speeddensity() const{return road_flow_as_speeddensity;};
+
+	position_time_interval_map get_time_intervals() const {return markers_time_intervals;};
 	// подсчет параметров, вызывается раз в итерацию
 	void update_parameters();
 
