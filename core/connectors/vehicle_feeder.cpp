@@ -106,8 +106,6 @@ void vehicle_feeder::feed_roads()
 
 void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params params)
 {
-	if(params.road_fed())
-		return;
 	// fill road with vehicles to density
 	float dens = 0;
 	int16 created_veh_length = 0;
@@ -116,32 +114,73 @@ void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params params)
 	while (dens < params.density)
 	{
 		int16 init_speed = params.init_speed, max_speed = params.max_speed;
-		vehicle_type veh_type = Car;
-		float typerand = random::std_random();
-		if (typerand < params.car_prob)
-			veh_type = Car;
-		else
-			if (typerand < params.car_prob + params.bus_prob)
-				veh_type = Bus;
-			else
-				veh_type = Truck;
-		vehicle_ptr veh = veh_factory->create_vehicle(max_speed, init_speed, veh_type);
+		vehicle_ptr veh = create_vehicle_by_params(params);
 		created_veh_length += veh->get_length();
 		dens = created_veh_length/(float)(road_length * lanes_num);
 		road->push_vehicle(veh);
 	}
+}
+
+vehicle_ptr vehicle_feeder::create_vehicle_by_params(feeder_params params)
+{
+	vehicle_type veh_type = Car;
+	float typerand = random::std_random();
+	if (typerand < params.car_prob)
+		veh_type = Car;
+	else
+		if (typerand < params.car_prob + params.bus_prob)
+			veh_type = Bus;
+		else
+			veh_type = Truck;
+	return veh_factory->create_vehicle(max_speed, init_speed, veh_type);
+}
+
+void vehicle_feeder::feed_road_initially(road_ptr road, feeder_params params)
+{
+	if(params.road_fed())
+		return;
+	fill_road_to_density(road, params);
 	params.set_fed();
 	update_road_params(road->get_id(), params);
 }
 
 void vehicle_feeder::feed_road_continuously(road_ptr road, feeder_params params)
 {
-
+	float density_delta = params.density - road->get_current_density();
+	if(density_delta > 0)
+	{
+		feeder_params update_params = params;
+		update_params.density = density_delta;
+		fill_road_to_density(road, update_params);
+	}
 }
 
 void vehicle_feeder::feed_road_by_distribution(road_ptr road, feeder_params params)
 {
-
+	distribution dist_type = params.get_distribution();
+	switch(dist_type)
+	{
+		case NORMAL:
+			if(params.need_to_distribute())
+			{
+				vehicle_ptr veh = create_vehicle_by_params(params);
+				road->push_vehicle(veh);
+				int next_timer = random::next_int_uniform();
+				params.set_distribution_timer(next_timer);
+			}
+			else
+			{
+				params.tick_distribution_timer();
+			}
+			break;
+		case PUASSON:
+			break;
+		case TRIANGLE:
+			break;
+		default:
+			break;
+	}
+	update_road_params(road->get_id(), params);
 }
 
 void vehicle_feeder::update_road_params(std::string id, feeder_params params)

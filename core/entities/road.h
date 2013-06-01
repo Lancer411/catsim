@@ -62,6 +62,7 @@ public:
 	int16 get_lane_count() const {return rw;};
 	int16 get_lane_length() const {return rl;};
 	short get_velocity_limit() const {return velocity_limit;};
+	float get_current_density() const {return stat_data->get_current_road_density();};
 	void set_velocity_limit(short limit){velocity_limit = limit;};
 	void set_connector(connector_ptr cross){ front_crossroad = cross; };
 	void push_vehicle(vehicle_ptr veh);

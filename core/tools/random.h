@@ -21,14 +21,21 @@
 #ifndef RANDOM_H_
 #define RANDOM_H_
 #include "define/cadef.h"
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 class random
 {
+	// random generator
+	static boost::random::mt19937 gen;
+	// distributions
+	static boost::random::uniform_int_distribution<> uniform_int_dist;
 public:
 	static void initialize()
-		{
-			std::srand(std::time(0));
-		}
+	{
+		std::srand(std::time(0));
+		init_int_uniform(10);
+	}
 
 	static float std_random(int offset, int top)
 	{
@@ -51,6 +58,17 @@ public:
 			return DIRECTION_STRAIGHT;
 		return DIRECTION_STRAIGHT;
 	};
+
+	static void init_int_uniform(int max)
+	{
+		uniform_int_dist(0, max);
+	}
+
+	static int next_int_uniform()
+	{
+		return uniform_int_dist(gen);
+	}
+
 };
 
 #endif /* RANDOM_H_ */

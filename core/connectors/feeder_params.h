@@ -66,10 +66,24 @@ public:
 	distribution get_distribution() const {return distrib;};
 	bool road_fed() const {return road_is_fed;};
 	void set_fed() {road_is_fed = true;};
+
+	void need_to_distribute() const{return need_to_distribute;};
+	void set_distribution_timer(int time){this->distribution_timer = time;};
+	void tick_distribution_timer()
+	{
+		time--;
+		if(time <= 0)
+		{
+			set_distribution_timer(1); 	// in case someone forget to reset timer
+			need_to_distribute = true;
+		}
+	};
 private:
 	feeder_mode mode;	// a mode of feeding
 	distribution distrib; // distribution that is used in DISTRIBUTIVE mode
 	bool road_is_fed;	// indicator for initial distribution
+	bool need_to_distribute;	// indicator of road's need to be distributed
+	int distribution_timer;
 
 	void init_params(float density, feeder_mode mode, int16 init_speed,
 					int16 max_speed, float car_prob,

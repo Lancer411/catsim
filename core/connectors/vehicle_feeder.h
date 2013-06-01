@@ -27,7 +27,7 @@
 #include "core/factories/vehicle_factory.h"
 #include "core/entities/vehicle.h"
 #include "core/tools/random.h"
-#include "boost/algorithm/string/predicate.hpp"
+#include <boost/algorithm/string/predicate.hpp>
 
 typedef boost::container::map<std::string, road_ptr> road_map;
 typedef boost::container::map<std::string, feeder_params> params_map;
@@ -42,6 +42,7 @@ class vehicle_feeder : public connector
 	road_map deadend_roads;
 	// pointer to existing vehicle factory
 	vehicle_factory_ptr veh_factory;
+
 public:
 	/**
 	 * Constructor of vehicle feeder with vehicle factory as parameter
@@ -81,9 +82,11 @@ private:
 	 * Fills specified road with params
 	 */
 	void fill_road_to_density(road_ptr road, feeder_params params);
+	void feed_road_initially(road_ptr road, feeder_params params);
 	void feed_road_continuously(road_ptr road, feeder_params params);
 	void feed_road_by_distribution(road_ptr road, feeder_params params);
 
+	vehicle_ptr create_vehicle_by_params(feeder_params params);
 	void update_road_params(std::string id, feeder_params params);
 };
 
