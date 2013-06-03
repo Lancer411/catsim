@@ -20,6 +20,7 @@
  */
 
 #include "vehicle_feeder.h"
+#include "core/tools/random.h"
 
 vehicle_feeder::vehicle_feeder(vehicle_factory_ptr veh_factory)
 {
@@ -113,7 +114,6 @@ void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params params)
 	int16 lanes_num = road->get_lane_count();
 	while (dens < params.density)
 	{
-		int16 init_speed = params.init_speed, max_speed = params.max_speed;
 		vehicle_ptr veh = create_vehicle_by_params(params);
 		created_veh_length += veh->get_length();
 		dens = created_veh_length/(float)(road_length * lanes_num);
@@ -123,6 +123,7 @@ void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params params)
 
 vehicle_ptr vehicle_feeder::create_vehicle_by_params(feeder_params params)
 {
+	int16 init_speed = params.init_speed, max_speed = params.max_speed;
 	vehicle_type veh_type = Car;
 	float typerand = random::std_random();
 	if (typerand < params.car_prob)

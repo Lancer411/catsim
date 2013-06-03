@@ -80,7 +80,7 @@ void feeder_params::init_params(float density, feeder_mode mode,
 	this->bus_prob = bus_prob;
 	this->truck_prob = truck_prob;
 	this->road_is_fed = false;
-	this->need_to_distribute = true;
+	this->need_distribute = true;
 	set_distribution_timer(0);
 }
 

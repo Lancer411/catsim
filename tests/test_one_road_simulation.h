@@ -52,6 +52,8 @@ public:
 			// init road loop
 			vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
 			feeder_params params(init_density, 20, 80, 0, 1);
+			params.set_mode(DISTRIBUTIVE);
+			params.set_distribution(NORMAL);
 			feeder_p->connect_feeding_road(road, params);
 
 			crossroad_ptr cross = roadf.get_crossroad(road->get_id());

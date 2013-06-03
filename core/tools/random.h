@@ -35,7 +35,7 @@ public:
 	{
 		std::srand(std::time(0));
 		init_int_uniform(10);
-	}
+	};
 
 	static float std_random(int offset, int top)
 	{
@@ -61,13 +61,14 @@ public:
 
 	static void init_int_uniform(int max)
 	{
-		uniform_int_dist(0, max);
-	}
+		boost::random::uniform_int_distribution<> dist(0, max);
+		uniform_int_dist = dist;
+	};
 
 	static int next_int_uniform()
 	{
 		return uniform_int_dist(gen);
-	}
+	};
 
 };
 

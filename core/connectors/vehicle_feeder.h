@@ -26,7 +26,6 @@
 #include "core/connectors/feeder_params.h"
 #include "core/factories/vehicle_factory.h"
 #include "core/entities/vehicle.h"
-#include "core/tools/random.h"
 #include <boost/algorithm/string/predicate.hpp>
 
 typedef boost::container::map<std::string, road_ptr> road_map;
