@@ -21,16 +21,40 @@
 
 boost::random::mt19937 random::gen(std::time(0));
 boost::random::uniform_int_distribution<> random::uniform_int_dist(0, 10);
+boost::random::poisson_distribution<int> random::poisson_int_dist(5);
+boost::random::triangle_distribution<> random::triangle_int_dist(1,5,10);
 
 int random::next_int_uniform()
 {
 	return random::uniform_int_dist(random::gen);
 }
 
-void random::init_int_uniform(int max)
+int random::next_int_poisson()
 {
-	boost::random::uniform_int_distribution<> new_uniform(0, max);
+	return random::poisson_int_dist(random::gen);
+}
+
+int random::next_int_triangle()
+{
+	return random::triangle_int_dist(random::gen);
+}
+
+void random::init_int_uniform(unsigned int min, unsigned int max)
+{
+	boost::random::uniform_int_distribution<> new_uniform(min, max);
 	random::uniform_int_dist = new_uniform;
+}
+
+void random::init_int_poisson(unsigned int mean)
+{
+	boost::random::poisson_distribution<int> new_poisson(mean);
+	random::poisson_int_dist = new_poisson;
+}
+
+void random::init_int_trianle(unsigned int lower, unsigned int mode, unsigned int upper)
+{
+	boost::random::triangle_distribution<> new_triangle(lower, mode, upper);
+	random::triangle_int_dist = new_triangle;
 }
 
 void random::seed(const unsigned int & seed)

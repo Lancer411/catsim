@@ -28,7 +28,7 @@ const short DEFAULT_FEEDER_MAX_SPEED = 80;
 const float DEFAULT_FEEDER_CAR_PROB = 0.7;
 const float DEFAULT_FEEDER_BUS_PROB = 0.25;
 const float DEFAULT_FEEDER_TRUCK_PROB = 0.05;
-const distribution DEFAULT_FEEDER_DISTRIBUTION = NORMAL;
+const distribution DEFAULT_FEEDER_DISTRIBUTION = UNIFORM;
 
 enum feeder_mode
 {

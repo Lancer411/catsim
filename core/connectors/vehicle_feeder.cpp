@@ -159,28 +159,31 @@ void vehicle_feeder::feed_road_continuously(road_ptr road, feeder_params_ptr par
 void vehicle_feeder::feed_road_by_distribution(road_ptr road, feeder_params_ptr params)
 {
 	distribution dist_type = params->distribution_type;
-	switch(dist_type)
+	if(params->need_to_distribute())
 	{
-		case NORMAL:
-			if(params->need_to_distribute())
-			{
-				vehicle_ptr veh = create_vehicle_by_params(params);
-				road->push_vehicle(veh);
-				int next_timer = random::next_int_uniform();
-//				std::cout<<"next timer: "<<next_timer<<std::endl;
-				params->set_distribution_timer(next_timer);
-			}
-			else
-			{
-				params->tick_distribution_timer();
-			}
-			break;
-		case PUASSON:
-			break;
-		case TRIANGLE:
-			break;
-		default:
-			break;
+		vehicle_ptr veh = create_vehicle_by_params(params);
+		road->push_vehicle(veh);
+		int next_timer = 0;
+		switch(dist_type)
+		{
+			case UNIFORM:
+				next_timer = random::next_int_uniform();
+				break;
+			case POISSON:
+				next_timer = random::next_int_poisson();
+				break;
+			case TRIANGLE:
+				next_timer = random::next_int_triangle();
+				break;
+			default:
+				break;
+		}
+		std::cout<<"next timer: "<<next_timer<<std::endl;
+		params->set_distribution_timer(next_timer);
+	}
+	else
+	{
+		params->tick_distribution_timer();
 	}
 }
 

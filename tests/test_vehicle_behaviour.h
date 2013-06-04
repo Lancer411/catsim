@@ -41,8 +41,9 @@ public:
 		vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
 
 		feeder_params_ptr params (new feeder_params(density, 20, 80, 1, 0));
-		params->mode = CONTINUOUS;
-		params->distribution_type = NORMAL;
+		params->mode = DISTRIBUTIVE;
+		params->distribution_type = TRIANGLE;
+		random::init_int_trianle(0,1,2);
 		feeder_p->connect_feeding_road(road, params);
 
 		crossroad_ptr cross = roadf.get_crossroad(road->get_id());

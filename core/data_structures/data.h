@@ -62,8 +62,8 @@ enum light_signal_state
 
 enum distribution
 {
-	NORMAL,
-	PUASSON,
+	UNIFORM,
+	POISSON,
 	TRIANGLE,
 };
 
