@@ -20,7 +20,8 @@
 
 #ifndef RANDOM_H_
 #define RANDOM_H_
-#include "define/cadef.h"
+#include <ctime>
+#include "core/data_structures/data.h"
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
@@ -34,7 +35,6 @@ public:
 	static void initialize()
 	{
 		std::srand(std::time(0));
-		init_int_uniform(10);
 	};
 
 	static float std_random(int offset, int top)
@@ -59,17 +59,11 @@ public:
 		return DIRECTION_STRAIGHT;
 	};
 
-	static void init_int_uniform(int max)
-	{
-		boost::random::uniform_int_distribution<> dist(0, max);
-		uniform_int_dist = dist;
-	};
-
-	static int next_int_uniform()
-	{
-		return uniform_int_dist(gen);
-	};
+	static int next_int_uniform();
+	static void init_int_uniform(int max);
+	static void seed(const unsigned int & seed);
 
 };
+
 
 #endif /* RANDOM_H_ */

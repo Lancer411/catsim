@@ -73,15 +73,25 @@ void feeder_params::init_params(float density, feeder_mode mode,
 {
 	this->density = density;
 	this->mode = mode;
-	this->distrib = DEFAULT_FEEDER_DISTRIBUTION;
+	this->distribution_type = DEFAULT_FEEDER_DISTRIBUTION;
 	this->init_speed = init_speed;
 	this->max_speed = max_speed;
 	this->car_prob = car_prob;
 	this->bus_prob = bus_prob;
 	this->truck_prob = truck_prob;
 	this->road_is_fed = false;
-	this->need_distribute = true;
 	set_distribution_timer(0);
+	this->need_distribute = true;
+}
+
+void feeder_params::tick_distribution_timer()
+{
+	distribution_timer--;
+	if(distribution_timer <= 0)
+	{
+		set_distribution_timer(1); 	// in case someone forget to reset timer
+		need_distribute = true;
+	}
 }
 
 feeder_params::~feeder_params()

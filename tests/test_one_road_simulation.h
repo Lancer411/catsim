@@ -24,7 +24,6 @@
 #include "core/factories/road_factory.h"
 #include "core/factories/vehicle_factory.h"
 #include "core/connectors/vehicle_feeder.h"
-#include <boost/program_options.hpp>
 
 class test_one_road_simulation : public test
 {
@@ -36,8 +35,8 @@ public:
 		// init parameters
 		float init_density = 0.01;
 		float step = 0.01;
-		int iteration_num = 3600;
-		int road_length = 900;
+		int iteration_num = 450;
+		int road_length = 100;
 		int lanes_num = 1;
 		random::initialize();
 
@@ -51,9 +50,9 @@ public:
 			road_ptr road = roadf.create_road(lanes_num, road_length);
 			// init road loop
 			vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
-			feeder_params params(init_density, 20, 80, 0, 1);
-			params.set_mode(DISTRIBUTIVE);
-			params.set_distribution(NORMAL);
+			feeder_params_ptr params (new feeder_params(init_density, 20, 80, 1, 0));
+			params->mode = INITIAL;
+			params->distribution_type = NORMAL;
 			feeder_p->connect_feeding_road(road, params);
 
 			crossroad_ptr cross = roadf.get_crossroad(road->get_id());

@@ -29,7 +29,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 
 typedef boost::container::map<std::string, road_ptr> road_map;
-typedef boost::container::map<std::string, feeder_params> params_map;
+typedef boost::container::map<std::string, feeder_params_ptr> params_map;
 
 class vehicle_feeder : public connector
 {
@@ -41,7 +41,6 @@ class vehicle_feeder : public connector
 	road_map deadend_roads;
 	// pointer to existing vehicle factory
 	vehicle_factory_ptr veh_factory;
-
 public:
 	/**
 	 * Constructor of vehicle feeder with vehicle factory as parameter
@@ -58,7 +57,7 @@ public:
 	 * \return	true	- if successfully added
 	 * 			false	- if road already been added
 	 */
-	bool connect_feeding_road(road_ptr road, feeder_params params);
+	bool connect_feeding_road(road_ptr road, feeder_params_ptr params);
 
 	/**
 	 * Add road which is input to feeder
@@ -80,13 +79,14 @@ private:
 	/**
 	 * Fills specified road with params
 	 */
-	void fill_road_to_density(road_ptr road, feeder_params params);
-	void feed_road_initially(road_ptr road, feeder_params params);
-	void feed_road_continuously(road_ptr road, feeder_params params);
-	void feed_road_by_distribution(road_ptr road, feeder_params params);
+	void fill_road_to_density(road_ptr road, feeder_params_ptr params);
+	void feed_road_initially(road_ptr road, feeder_params_ptr params);
+	void feed_road_continuously(road_ptr road, feeder_params_ptr params);
+	void feed_road_by_distribution(road_ptr road, feeder_params_ptr params);
 
-	vehicle_ptr create_vehicle_by_params(feeder_params params);
-	void update_road_params(std::string id, feeder_params params);
+	vehicle_ptr create_vehicle_by_params(feeder_params_ptr params);
+	void update_road_params(std::string id, feeder_params_ptr params);
+
 };
 
 typedef boost::shared_ptr<vehicle_feeder> vehicle_feeder_ptr;
