@@ -98,6 +98,7 @@ private:
 	vehicle_ptr create_vehicle_by_params(feeder_params_ptr params);
 	void update_road_params(std::string id, feeder_params_ptr params);
 
+	boost::random::triangle_distribution<> speed_distribution;
 };
 
 typedef boost::shared_ptr<vehicle_feeder> vehicle_feeder_ptr;

@@ -26,6 +26,7 @@ vehicle_feeder::vehicle_feeder(vehicle_factory_ptr veh_factory)
 {
 	this->veh_factory = veh_factory;
 	this->transfer_mode = SAVING;
+	this->speed_distribution = random::triangle_distribution(20,40,60);
 }
 
 bool vehicle_feeder::transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance)
@@ -140,8 +141,7 @@ vehicle_ptr vehicle_feeder::create_vehicle_by_params(feeder_params_ptr params)
 {
 	int16 init_speed = params->init_speed, max_speed = params->max_speed;
 	int mode = (init_speed + max_speed)/2;
-	random::init_int_trianle(init_speed, mode, max_speed);
-	init_speed = random::next_int_triangle();
+	init_speed = random::next_int_triangle(speed_distribution);
 	vehicle_type veh_type = Car;
 	float typerand = random::std_random();
 	if (typerand < params->car_prob)

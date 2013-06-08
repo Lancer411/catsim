@@ -32,6 +32,7 @@ public:
 		feeder_params_ptr params (new feeder_params(density, 20, 60, 1, 0));
 		params->mode = DISTRIBUTIVE;
 		params->distribution_type = TRIANGLE;
+		random::init_int_trianle(1,2,2);
 		feeder_p->connect_feeding_road(road, params);
 		feeder_p->connect_deadend_road(road, road->get_id());
 		road->set_connector(feeder_p);
