@@ -124,6 +124,9 @@ void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params_ptr param
 vehicle_ptr vehicle_feeder::create_vehicle_by_params(feeder_params_ptr params)
 {
 	int16 init_speed = params->init_speed, max_speed = params->max_speed;
+	int mode = (init_speed + max_speed)/2;
+	random::init_int_trianle(init_speed, mode, max_speed);
+	init_speed = random::next_int_triangle();
 	vehicle_type veh_type = Car;
 	float typerand = random::std_random();
 	if (typerand < params->car_prob)
