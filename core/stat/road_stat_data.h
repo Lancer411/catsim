@@ -22,26 +22,38 @@
 #define ROAD_STAT_DATA_H_
 #include "define/cadef.h"
 #include "core/entities/road_marker.h"
+#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
+#include <boost/accumulators/statistics/density.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/container/vector.hpp>
 #include <boost/container/map.hpp>
 
+typedef boost::accumulators::tag::mean stat_mean;
+typedef boost::accumulators::tag::density stat_density;
+
 typedef boost::accumulators::accumulator_set<float,
-						boost::accumulators::features<boost::accumulators::tag::mean> >
+						boost::accumulators::stats<stat_mean> >
 						float_acc;
 
 typedef boost::accumulators::accumulator_set<long,
-						boost::accumulators::features<boost::accumulators::tag::mean> >
+						boost::accumulators::stats<stat_mean> >
 						long_acc;
 
 typedef boost::accumulators::accumulator_set<int,
-						boost::accumulators::features<boost::accumulators::tag::mean> >
+						boost::accumulators::stats<stat_mean> >
 						int_acc;
 
+typedef boost::accumulators::accumulator_set<int,
+						boost::accumulators::features<stat_density> >
+						int_dens_acc;
+
 typedef boost::container::map<int, int_acc> position_time_interval_map;
+
+typedef boost::iterator_range<std::vector<std::pair<double, double> >::iterator > time_density_histogram;
 
 class road_stat_data
 {
@@ -70,6 +82,7 @@ class road_stat_data
 	boost::container::vector<road_marker_ptr> markers_list;
 
 	position_time_interval_map markers_time_intervals;
+	static int_dens_acc dens_acc;
 public:
 	road_stat_data(int16 linesnum, int16 length);
 	virtual ~road_stat_data();
@@ -101,6 +114,8 @@ public:
 	void reset();
 
 	void add_marker(const road_marker_ptr marker);
+
+	time_density_histogram get_time_density_histogram();
 private:
 	void reset_timer();
 };

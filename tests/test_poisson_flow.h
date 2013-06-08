@@ -19,7 +19,7 @@ public:
 	~test_poisson_flow(){};
 	void runtest()
 	{
-		int iteration_num = 100;
+		int iteration_num = 10000;
 		int road_length = 100;
 		int lane_num = 1;
 		float density = 0.25;
@@ -43,10 +43,10 @@ public:
 
 		while(k < iteration_num)
 		{
-			std::cout<<"iter "<<k<<std::endl;
+//			std::cout<<"iter "<<k<<std::endl;
 			k++;
 			feeder_p->feed_roads();
-			std::cout<<road;
+//			std::cout<<road;
 			roadf.iterate();
 		}
 
@@ -61,6 +61,18 @@ public:
 		std::cout<<"Passed Vehicles: "<<stat->get_passed_vehicles_number()<<std::endl;
 		std::cout<<"Current Vehicles: "<<stat->get_current_vehicles_number()<<std::endl;
 		std::cout<<"Average Passage Time: "<<stat->get_avg_road_passage_time()<<std::endl;
+
+		time_density_histogram hist = stat->get_time_density_histogram();
+
+		double total = 0.0;
+
+		for( int i = 0; i < hist.size(); i++ )
+		{
+			std::cout << "Bin lower bound: " << hist[i].first << ", Value: " << hist[i].second << std::endl;
+			total += hist[i].second;
+		}
+
+		std::cout << "Total: " << total << std::endl;
 	};
 };
 
