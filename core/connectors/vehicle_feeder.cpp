@@ -24,21 +24,36 @@
 
 vehicle_feeder::vehicle_feeder(vehicle_factory_ptr veh_factory)
 {
-//	this->veh_factory = vehicle_factory::get();
 	this->veh_factory = veh_factory;
+	this->transfer_mode = SAVING;
 }
 
 bool vehicle_feeder::transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance)
 {
-	COORD coord;
-	bool road_free = to_road->has_free_space(veh->get_length(), veh->get_cell_velocity() - passed_distance + 1, &coord);
-	if(road_free)
+	switch(this->transfer_mode)
 	{
-		veh->set_cell_velocity(veh->get_cell_velocity() - passed_distance + 1);
-		veh->reset_time_counter();
-		to_road->move_vehicle(veh, coord);
-		to_road->stat_data->inc_current_vehicles_num(veh->get_length());
-		return true;
+		case SAVING:
+		{
+			COORD coord;
+			bool road_free = to_road->has_free_space(veh->get_length(), veh->get_cell_velocity() - passed_distance + 1, &coord);
+			if(road_free)
+			{
+				veh->set_cell_velocity(veh->get_cell_velocity() - passed_distance + 1);
+				veh->reset_time_counter();
+				to_road->move_vehicle(veh, coord);
+				to_road->stat_data->inc_current_vehicles_num(veh->get_length());
+				return true;
+			}
+		}
+		break;
+		case DELETING:
+		{
+			this->veh_factory->delete_vehicle(veh->get_id());
+			veh.reset();
+			return true;
+		}
+		default:
+			break;
 	}
 	return false;
 }
@@ -155,7 +170,7 @@ void vehicle_feeder::feed_road_continuously(road_ptr road, feeder_params_ptr par
 	{
 		params->density = density_delta;
 		fill_road_to_density(road, params);
-		params->density = current_density;
+		params->density = current_density + density_delta;
 	}
 }
 

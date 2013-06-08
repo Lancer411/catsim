@@ -29,6 +29,7 @@
 #include "test_road_infinity.h"
 #include "test_crossroad.h"
 #include "test_vehicle_feeder.h"
+#include "test_poisson_flow.h"
 
 void runtests()
 {
@@ -40,8 +41,8 @@ void runtests()
 //	vehfactorytest.runtest();
 //	test_vehicle_behaviour behtest;
 //	behtest.runtest();
-	test_one_road_simulation roadtest;
-	roadtest.runtest();
+//	test_one_road_simulation roadtest;
+//	roadtest.runtest();
 //	test_vehicle_ptr vehptrtest;
 //	vehptrtest.runtest();
 //	test_road_infinity inftest;
@@ -50,5 +51,7 @@ void runtests()
 //	crosstest.runtest();
 //	test_vehicle_feeder feedertest;
 //	feedertest.runtest();
+	test_poisson_flow flowtest;
+	flowtest.runtest();
 }
 #endif /* TESTRUNNER_H_ */
