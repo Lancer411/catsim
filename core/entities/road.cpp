@@ -340,10 +340,14 @@ void road::release_vehicles_source()
 bool road::has_free_space(short len, short velocity, COORD *coord)
 {
 	bool source_empty = vehicles_source.empty();
+	bool has_free_space = false;
 		for(int i = 0; i < rw; i++)
 			if(has_free_space_at_lane(temp_roaddata ,i, len, velocity, coord))
-				return true && source_empty;
-		return false && source_empty;
+			{
+				has_free_space = true;
+				break;
+			}
+	return has_free_space && source_empty;
 }
 
 bool road::has_free_space_at_lane(cell** &data, int lane, short len, short velocity, COORD *coord)

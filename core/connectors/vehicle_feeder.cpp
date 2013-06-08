@@ -164,6 +164,11 @@ void vehicle_feeder::feed_road_initially(road_ptr road, feeder_params_ptr params
 
 void vehicle_feeder::feed_road_continuously(road_ptr road, feeder_params_ptr params)
 {
+	if(!params->road_fed())
+	{
+		feed_road_initially(road, params);
+		return;
+	}
 	float current_density =  road->get_current_density();
 	float density_delta = params->density - current_density;
 	if(density_delta > 0)
@@ -196,7 +201,7 @@ void vehicle_feeder::feed_road_by_distribution(road_ptr road, feeder_params_ptr 
 			default:
 				break;
 		}
-		std::cout<<"next timer: "<<next_timer<<std::endl;
+//		std::cout<<"next timer: "<<next_timer<<std::endl;
 		params->set_distribution_timer(next_timer);
 	}
 	else

@@ -22,7 +22,7 @@ public:
 		int iteration_num = 10000;
 		int road_length = 100;
 		int lane_num = 1;
-		float density = 0.25;
+		float density = 0.5;
 		road_factory roadf;
 		vehicle_factory_ptr vehf_p(new vehicle_factory());
 		road_ptr road = roadf.create_road(lane_num, road_length);
@@ -30,7 +30,8 @@ public:
 		vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
 
 		feeder_params_ptr params (new feeder_params(density, 20, 60, 1, 0));
-		params->mode = CONTINUOUS;
+		params->mode = DISTRIBUTIVE;
+		params->distribution_type = TRIANGLE;
 		feeder_p->connect_feeding_road(road, params);
 		feeder_p->connect_deadend_road(road, road->get_id());
 		road->set_connector(feeder_p);

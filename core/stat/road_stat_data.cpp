@@ -20,7 +20,7 @@
 
 #include "road_stat_data.h"
 
-int_dens_acc road_stat_data::dens_acc (stat_density::num_bins = 20, stat_density::cache_size = 10);
+int_dens_acc road_stat_data::dens_acc (stat_density::num_bins = 40, stat_density::cache_size = 20);
 
 road_stat_data::road_stat_data(int16 linesnum, int16 length)
 {
