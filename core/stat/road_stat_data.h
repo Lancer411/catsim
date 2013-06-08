@@ -26,7 +26,7 @@
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
-#include <boost/container/list.hpp>
+#include <boost/container/vector.hpp>
 #include <boost/container/map.hpp>
 
 typedef boost::accumulators::accumulator_set<float,
@@ -67,7 +67,7 @@ class road_stat_data
 	long stat_accumulation_time;		// время итерации подсчета
 	long stat_timer;					// таймер итераций подсчета
 
-	boost::container::list<road_marker_ptr> markers_list;
+	boost::container::vector<road_marker_ptr> markers_list;
 
 	position_time_interval_map markers_time_intervals;
 public:
