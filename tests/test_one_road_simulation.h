@@ -49,13 +49,17 @@ public:
 			road_factory roadf;
 			vehicle_factory_ptr vehf_p(new vehicle_factory());
 			road_ptr road = roadf.create_road(lanes_num, road_length);
+
 			// init road loop
 			vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
 			feeder_params params(init_density, 20, 80, 0, 1);
 			feeder_p->connect_feeding_road(road, params);
 
+
 			crossroad_ptr cross = roadf.get_crossroad(road->get_id());
+
 			cross->connect(road, road->get_id(), DIRECTION_STRAIGHT);
+
 
 			// set accumulation time
 			roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/4);

@@ -53,6 +53,8 @@ class road : public entity, public iautomat, public imarkable
 	vehicle_queue vehicles_runoff;			// сток машин; машина попадает в сток когда выезжает с дороги
 	road_stat_data_ptr stat_data;			// статистические данные с дороги
 	connector_ptr_weak front_crossroad;
+
+	bool free;
 public:
 	road(int16 linesnum, int16 length);
 	road(int16 linesnum, int16 length, short velocity_limit);

@@ -32,6 +32,11 @@
 typedef boost::container::map<std::string, road_ptr> road_map;
 typedef boost::container::map<std::string, feeder_params> params_map;
 
+enum feeder_trasfer_mode
+{
+  SAVING,
+  DELETING,
+};
 class vehicle_feeder : public connector
 {
 	// a map of roads to feed
@@ -42,6 +47,8 @@ class vehicle_feeder : public connector
 	road_map deadend_roads;
 	// pointer to existing vehicle factory
 	vehicle_factory_ptr veh_factory;
+	// transfer mode
+	feeder_trasfer_mode transfer_mode;
 public:
 	/**
 	 * Constructor of vehicle feeder with vehicle factory as parameter
@@ -76,6 +83,7 @@ public:
 	 * Feeds all the roads with their params
 	 */
 	void feed_roads();
+	void set_transfer_mode(feeder_trasfer_mode mode){this->transfer_mode = mode;};
 private:
 	/**
 	 * Fills specified road with params

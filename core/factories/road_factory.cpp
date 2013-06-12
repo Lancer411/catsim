@@ -85,6 +85,13 @@ void road_factory::iterate()
 	{
 		it->second->iterate();
 	}
+
+
+	crossroad_map::iterator it_cr;
+	for (it_cr = crossroads.begin(); it_cr != crossroads.end();++it_cr)
+	{
+		it_cr->second->iterate();
+	}
 }
 
 crossroad_ptr road_factory::get_crossroad(std::string road_id)

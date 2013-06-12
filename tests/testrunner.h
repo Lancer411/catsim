@@ -40,14 +40,14 @@ void runtests()
 //	vehfactorytest.runtest();
 //	test_vehicle_behaviour behtest;
 //	behtest.runtest();
-	test_one_road_simulation roadtest;
-	roadtest.runtest();
+//	test_one_road_simulation roadtest;
+//	roadtest.runtest();
 //	test_vehicle_ptr vehptrtest;
 //	vehptrtest.runtest();
 //	test_road_infinity inftest;
 //	inftest.runtest();
-//	test_crossroad crosstest;
-//	crosstest.runtest();
+	test_crossroad crosstest;
+	crosstest.runtest();
 //	test_vehicle_feeder feedertest;
 //	feedertest.runtest();
 }

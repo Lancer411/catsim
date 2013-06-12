@@ -51,17 +51,21 @@ class road_stat_data
 	int16 current_vehicles_number;		// текущее число машин
 	int16 current_vehicles_length;		// длина машин на дороге
 	int16 passed_vehicles_number_iter;  // число прошедших машин за итерацию
+	int16 current_queue;				// длина очереди (в ячейках) перед перекрестком
+	int16 max_queue;					// максимальная длина очереди(в ячейках) перед перекрестком
 	float current_road_density;			// текущая плотность на дороге
 	float avg_road_density;				// средняя плотность
 	float avg_road_speed;				// средняя скорость за итерацию
 	float avg_road_speed_total;			// средняя скорость за время итерации подсчета
 	float avg_road_passage_time;		// среднее время проезда
+	float avg_queue;					// средняя длина очереди перед перекрестком
 	float road_flow_as_speeddensity;	// поток (ср плотность*ср скорость)
 	float passed_veh_flow;				// поток (ср. кол-во машин за итерацию)
 	float_acc density_accumulator;		// накопитель для подсчета avg_road_density
 	float_acc avg_speed_accumulator;	// накопитель для подсчета avg_road_speed
 	float_acc total_speed_accumulator;	// накопитель для подсчета avg_road_speed_total
 	float_acc passed_veh_acc;			// накопитель для подсчета числа прошедших машин
+	float_acc queue_accumulator;		// накопитель для подсчета avg_queue
 	long_acc passage_time_accumulator;	// накопитель для подсчета avg_road_passage_time
 
 	long stat_accumulation_time;		// время итерации подсчета
@@ -83,8 +87,16 @@ public:
 	// вызывать для каждого ТС на дороге
 	void update_avg_speed(short speed);
 
+	// вызывать когда проверяется очередь перед перекрестком
+	void inc_queue_vehicles_num();
+	// вызывать при проверке очереди перекрестка (обнуление очереди)
+	void reset_queue_vehicles_num();
+
 	int16 get_passed_vehicles_number() const{return passed_vehicles_number;};
 	int16 get_current_vehicles_number() const{return current_vehicles_number;};
+	int16 get_current_queue() const{return current_queue;};
+	int16 get_max_queue() const{return max_queue;};
+	float get_avg_queue()const{return avg_queue;};
 	float get_current_road_density() const{return current_road_density;};
 	float get_avg_road_density() const{return avg_road_density;};
 	float get_avg_road_speed() const{return avg_road_speed;};

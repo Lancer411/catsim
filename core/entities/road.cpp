@@ -42,6 +42,7 @@ void road::init(int16 linesnum, int16 length, short limit)
 		roaddata[i] = new cell[rl];
 		temp_roaddata[i] = new cell[rl];
 	}
+	free=false;
 }
 
 void road::copy_roads()
@@ -67,12 +68,14 @@ void road::free_temp_road()
 
 void road::iterate()
 {
+	free=true;
 	// распределить машины из источника
 	release_vehicles_source();
 	// скопировать дороги
 	copy_roads();
 	// итерировать все машины
 	for(int i = 0; i < rw; i++)
+	{stat_data->reset_queue_vehicles_num();
 		for(int j = 0; j < rl;)
 		{
 			if(temp_roaddata[i][j].is_occupied()) // если ячейка занята
@@ -80,6 +83,10 @@ void road::iterate()
 				object_ptr obj = temp_roaddata[i][j].get_object();
 				if(obj->is_dynamic())
 				{
+					if (j >= (rl/2))
+						stat_data->inc_queue_vehicles_num();
+					else stat_data->reset_queue_vehicles_num();
+					free=false;
 					vehicle_ptr veh = boost::shared_polymorphic_downcast<vehicle>(obj);
 					stat_data->update_avg_speed(veh->get_kmh_velocity());
 					veh->update_velocity(velocity_limit);
@@ -88,10 +95,14 @@ void road::iterate()
 	//				j -= veh->get_length();
 				}
 			}
-			else j++;
+			else
+			{
+				j++;
+				stat_data->reset_queue_vehicles_num();
+			}
 //			else j--;
 		}
-
+	}
 	// обновить статистические данные
 	stat_data->update_parameters();
 	// cбросить обновившиеся машины
@@ -183,6 +194,7 @@ void road::try_crossroad(vehicle_ptr veh, int i, int j)
 		// если дороги нет
 		if(next_road == null_ptr)
 		{
+
 			// тормозить в конце дороги
 			coord.x = i;
 			coord.y = rl - 1;
@@ -345,6 +357,8 @@ bool road::has_free_space(short len, short velocity, COORD *coord)
 				return true && source_empty;
 		return false && source_empty;
 }
+
+
 
 bool road::has_free_space_at_lane(cell** &data, int lane, short len, short velocity, COORD *coord)
 {

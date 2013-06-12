@@ -65,7 +65,7 @@ public:
 
 	};
 
-	static int get_road_position (int position, relative_direction direction)
+	static int get_output_road_position (int position, relative_direction direction)
 	{
 		int pos;
 		switch(direction)
