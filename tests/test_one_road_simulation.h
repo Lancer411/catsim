@@ -35,8 +35,8 @@ public:
 		// init parameters
 		float init_density = 0.01;
 		float step = 0.01;
-		int iteration_num = 450;
-		int road_length = 100;
+		int iteration_num = 3600;
+		int road_length = 900;
 		int lanes_num = 1;
 		random::initialize();
 

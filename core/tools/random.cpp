@@ -29,14 +29,29 @@ int random::next_int_uniform()
 	return random::uniform_int_dist(random::gen);
 }
 
+int random::next_int_uniform(boost::random::uniform_int_distribution<> distrib)
+{
+	return distrib(random::gen);
+}
+
 int random::next_int_poisson()
 {
 	return random::poisson_int_dist(random::gen);
 }
 
+int random::next_int_poisson(boost::random::poisson_distribution<int> distrib)
+{
+	return distrib(random::gen);
+}
+
 int random::next_int_triangle()
 {
 	return random::triangle_int_dist(random::gen);
+}
+
+int random::next_int_triangle(boost::random::triangle_distribution<> distrib)
+{
+	return distrib(random::gen);
 }
 
 void random::init_int_uniform(unsigned int min, unsigned int max)

@@ -20,6 +20,8 @@
 
 #include "road_stat_data.h"
 
+int_dens_acc road_stat_data::dens_acc (stat_density::num_bins = 40, stat_density::cache_size = 20);
+
 road_stat_data::road_stat_data(int16 linesnum, int16 length)
 {
 	road_length = length;
@@ -51,13 +53,14 @@ void road_stat_data::update_parameters()
 	}
 	passed_vehicles_number_iter = 0;
 
-	typedef boost::container::list<road_marker_ptr>::value_type marker_item;
+	typedef boost::container::vector<road_marker_ptr>::value_type marker_item;
 	BOOST_FOREACH(marker_item item, markers_list)
 	{
 		int position = item->get_position();
 		if(item->is_triggered())
 		{
 			markers_time_intervals[position](item->get_time_interval_prev());
+			road_stat_data::dens_acc(item->get_time_interval_prev());
 		}
 
 		item->iterate();
@@ -85,6 +88,7 @@ void road_stat_data::reset_timer()
 	passage_time_accumulator = long_acc();
 	passed_veh_acc = float_acc();
 	queue_accumulator = float_acc();
+	markers_time_intervals.clear();
 }
 
 void road_stat_data::reset()
@@ -127,7 +131,14 @@ void road_stat_data::reset_queue_vehicles_num()
 
 void road_stat_data::add_marker(const road_marker_ptr marker)
 {
-	markers_list.push_back(marker);
+	boost::container::vector<road_marker_ptr>::iterator it = markers_list.end();
+	markers_list.insert(it, marker);
+}
+
+time_density_histogram road_stat_data::get_time_density_histogram()
+{
+	time_density_histogram hist = boost::accumulators::density(road_stat_data::dens_acc);
+	return hist;
 }
 
 road_stat_data::~road_stat_data()

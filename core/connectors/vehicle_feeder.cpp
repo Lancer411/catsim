@@ -24,9 +24,10 @@
 
 vehicle_feeder::vehicle_feeder(vehicle_factory_ptr veh_factory)
 {
-//	this->veh_factory = vehicle_factory::get();
 	this->veh_factory = veh_factory;
 	this->transfer_mode = SAVING;
+	this->speed_distribution = random::triangle_distribution(20,40,60);
+
 }
 
 bool vehicle_feeder::transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance)
@@ -55,8 +56,6 @@ bool vehicle_feeder::transfer(std::string from_road_id, road_ptr to_road, vehicl
 	    }
 	    default:
 	      break;
-	}
-	   return false;
 }
 
 road_ptr vehicle_feeder::get_next_road(std::string road_id, relative_direction direction)
@@ -140,6 +139,8 @@ void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params_ptr param
 vehicle_ptr vehicle_feeder::create_vehicle_by_params(feeder_params_ptr params)
 {
 	int16 init_speed = params->init_speed, max_speed = params->max_speed;
+	int mode = (init_speed + max_speed)/2;
+	init_speed = random::next_int_triangle(speed_distribution);
 	vehicle_type veh_type = Car;
 	float typerand = random::std_random();
 	if (typerand < params->car_prob)
@@ -162,13 +163,18 @@ void vehicle_feeder::feed_road_initially(road_ptr road, feeder_params_ptr params
 
 void vehicle_feeder::feed_road_continuously(road_ptr road, feeder_params_ptr params)
 {
+	if(!params->road_fed())
+	{
+		feed_road_initially(road, params);
+		return;
+	}
 	float current_density =  road->get_current_density();
 	float density_delta = params->density - current_density;
 	if(density_delta > 0)
 	{
 		params->density = density_delta;
 		fill_road_to_density(road, params);
-		params->density = current_density;
+		params->density = current_density + density_delta;
 	}
 }
 

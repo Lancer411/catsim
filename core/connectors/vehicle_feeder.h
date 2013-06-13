@@ -28,6 +28,13 @@
 #include "core/entities/vehicle.h"
 #include <boost/algorithm/string/predicate.hpp>
 
+
+enum feeder_trasfer_mode
+{
+	SAVING,
+	DELETING,
+};
+
 typedef boost::container::map<std::string, road_ptr> road_map;
 typedef boost::container::map<std::string, feeder_params_ptr> params_map;
 
@@ -95,6 +102,7 @@ private:
 	vehicle_ptr create_vehicle_by_params(feeder_params_ptr params);
 	void update_road_params(std::string id, feeder_params_ptr params);
 
+	boost::random::triangle_distribution<> speed_distribution;
 };
 
 typedef boost::shared_ptr<vehicle_feeder> vehicle_feeder_ptr;
