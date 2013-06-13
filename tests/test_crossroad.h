@@ -34,10 +34,10 @@ public:
 	void runtest()
 	{
 		// init parameters
-		float init_density = 0.01;
+		float init_density = 1;
 		float step = 0.01;
-		int iteration_num = 500;
-		int road_length = 100;
+		int iteration_num = 50;
+		int road_length = 10;
 		int lanes_num = 1;
 		random::initialize();
 
@@ -54,19 +54,28 @@ public:
 			road_ptr road1 = roadf.create_road(lanes_num, road_length);
 			road_ptr road2 = roadf.create_road(lanes_num, road_length);
 			road_ptr road3 = roadf.create_road(lanes_num, road_length);
-			road_ptr road4 = roadf.create_road(lanes_num, 1000);
-			road_ptr road5 = roadf.create_road(lanes_num, 1000);
-			road_ptr road6 = roadf.create_road(lanes_num, 1000);
-			road_ptr road7 = roadf.create_road(lanes_num, 1000);
+			road_ptr road4 = roadf.create_road(lanes_num, road_length);
+			road_ptr road5 = roadf.create_road(lanes_num, road_length);
+			road_ptr road6 = roadf.create_road(lanes_num, road_length);
+			road_ptr road7 = roadf.create_road(lanes_num, road_length);
+
+	//		road_ptr road8 = roadf.create_road(lanes_num, road_length);
 			vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
-			feeder_params params(init_density, 20, 80, 1, 0);
+			vehicle_feeder_ptr feeder_p1(new vehicle_feeder(vehf_p));
+			feeder_params_ptr params (new feeder_params(init_density, 20, 80, 1, 0));
+			params->mode = CONTINUOUS;
+			params->distribution_type = UNIFORM;
+	//		random::init_int_trianle(0,1,2);
 			feeder_p->connect_feeding_road(road0, params);
 	//		feeder_p->connect_feeding_road(road1, params);
 	//		feeder_p->connect_feeding_road(road2, params);
 	//		feeder_p->connect_feeding_road(road3, params);
 
+	//		feeder_p1->connect_deadend_road(road7,road0->get_id());
+
 			// init road loop
 			crossroad_ptr cross = roadf.get_crossroad(road0->get_id());
+	//		crossroad_ptr cross1 = roadf.get_crossroad(road8->get_id());
 			lightsignal_ptr lightsignal = lightsignalf.create_lightsignal(10,2,10,Green);
 
 			road1->set_connector(cross);
@@ -75,6 +84,8 @@ public:
 			cross->connect_in(road1);
 			cross->connect_in(road2);
 			cross->connect_in(road3);
+
+	//		cross1->connect(road0, road8->get_id(), DIRECTION_STRAIGHT);
 
 			cross->connect(road6, road0->get_id(), DIRECTION_STRAIGHT);
 			cross->connect(road5, road0->get_id(), DIRECTION_LEFT);
@@ -111,15 +122,15 @@ public:
 				feeder_p->feed_roads();
 
 		//		cross->print_crossroad(road0->get_id());
-		/*		std::cout<<""<<std::endl;
+				std::cout<<""<<std::endl;
 				std::cout<<road0;
-				std::cout<<road1;
-				std::cout<<road2;
-				std::cout<<road3;
-				std::cout<<road4;
+		//		std::cout<<road1;
+		//		std::cout<<road2;
+		//		std::cout<<road3;
+		//		std::cout<<road4;
 				std::cout<<road5;
 				std::cout<<road6;
-				std::cout<<road7;*/
+				std::cout<<road7;
 				roadf.iterate();
 				lightsignalf.tick();
 

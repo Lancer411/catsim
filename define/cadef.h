@@ -22,7 +22,7 @@
 #define CADEF_H_
 
 #include <iostream>
-#include <ctime>
+
 #include <cstring>
 #include <boost/pending/cstddef.hpp>
 #include <boost/container/map.hpp>
@@ -32,6 +32,8 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/foreach.hpp>
+
+#include "core/data_structures/data.h"
 
 
 const float DEFAULT_CELL_LENGTH = 5.5;					// Размер ячейки в метрах по умолчанию
@@ -48,54 +50,6 @@ const short DEFAULT_GET_READY_DURATION = 2;				// Продолжительнос
 const long DEFAULT_STAT_ACCUMULATION_TIME = 60;			// Время накопления статистическаз данных п.у. (время итерации подсчета) = 1 мин.
 const static short ROAD_COUNT = 4;
 
-
-
 typedef uint16_t int16;
-
-enum relative_direction
-{
-	DIRECTION_LEFT = 1,
-	DIRECTION_STRAIGHT = 2,
-	DIRECTION_RIGHT = 4,
-	DIRECTION_ANY = 8
-};
-
-enum road_status
-{
-	ROAD_ABLE = 1,
-	ROAD_UNABLE = 0,
-	ROAD_NONE = -1
-};
-
-enum vehicle_type
-{
-	Car = 1,
-	LightTruck = 2,
-	Truck = 3,
-	Bus = 4,
-};
-
-typedef struct
-{
-	int x;
-	int y;
-} COORD;
-
-enum light_signal_state
-{
-	Green = 0,
-	GreenBlink = 1,
-	Yellow = 2,
-	Red = 3,
-	GetReady = 4,
-	Broken = 5
-};
-
-enum distribution
-{
-	NORMAL,
-	PUASSON,
-	TRIANGLE
-};
 
 #endif /* CADEF_H_ */

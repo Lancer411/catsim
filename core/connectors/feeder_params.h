@@ -28,13 +28,13 @@ const short DEFAULT_FEEDER_MAX_SPEED = 80;
 const float DEFAULT_FEEDER_CAR_PROB = 0.7;
 const float DEFAULT_FEEDER_BUS_PROB = 0.25;
 const float DEFAULT_FEEDER_TRUCK_PROB = 0.05;
-const distribution DEFAULT_FEEDER_DISTRIBUTION = NORMAL;
+const distribution DEFAULT_FEEDER_DISTRIBUTION = UNIFORM;
 
 enum feeder_mode
 {
 	INITIAL,			// road is fed to density at start
 	CONTINUOUS,			// road is fed to keep required density
-	DISTRIBUTIVE		// vehicles appear according to distribution
+	DISTRIBUTIVE,		// vehicles appear according to distribution
 };
 
 const feeder_mode DEFAULT_FEEDER_MODE = INITIAL;
@@ -59,17 +59,23 @@ public:
 	float bus_prob;		// probability of generating Buses
 	float truck_prob;	// probability of generating Trucks
 
-	void set_mode(feeder_mode mode) {this->mode = mode;};
-	void set_distribution (distribution distrib) {this->distrib = distrib;};
+	feeder_mode mode;	// a mode of feeding
+	distribution distribution_type; // distribution that is used in DISTRIBUTIVE mode
 
-	feeder_mode get_mode() const {return mode;};
-	distribution get_distribution() const {return distrib;};
 	bool road_fed() const {return road_is_fed;};
 	void set_fed() {road_is_fed = true;};
+
+	bool need_to_distribute() const{return need_distribute;};
+	void set_distribution_timer(int time)
+	{
+		this->distribution_timer = time;
+		need_distribute = false;
+	};
+	void tick_distribution_timer();
 private:
-	feeder_mode mode;	// a mode of feeding
-	distribution distrib; // distribution that is used in DISTRIBUTIVE mode
 	bool road_is_fed;	// indicator for initial distribution
+	bool need_distribute;	// indicator of road's need to be distributed
+	int distribution_timer;
 
 	void init_params(float density, feeder_mode mode, int16 init_speed,
 					int16 max_speed, float car_prob,
@@ -77,5 +83,6 @@ private:
 
 };
 
+typedef boost::shared_ptr<feeder_params> feeder_params_ptr;
 
 #endif /* FEEDER_PARAMS_H_ */

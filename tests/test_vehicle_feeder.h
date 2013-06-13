@@ -54,7 +54,7 @@ public:
 			road_ptr road2 = roadf.create_road(lanes_num, road_length);
 			// init road loop
 			vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
-			feeder_params params(init_density);
+			feeder_params_ptr params(new feeder_params(init_density));
 			feeder_p->connect_feeding_road(road1, params);
 			feeder_p->connect_feeding_road(road2, params);
 			feeder_p->connect_deadend_road(road1, road2->get_id());
