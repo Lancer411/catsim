@@ -24,7 +24,6 @@
 #include "core/factories/road_factory.h"
 #include "core/factories/vehicle_factory.h"
 #include "core/connectors/vehicle_feeder.h"
-#include <boost/program_options.hpp>
 
 class test_one_road_simulation : public test
 {
@@ -52,7 +51,9 @@ public:
 
 			// init road loop
 			vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
-			feeder_params params(init_density, 20, 80, 0, 1);
+			feeder_params_ptr params (new feeder_params(init_density, 20, 80, 1, 0));
+			params->mode = INITIAL;
+			params->distribution_type = UNIFORM;
 			feeder_p->connect_feeding_road(road, params);
 
 

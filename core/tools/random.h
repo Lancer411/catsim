@@ -20,15 +20,26 @@
 
 #ifndef RANDOM_H_
 #define RANDOM_H_
-#include "define/cadef.h"
+#include <ctime>
+#include "core/data_structures/data.h"
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/random/poisson_distribution.hpp>
+#include <boost/random/triangle_distribution.hpp>
 
 class random
 {
+	// random generator
+	static boost::random::mt19937 gen;
+	// distributions
+	static boost::random::uniform_int_distribution<> uniform_int_dist;
+	static boost::random::poisson_distribution<int> poisson_int_dist;
+	static boost::random::triangle_distribution<> triangle_int_dist;
 public:
 	static void initialize()
-		{
-			std::srand(std::time(0));
-		}
+	{
+		std::srand(std::time(0));
+	};
 
 	static float std_random(int offset, int top)
 	{
@@ -51,6 +62,38 @@ public:
 			return DIRECTION_STRAIGHT;
 		return DIRECTION_STRAIGHT;
 	};
+
+	static int next_int_uniform();
+	static int next_int_uniform(boost::random::uniform_int_distribution<> distrib);
+	static int next_int_poisson();
+	static int next_int_poisson(boost::random::poisson_distribution<int> distrib);
+	static int next_int_triangle();
+	static int next_int_triangle(boost::random::triangle_distribution<> distrib);
+
+	static void init_int_uniform(unsigned int min, unsigned int max);
+	static void init_int_poisson(unsigned int mean);
+	static void init_int_trianle(unsigned int lower, unsigned int mode, unsigned int upper);
+	static void seed(const unsigned int & seed);
+
+	static boost::random::triangle_distribution<> triangle_distribution(unsigned int lower, unsigned int mode, unsigned int upper)
+	{
+		boost::random::triangle_distribution<> distrib(lower, mode, upper);
+		return distrib;
+	};
+
+	static boost::random::uniform_int_distribution<>  uniform_distribution(unsigned int min, unsigned int max)
+	{
+		boost::random::uniform_int_distribution<>  distrib(min, max);
+		return distrib;
+	};
+
+	static boost::random::poisson_distribution<int>  poisson_distribution(unsigned int mean)
+	{
+		boost::random::poisson_distribution<int>  distrib(mean);
+		return distrib;
+	};
+
 };
+
 
 #endif /* RANDOM_H_ */

@@ -20,40 +20,41 @@
  */
 
 #include "vehicle_feeder.h"
+#include "core/tools/random.h"
 
 vehicle_feeder::vehicle_feeder(vehicle_factory_ptr veh_factory)
 {
-//	this->veh_factory = vehicle_factory::get();
 	this->veh_factory = veh_factory;
 	this->transfer_mode = SAVING;
+	this->speed_distribution = random::triangle_distribution(20,40,60);
 }
 
 bool vehicle_feeder::transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance)
 {
 	switch(this->transfer_mode)
 	{
-	case SAVING:
-	    {
-	      COORD coord;
-	      bool road_free = to_road->has_free_space(veh->get_length(), veh->get_cell_velocity() - passed_distance + 1, &coord);
-	      if(road_free)
-	      {
-	        veh->set_cell_velocity(veh->get_cell_velocity() - passed_distance + 1);
-	        veh->reset_time_counter();
-	        to_road->move_vehicle(veh, coord);
-	        to_road->stat_data->inc_current_vehicles_num(veh->get_length());
-	        return true;
-	      }
-	    }
-	    break;
-	    case DELETING:
-	    {
-	      this->veh_factory->delete_vehicle(veh->get_id());
-	      veh.reset();
-	      return true;
-	    }
-	    default:
-	      break;
+		case SAVING:
+		{
+			COORD coord;
+			bool road_free = to_road->has_free_space(veh->get_length(), veh->get_cell_velocity() - passed_distance + 1, &coord);
+			if(road_free)
+			{
+				veh->set_cell_velocity(veh->get_cell_velocity() - passed_distance + 1);
+				veh->reset_time_counter();
+				to_road->move_vehicle(veh, coord);
+				to_road->stat_data->inc_current_vehicles_num(veh->get_length());
+				return true;
+			}
+		}
+		break;
+		case DELETING:
+		{
+			this->veh_factory->delete_vehicle(veh->get_id());
+			veh.reset();
+			return true;
+		}
+		default:
+			break;
 	}
 	   return false;
 }
@@ -74,7 +75,7 @@ road_ptr vehicle_feeder::get_next_road(std::string road_id, relative_direction d
 	return null_ptr;
 }
 
-bool vehicle_feeder::connect_feeding_road(road_ptr road, feeder_params params)
+bool vehicle_feeder::connect_feeding_road(road_ptr road, feeder_params_ptr params)
 {
 	if(!feeding_roads.count(road->get_id()))
 	{
@@ -102,11 +103,11 @@ void vehicle_feeder::feed_roads()
 	{
 		std::string road_id = it->first;
 		road_ptr road = it->second;
-		feeder_params params = feeding_roads_params[road_id];
-		switch (params.get_mode())
+		feeder_params_ptr params = feeding_roads_params[road_id];
+		switch (params->mode)
 		{
 			case INITIAL:
-				fill_road_to_density(road, params);
+				feed_road_initially(road, params);
 				break;
 			case CONTINUOUS:
 				feed_road_continuously(road, params);
@@ -120,47 +121,96 @@ void vehicle_feeder::feed_roads()
 	}
 }
 
-void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params params)
+void vehicle_feeder::fill_road_to_density(road_ptr road, feeder_params_ptr params)
 {
-	if(params.road_fed())
-		return;
 	// fill road with vehicles to density
 	float dens = 0;
 	int16 created_veh_length = 0;
 	int16 road_length = road->get_lane_length();
 	int16 lanes_num = road->get_lane_count();
-	while (dens < params.density)
+	while (dens < params->density)
 	{
-		int16 init_speed = params.init_speed, max_speed = params.max_speed;
-		vehicle_type veh_type = Car;
-		float typerand = random::std_random();
-		if (typerand < params.car_prob)
-			veh_type = Car;
-		else
-			if (typerand < params.car_prob + params.bus_prob)
-				veh_type = Bus;
-			else
-				veh_type = Truck;
-		vehicle_ptr veh = veh_factory->create_vehicle(max_speed, init_speed, veh_type);
+		vehicle_ptr veh = create_vehicle_by_params(params);
 		created_veh_length += veh->get_length();
 		dens = created_veh_length/(float)(road_length * lanes_num);
 		road->push_vehicle(veh);
 	}
-	params.set_fed();
-	update_road_params(road->get_id(), params);
 }
 
-void vehicle_feeder::feed_road_continuously(road_ptr road, feeder_params params)
+vehicle_ptr vehicle_feeder::create_vehicle_by_params(feeder_params_ptr params)
 {
-
+	int16 init_speed = params->init_speed, max_speed = params->max_speed;
+	int mode = (init_speed + max_speed)/2;
+	init_speed = random::next_int_triangle(speed_distribution);
+	vehicle_type veh_type = Car;
+	float typerand = random::std_random();
+	if (typerand < params->car_prob)
+		veh_type = Car;
+	else
+		if (typerand < params->car_prob + params->bus_prob)
+			veh_type = Bus;
+		else
+			veh_type = Truck;
+	return veh_factory->create_vehicle(max_speed, init_speed, veh_type);
 }
 
-void vehicle_feeder::feed_road_by_distribution(road_ptr road, feeder_params params)
+void vehicle_feeder::feed_road_initially(road_ptr road, feeder_params_ptr params)
 {
-
+	if(params->road_fed())
+		return;
+	fill_road_to_density(road, params);
+	params->set_fed();
 }
 
-void vehicle_feeder::update_road_params(std::string id, feeder_params params)
+void vehicle_feeder::feed_road_continuously(road_ptr road, feeder_params_ptr params)
+{
+	if(!params->road_fed())
+	{
+		feed_road_initially(road, params);
+		return;
+	}
+	float current_density =  road->get_current_density();
+	float density_delta = params->density - current_density;
+	if(density_delta > 0)
+	{
+		params->density = density_delta;
+		fill_road_to_density(road, params);
+		params->density = current_density + density_delta;
+	}
+}
+
+void vehicle_feeder::feed_road_by_distribution(road_ptr road, feeder_params_ptr params)
+{
+	distribution dist_type = params->distribution_type;
+	if(params->need_to_distribute())
+	{
+		vehicle_ptr veh = create_vehicle_by_params(params);
+		road->push_vehicle(veh);
+		int next_timer = 0;
+		switch(dist_type)
+		{
+			case UNIFORM:
+				next_timer = random::next_int_uniform();
+				break;
+			case POISSON:
+				next_timer = random::next_int_poisson();
+				break;
+			case TRIANGLE:
+				next_timer = random::next_int_triangle();
+				break;
+			default:
+				break;
+		}
+//		std::cout<<"next timer: "<<next_timer<<std::endl;
+		params->set_distribution_timer(next_timer);
+	}
+	else
+	{
+		params->tick_distribution_timer();
+	}
+}
+
+void vehicle_feeder::update_road_params(std::string id, feeder_params_ptr params)
 {
 	feeding_roads_params[id] = params;
 }

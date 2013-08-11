@@ -59,7 +59,7 @@ public:
 			road_ptr road6 = roadf.create_road(lanes_num, 1000);
 			road_ptr road7 = roadf.create_road(lanes_num, 1000);
 			vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
-			feeder_params params(init_density, 20, 80, 1, 0);
+			feeder_params_ptr params (new feeder_params(init_density, 20, 80, 1, 0));
 			feeder_p->connect_feeding_road(road0, params);
 	//		feeder_p->connect_feeding_road(road1, params);
 	//		feeder_p->connect_feeding_road(road2, params);
