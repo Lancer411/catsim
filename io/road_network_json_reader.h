@@ -8,29 +8,48 @@
 #ifndef ROADNETWORKJSONREADER_H_
 #define ROADNETWORKJSONREADER_H_
 #include "define/cadef.h"
-#include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include "road_network_data.h"
 
+typedef boost::property_tree::ptree ptree;
 class road_network_json_reader
 {
-	boost::property_tree::ptree network_tree;
 public:
 	road_network_json_reader(){};
 	virtual ~road_network_json_reader(){};
 
-	void read(const std::string filename)
+	static road_network_data read(const std::string filename)
 	{
+		ptree network_tree;
+		road_network_data data;
 		try
 		{
 			boost::property_tree::read_json(filename, network_tree);
-			typedef boost::property_tree::ptree::value_type tree_value;
+			typedef ptree::value_type tree_value;
 
-			boost::property_tree::write_json(std::cout, network_tree);
+			BOOST_FOREACH(tree_value &v, network_tree.get_child(RN_ROADS))
+			{
+				ptree road = v.second;
+				data.parse_road(road);
+			}
+
+			BOOST_FOREACH(tree_value &v, network_tree.get_child(RN_CROSSROADS))
+			{
+				ptree crossroad = v.second;
+				data.parse_crossroad(crossroad);
+			}
+
+//			BOOST_FOREACH(tree_value &v, network_tree.get_child(RN_ROADS))
+//			{
+//				ptree feeder = v.second;
+//				data.parse_road(feeder);
+//			}
 
 		} catch (std::exception const& e) {
 			std::cerr << e.what() << std::endl;
 		}
+		return data;
 	};
 };
 

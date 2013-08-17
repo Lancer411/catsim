@@ -17,8 +17,7 @@ public:
 	virtual ~test_read_network(){};
 	void runtest()
 	{
-		road_network_json_reader reader;
-		reader.read("test_models/one_road_test.json");
+		road_network_json_reader::read("test_models/one_road_test.json");
 	};
 };
 
