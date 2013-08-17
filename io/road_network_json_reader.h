@@ -40,11 +40,11 @@ public:
 				data.parse_crossroad(crossroad);
 			}
 
-//			BOOST_FOREACH(tree_value &v, network_tree.get_child(RN_ROADS))
-//			{
-//				ptree feeder = v.second;
-//				data.parse_road(feeder);
-//			}
+			BOOST_FOREACH(tree_value &v, network_tree.get_child(RN_FEEDERS))
+			{
+				ptree feeder = v.second;
+				data.parse_feeder(feeder);
+			}
 
 		} catch (std::exception const& e) {
 			std::cerr << e.what() << std::endl;
