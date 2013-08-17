@@ -72,9 +72,6 @@ public:
 			road1->set_connector(cross);
 			road2->set_connector(cross);
 			road3->set_connector(cross);
-			cross->connect_in(road1);
-			cross->connect_in(road2);
-			cross->connect_in(road3);
 
 			cross->connect(road6, road0->get_id(), DIRECTION_STRAIGHT);
 			cross->connect(road5, road0->get_id(), DIRECTION_LEFT);
@@ -92,8 +89,6 @@ public:
 			cross->connect(road4, road3->get_id(), DIRECTION_LEFT);
 			cross->connect(road6, road3->get_id(), DIRECTION_RIGHT);
 
-
-			cross->add_light_signal(lightsignal,ADAPTIVE);
 
 			// set accumulation time
 			roadf.get_road_statistics(road0->get_id())->set_stat_accumulation_time(iteration_num/4);

@@ -23,27 +23,16 @@
 #include "core/connectors/connector.h"
 #include "core/tools/conversion.h"
 #include "boost/algorithm/string/predicate.hpp"
-#include "core/entities/lightsignal.h"
-enum lightsignal_mode
-{
-	FIXED,
-	ADAPTIVE,
-};
+
 class crossroad : public connector
 {
 	const static int NO_ROAD = -1;
-	//array inputs roads
-	road_ptr roads_in [ROAD_COUNT];
 	// array of roads which are direct inputs for crossroad
-	road_ptr roads_direct[ROAD_COUNT][ROAD_COUNT];
+	road_ptr roads_direct[ROAD_COUNT];
 	// array of roads which are opposite to direct ones
-	road_ptr roads_opposite[ROAD_COUNT][ROAD_COUNT];
+	road_ptr roads_opposite[ROAD_COUNT];
 	// matrix represents road to road state (ABLE, UNABLE, NONE)
 	short road_mtx[ROAD_COUNT][ROAD_COUNT];
-
-	bool controlled;
-	lightsignal_ptr ls;
-	lightsignal_mode ls_mode;
 public:
 	crossroad();
 	virtual ~crossroad();
@@ -72,20 +61,8 @@ public:
 	 * 						or connection in that direction already exists
 	 **/
 	bool connect(road_ptr road, std::string road_id, relative_direction direction);
-	bool connect_in(road_ptr inpit_road);
 	bool transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance);
 	road_ptr get_next_road(std::string road_id, relative_direction direction);
-
-	void add_light_signal(lightsignal_ptr lightsignal, lightsignal_mode mode);
-	lightsignal_ptr get_light_signal();
-
-	void print_crossroad(std::string road_id);
-
-	/**
-	 * Implements an adaptive control method
-	 */
-	void iterate();
-
 private:
 	/**
 	 * Finds position of road in one of road arrays (direct and opposite)
@@ -95,8 +72,8 @@ private:
 	 * \return	position 	- if road found
 	 * 			ROAD_NONE	- if road not found
 	 */
-	int get_input_road_position(std::string road_id);
-	int get_output_road_position(std::string road_id, int x);
+	int get_road_position(std::string road_id);
+
 	/**
 	 * Returns the status of path availavility between roads
 	 * with positions pos_x and pos_y
@@ -119,11 +96,6 @@ private:
 	 */
 	void set_road_status(int position, road_status status);
 	/**
-	 * Sets status for road in position, for all of other roads
-	 * in one directions
-	 */
-	void set_direction_road_status(int position, road_status status);
-	/**
 	 * Sets status in one direction between road with \p pos_x
 	 * and road with \p pos_y
 	 */
@@ -134,9 +106,6 @@ private:
 	 * and return a random of them.
 	 */
 	relative_direction get_any_available_direction(int position);
-
-
-
 };
 
 typedef boost::shared_ptr<crossroad> crossroad_ptr;

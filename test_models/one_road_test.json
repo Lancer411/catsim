@@ -1,0 +1,40 @@
+{
+	"roads":
+	[
+		{
+			"id":"road_1",
+			"length":900,
+			"lanes":1,
+			"name":"noname",
+			"velocity_limit":80
+		}
+	],
+	"crossroads":
+	[
+		{
+			"id":"crossroad_1",
+			"roads_in":["road_1", "none", "road_1", "none"],
+			"roads_out":["none", "none", "none", "none"]
+		}
+	],
+	"vehicle_feeders":
+	[
+		{
+			"id":"feeder_1",
+			"feeding_roads":["road_1"],
+			"deadend_roads":[],
+			"params":
+			[				
+				{
+					"road_id":"road_1",
+					"mode":"initial",
+					"density":0.1,
+					"init_speed":20,
+					"max_speed":100,
+					"car_prob":0.8,
+					"bus_prob":0.2
+				}
+			]
+		}
+	]
+}

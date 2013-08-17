@@ -26,7 +26,7 @@ public:
 		this->simulation_density_step = DEFAULT_DENSITY_STEP;
 		random::initialize();
 	};
-	virtual ~simulation_model();
+	virtual ~simulation_model(){};
 
 	int get_iterations_number() const {return this->iterations_number;};
 	float get_initial_density() const {return this->initial_density;};

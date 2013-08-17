@@ -38,8 +38,11 @@ class statistics_model {
 	boost::container::set<DATA_PARAMS> data_params;
 	boost::container::set<STAT_PARAMS> stat_params;
 public:
-	statistics_model();
-	virtual ~statistics_model();
+	statistics_model()
+	{
+		data_accumulation_time = 0
+	};
+	virtual ~statistics_model(){};
 
 	void set_data_accumulation_time(const int time) {this->data_accumulation_time = time;};
 	int get_data_accumulation_time() const{return this->data_accumulation_time;}
