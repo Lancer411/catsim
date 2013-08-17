@@ -1,6 +1,6 @@
 /*
  vehicle_feeder.cpp - connector which aim is to fill roads with
- vehicles with some density
+ vehicles at some density
 
  Catsim source code
  Copyright (C) 2012-2013  naghtarr

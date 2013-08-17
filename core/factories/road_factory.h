@@ -21,7 +21,6 @@
 #ifndef ROAD_FACTORY_H_
 #define ROAD_FACTORY_H_
 #include "define/cadef.h"
-//#include "factory.h"
 #include "core/entities/road.h"
 #include "core/connectors/crossroad.h"
 #include "core/stat/stat_data_handler.h"
@@ -29,7 +28,7 @@
 typedef boost::container::map<std::string, road_ptr> road_map;
 typedef boost::container::map<std::string, crossroad_ptr> crossroad_map;
 
-class road_factory //: factory<road_ptr>
+class road_factory
 {
 	road_map roads;
 	crossroad_map crossroads;

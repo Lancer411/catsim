@@ -23,7 +23,6 @@
 #include "abstract/observer.h"
 #include "core/base/iautomat.h"
 #include "core/entities/entity.h"
-#include "abstract/listeners.h"
 
 const static int ROAD_MARKER_SPECIAL_POSITION = -1;
 
