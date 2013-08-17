@@ -48,5 +48,6 @@ public:
 	virtual ~road_factory();
 };
 
+typedef boost::shared_ptr<road_factory> road_factory_ptr;
 
 #endif /* ROAD_FACTORY_H_ */

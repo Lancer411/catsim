@@ -28,4 +28,6 @@ public:
 	virtual ~lightsignal_factory();
 };
 
+typedef boost::shared_ptr<lightsignal_factory> lightsignal_factory_ptr;
+
 #endif /* LIGHTSIGNAL_FACTORY_H_ */
