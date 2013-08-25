@@ -23,14 +23,12 @@ enum STAT_PARAMS
 {
 	MEAN,
 	MEDIAN,
-	COVARIANCE,
-	DENSITY,
 	KURTOSIS,
 	MAX,
 	MIN,
-	MOMENT,
 	SUM,
-	VARIANCE
+	VARIANCE,
+	DEVIATION
 };
 
 class statistics_model {

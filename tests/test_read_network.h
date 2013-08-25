@@ -20,7 +20,7 @@ public:
 	virtual ~test_read_network(){};
 	void runtest()
 	{
-		int iterations = 3600;
+		int iterations = 800;
 		road_network_data_ptr network_data = road_network_json_reader::read("test_models/one_road_test.json");
 		road_network_model_ptr network_model(new roadnetwork_model());
 		network_model->build_network(network_data);
@@ -33,7 +33,7 @@ public:
 		stat_model->add_data_param(VEHICLES);
 		stat_model->add_data_param(PASSAGE_TIME);
 		stat_model->add_data_param(ROAD_QUEUE);
-		stat_model->add_stat_param(MEDIAN);
+		stat_model->add_stat_param(MEAN);
 
 		sim_model->launch_simulation(network_model, stat_model);
 	};

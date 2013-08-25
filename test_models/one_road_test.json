@@ -3,7 +3,7 @@
 	[
 		{
 			"road_id":"road_1",
-			"length":900,
+			"length":200,
 			"lanes":1,
 			"name":"noname",
 			"velocity_limit":80

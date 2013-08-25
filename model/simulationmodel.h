@@ -53,7 +53,6 @@ public:
 	{
 		while(initial_density <= 1)
 		{
-//			std::cout << initial_density << std::endl;
 			network_model->reset_to_density(initial_density);
 			network_model->set_stat_data_accumulation_time(statistics_model->get_data_accumulation_time());
 			int iteration = 0;

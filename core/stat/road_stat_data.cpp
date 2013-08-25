@@ -37,18 +37,17 @@ void road_stat_data::update_parameters()
 	density_accumulator(current_road_density);
 	queue_accumulator (current_queue);
 
-	avg_road_speed = boost::accumulators::mean(avg_speed_accumulator);
-	total_speed_accumulator(avg_road_speed);
+	update_stat_data_params_float(speed, avg_speed_accumulator);
+	total_speed_accumulator(speed.mean);
 
 	passed_veh_acc((float)passed_vehicles_number_iter);
 	if(stat_timer == stat_accumulation_time)
 	{
-		avg_road_density = boost::accumulators::mean(density_accumulator);
-		avg_road_passage_time = boost::accumulators::mean(passage_time_accumulator);
-		avg_queue = boost::accumulators::mean(queue_accumulator);
-		avg_road_speed_total = boost::accumulators::mean(total_speed_accumulator);
-		road_flow_as_speeddensity = avg_road_density * avg_road_speed_total*road_lanes_count;
-		passed_veh_flow = boost::accumulators::mean(passed_veh_acc);
+		update_stat_data_params_float(density, density_accumulator);
+		update_stat_data_params_long(passage_time, passage_time_accumulator);
+		update_stat_data_params_float(queue, queue_accumulator);
+		update_stat_data_params_float(speed_total, total_speed_accumulator);
+		update_stat_data_params_float(passed_vehicles, passed_veh_acc);
 		reset_timer();
 	}
 	passed_vehicles_number_iter = 0;
@@ -82,12 +81,12 @@ void road_stat_data::update_avg_speed(short speed)
 void road_stat_data::reset_timer()
 {
 	stat_timer = 0;
-	density_accumulator = float_acc();
-	avg_speed_accumulator = float_acc();
-	total_speed_accumulator = float_acc();
-	passage_time_accumulator = long_acc();
-	passed_veh_acc = float_acc();
-	queue_accumulator = float_acc();
+	density_accumulator = accumulator<float>::type();
+	avg_speed_accumulator = accumulator<float>::type();
+	total_speed_accumulator = accumulator<float>::type();
+	passage_time_accumulator = accumulator<long>::type();
+	passed_veh_acc = accumulator<float>::type();
+	queue_accumulator = accumulator<float>::type();
 	markers_time_intervals.clear();
 }
 
@@ -95,11 +94,14 @@ void road_stat_data::reset()
 {
 	passed_vehicles_number_iter =
 	passed_vehicles_number = current_vehicles_number =
-	current_queue =	avg_queue = max_queue =
-	current_vehicles_length =
-	current_road_density = avg_road_density =
-	avg_road_speed = avg_road_speed_total =
-	avg_road_passage_time = road_flow_as_speeddensity = passed_veh_flow = 0;
+	current_queue = current_vehicles_length = current_road_density = 0;
+
+	density.reset();
+	speed.reset();
+	passed_vehicles.reset();
+	passage_time.reset();
+	queue.reset();
+
 	stat_accumulation_time = DEFAULT_STAT_ACCUMULATION_TIME;
 	reset_timer();
 }
@@ -123,8 +125,8 @@ void road_stat_data::inc_queue_vehicles_num()
 
 void road_stat_data::reset_queue_vehicles_num()
 {
-	if (current_queue>max_queue)
-		max_queue = current_queue;
+	if (current_queue > queue.max)
+		queue.max = current_queue;
 	current_queue=0;
 }
 

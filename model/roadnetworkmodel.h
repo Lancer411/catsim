@@ -150,7 +150,7 @@ public:
 		std::cout<<stat->get_current_road_density()<<"|"
 			<<stat->get_avg_road_density()<<"|"
 			<<stat->get_avg_road_speed_total()<<"|"
-			<<stat->get_road_flow_as_mean_passed_veh_num()<<"|"
+			<<stat->get_road_flow()<<"|"
 			<<stat->get_passed_vehicles_number()<<"|"
 			<<stat->get_current_vehicles_number()<<"|"
 			<<stat->get_avg_road_passage_time()<<"|"
