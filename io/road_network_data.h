@@ -23,8 +23,13 @@ const char * RN_ROAD_VELOCITY_LIMIT = "velocity_limit";
 
 const char * RN_CROSSROADS = "crossroads";
 const char * RN_CROSSROAD_ID = "crossroad_id";
-const char * RN_CROSSROAD_ROADS_IN = "roads_in";
-const char * RN_CROSSROAD_ROADS_OUT = "roads_out";
+const char * RN_CONNECTIONS = "road_connections";
+const char * RN_CONNECTION_INPUT_ROAD = "input_road_id";
+const char * RN_CONNECTION_OUPUT_ROAD = "output_road_id";
+const char * RN_CONNECTION_DIRECTION = "direction";
+const char * RN_CONNECTION_DIRECTION_STRAIGHT = "straight";
+const char * RN_CONNECTION_DIRECTION_LEFT = "left";
+const char * RN_CONNECTION_DIRECTION_RIGHT = "right";
 
 const char * RN_PARAM_NONE = "none";
 
@@ -62,11 +67,17 @@ struct road_raw
 	int velocity_limit;
 };
 
+struct roads_connection
+{
+	std::string input_road_id;
+	std::string output_road_id;
+	std::string direction;
+};
+
 struct crossroad_raw
 {
 	std::string id;
-	std::string roads_in[4];
-	std::string roads_out[4];
+	boost::container::list<roads_connection> road_connections;
 };
 
 struct vehicle_feeder_params
@@ -138,16 +149,26 @@ public:
 		roads_raw.insert(it, road);
 	};
 
-	void parse_crossroad(const boost::property_tree::ptree ptree)
+	void parse_crossroad(boost::property_tree::ptree ptree)
 	{
 		crossroad_raw crossroad;
 		crossroad.id = ptree_get<std::string>(ptree, RN_CROSSROAD_ID);
-		boost::property_tree::ptree roads_in = ptree.get_child(RN_CROSSROAD_ROADS_IN);
-		boost::property_tree::ptree roads_out = ptree.get_child(RN_CROSSROAD_ROADS_OUT);
-		ptree_fill_array<std::string>(roads_in, EMPTY_PROPERTY, crossroad.roads_in, 4);
-		ptree_fill_array<std::string>(roads_out, EMPTY_PROPERTY, crossroad.roads_out, 4);
+		BOOST_FOREACH(ptree_value &val, ptree.get_child(RN_CONNECTIONS))
+		{
+			boost::container::list<roads_connection>::iterator iter = crossroad.road_connections.end();
+			crossroad.road_connections.insert(iter, parse_road_connection(val.second));
+		}
 		raw_crossroads_list::iterator it = crossroads_raw.end();
 		crossroads_raw.insert(it, crossroad);
+	}
+
+	roads_connection parse_road_connection(const boost::property_tree::ptree ptree)
+	{
+		roads_connection conn;
+		conn.input_road_id = ptree_get<std::string>(ptree, RN_CONNECTION_INPUT_ROAD);
+		conn.output_road_id = ptree_get<std::string>(ptree, RN_CONNECTION_OUPUT_ROAD);
+		conn.direction = ptree_get<std::string>(ptree, RN_CONNECTION_DIRECTION);
+		return conn;
 	}
 
 	void parse_feeder(boost::property_tree::ptree ptree)

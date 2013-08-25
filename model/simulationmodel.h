@@ -8,6 +8,8 @@
 #ifndef SIMULATIONMODEL_H_
 #define SIMULATIONMODEL_H_
 #include "core/tools/random.h"
+#include "roadnetworkmodel.h"
+#include "statisticsmodel.h"
 
 const float DEFAULT_INITIAL_DENSITY = 0.01;
 const float DEFAULT_DENSITY_STEP = 0.01;
@@ -38,14 +40,35 @@ public:
 		if(density >=1 || density < 0)
 			return;
 		this->initial_density = density;
-	}
+	};
+
 	void set_simulation_density_step(const float step)
 	{
 		if(step >=1 || step < 0)
 			return;
 		this->simulation_density_step = step;
+	};
+
+	void launch_simulation(road_network_model_ptr network_model, statistics_model_ptr statistics_model)
+	{
+		while(initial_density <= 1)
+		{
+//			std::cout << initial_density << std::endl;
+			network_model->reset_to_density(initial_density);
+			network_model->set_stat_data_accumulation_time(statistics_model->get_data_accumulation_time());
+			int iteration = 0;
+			while(iteration < iterations_number)
+			{
+				iteration++;
+				network_model->iterate();
+			}
+			network_model->print();
+			initial_density += simulation_density_step;
+		}
 	}
 
  };
+
+typedef boost::shared_ptr<simulation_model> simulation_model_ptr;
 
 #endif /* SIMULATIONMODEL_H_ */

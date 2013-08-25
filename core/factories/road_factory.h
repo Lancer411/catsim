@@ -47,6 +47,8 @@ public:
 	void put_crossroad(crossroad_ptr crossroad, const std::string road_id);
 	size_t count();
 	void iterate();
+	void clear();
+	void set_stat_accumulation_time(long t);
 	virtual ~road_factory();
 };
 

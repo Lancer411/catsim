@@ -64,7 +64,7 @@ public:
 
 	bool road_fed() const {return road_is_fed;};
 	void set_fed() {road_is_fed = true;};
-
+	void set_not_fed(){road_is_fed = false;};
 	bool need_to_distribute() const{return need_distribute;};
 	void set_distribution_timer(int time)
 	{

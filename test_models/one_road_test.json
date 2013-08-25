@@ -13,8 +13,14 @@
 	[
 		{
 			"crossroad_id":"crossroad_1",
-			"roads_in":["road_1", "none", "road_1", "none"],
-			"roads_out":["none", "none", "none", "none"]
+			"road_connections":
+			[
+				{
+					"input_road_id":"road_1",
+					"output_road_id":"road_1",
+					"direction":"straight"
+				}
+			]
 		}
 	],
 	"vehicle_feeders":

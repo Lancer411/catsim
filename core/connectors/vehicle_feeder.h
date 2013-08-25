@@ -85,6 +85,7 @@ public:
 	 */
 	void feed_roads();
 	void set_transfer_mode(feeder_trasfer_mode mode){this->transfer_mode = mode;};
+	void set_params_to_density(float density);
 private:
 	/**
 	 * Fills specified road with params

@@ -53,6 +53,10 @@ road_ptr road_factory::create_road(int16 linesnum, int16 length, short velocity_
 	p->set_id(id);
 	road_stat_data_ptr data = stat_data.register_data(id, linesnum, length);
 	p->set_road_stat_data(data);
+	road_marker_ptr marker(new road_marker(ROAD_MARKER_SPECIAL_POSITION));
+	data->add_marker(marker);
+	p->add_marker(marker);
+
 	roads[id] = p;
 	crossroad_ptr cross(new crossroad());
 	cross->add_first_road(p);
@@ -67,6 +71,10 @@ road_ptr road_factory::create_road(int16 linesnum, int16 length, short velocity_
 	p->set_id(id);
 	road_stat_data_ptr data = stat_data.register_data(id, linesnum, length);
 	p->set_road_stat_data(data);
+	road_marker_ptr marker(new road_marker(ROAD_MARKER_SPECIAL_POSITION));
+	data->add_marker(marker);
+	p->add_marker(marker);
+
 	roads[id] = p;
 	return p;
 }
@@ -110,6 +118,27 @@ void road_factory::put_crossroad(crossroad_ptr crossroad, const std::string road
 const road_stat_data_ptr road_factory::get_road_statistics(std::string id)
 {
 	return stat_data.get_road_data(id);
+}
+
+void road_factory::set_stat_accumulation_time(long t)
+{
+	road_map::iterator it;
+	for (it = roads.begin(); it != roads.end();++it)
+	{
+		std::string road_id = it->second->get_id();
+		get_road_statistics(road_id)->set_stat_accumulation_time(t);
+	}
+}
+
+void road_factory::clear()
+{
+	road_map::iterator it;
+	for (it = roads.begin(); it != roads.end();++it)
+	{
+		it->second->clear();
+		std::string road_id = it->second->get_id();
+		get_road_statistics(road_id)->reset();
+	}
 }
 
 road_factory::~road_factory()

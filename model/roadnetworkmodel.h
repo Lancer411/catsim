@@ -19,7 +19,6 @@ class roadnetwork_model {
 	vehicle_factory_ptr vehicles_factory;
 	lightsignal_factory_ptr lightsignals_factory;
 	vehicle_feeder_ptr vehicles_feeder;
-
 public:
 	roadnetwork_model() :
 		roads_factory(new road_factory()),
@@ -34,49 +33,46 @@ public:
 		raw_roads_list roads = network->get_roads();
 		raw_crossroads_list crossroads = network->get_crossroads();
 		raw_feeders_list feeders = network->get_feeders();
-		int roads_count = roads.size();
-		int crossroads_count = crossroads.size();
-		int feeders_count = feeders.size();
-		std::cout<<roads_count << "|" << crossroads_count<< "|" <<feeders_count <<std::endl;
 
 		BOOST_FOREACH(raw_roads_list::value_type road, roads)
 		{
-			std::cout << road.id << std::endl;
 			roads_factory->create_road(road.lanes, road.length, road.velocity_limit, road.id);
 		}
 
 		BOOST_FOREACH(raw_crossroads_list::value_type raw_crossroad, crossroads)
 		{
-			std::cout << raw_crossroad.id << std::endl;
+			road_ptr null_ptr;
 			crossroad_ptr crossroad_p(new crossroad());
 			crossroad_p->set_id(raw_crossroad.id);
-			int pos = 0;
-			BOOST_FOREACH(std::string id, raw_crossroad.roads_in)
+			BOOST_FOREACH(boost::container::list<roads_connection>::value_type connection, raw_crossroad.road_connections)
 			{
-				if(!boost::algorithm::equals(id, RN_PARAM_NONE))
+				road_ptr input_road = roads_factory->get_road(connection.input_road_id);
+				road_ptr output_road = roads_factory->get_road(connection.output_road_id);
+				if(output_road != null_ptr && input_road != null_ptr)
 				{
-					std::cout << id << std::endl;
-					road_ptr road = roads_factory->get_road(id);
-					crossroad_p->put_road_input(road, pos);
+					relative_direction dir = DIRECTION_ANY;
+					if(boost::algorithm::equals(connection.direction, RN_CONNECTION_DIRECTION_STRAIGHT))
+						dir = DIRECTION_STRAIGHT;
+					if(boost::algorithm::equals(connection.direction, RN_CONNECTION_DIRECTION_LEFT))
+						dir = DIRECTION_LEFT;
+					if(boost::algorithm::equals(connection.direction, RN_CONNECTION_DIRECTION_RIGHT))
+						dir = DIRECTION_RIGHT;
+					if(dir != DIRECTION_ANY)
+					{
+						if(!crossroad_p->has_first_road())
+						{
+							crossroad_p->add_first_road(input_road);
+						}
+						crossroad_p->connect(output_road, input_road->get_id(), dir);
+						input_road->set_connector(crossroad_p);
+						roads_factory->put_crossroad(crossroad_p, input_road->get_id());
+					}
 				}
-				pos ++;
-			}
-			pos = 0;
-			BOOST_FOREACH(std::string id, raw_crossroad.roads_out)
-			{
-				std::cout << id << std::endl;
-				if(!boost::algorithm::equals(id, RN_PARAM_NONE))
-				{
-					road_ptr road = roads_factory->get_road(id);
-					crossroad_p->put_road_output(road, pos);
-				}
-				pos ++;
 			}
 		}
 
 		BOOST_FOREACH(raw_feeders_list::value_type raw_feeder, feeders)
 		{
-			std::cout << raw_feeder.id << std::endl;
 			if(boost::algorithm::equals(raw_feeder.feeder_mode, RN_FEEDER_MODE_SAVING))
 			{
 				vehicles_feeder->set_transfer_mode(SAVING);
@@ -132,10 +128,45 @@ public:
 					if(road != null_ptr)
 					{
 						vehicles_feeder->connect_deadend_road(road, raw_pair.feeding_road);
+						road->set_connector(vehicles_feeder);
 					}
 				}
 			}
 		}
+	};
+
+	void iterate()
+	{
+		vehicles_feeder->feed_roads();
+		roads_factory->iterate();
+	};
+
+	void print()
+	{
+//		road_ptr road = roads_factory->get_road("road_1");
+//		std::cout << road << std::endl;
+		road_stat_data_ptr  stat = roads_factory->get_road_statistics("road_1");
+		std::cout.precision(5);
+		std::cout<<stat->get_current_road_density()<<"|"
+			<<stat->get_avg_road_density()<<"|"
+			<<stat->get_avg_road_speed_total()<<"|"
+			<<stat->get_road_flow_as_mean_passed_veh_num()<<"|"
+			<<stat->get_passed_vehicles_number()<<"|"
+			<<stat->get_current_vehicles_number()<<"|"
+			<<stat->get_avg_road_passage_time()<<"|"
+			<<std::endl;
+	};
+
+	void reset_to_density(float density)
+	{
+		roads_factory->clear();
+		vehicles_factory->delete_all_vehicles();
+		vehicles_feeder->set_params_to_density(density);
+	};
+
+	void set_stat_data_accumulation_time(long t)
+	{
+		roads_factory->set_stat_accumulation_time(t);
 	};
 
 	~roadnetwork_model()
@@ -146,5 +177,7 @@ public:
 		vehicles_feeder.reset();
 	};
 };
+
+typedef boost::shared_ptr<roadnetwork_model> road_network_model_ptr;
 
 #endif /* ROADNETWORKMODEL_H_ */

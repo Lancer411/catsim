@@ -215,6 +215,19 @@ void vehicle_feeder::update_road_params(std::string id, feeder_params_ptr params
 	feeding_roads_params[id] = params;
 }
 
+void vehicle_feeder::set_params_to_density(float density)
+{
+	if(density > 1 || density < 0)
+		return;
+	params_map::iterator it;
+	for (it = feeding_roads_params.begin(); it != feeding_roads_params.end();++it)
+	{
+		feeder_params_ptr params = it->second;
+		params->set_not_fed();
+		params->density = density;
+	}
+}
+
 vehicle_feeder::~vehicle_feeder()
 {
 	feeding_roads.clear();
