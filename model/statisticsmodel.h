@@ -72,22 +72,216 @@ public:
 
 	void print_model_data(int iterations, float initial_density, float final_density, float density_step, road_network_model_ptr network)
 	{
-		out << "===================   CATSIM INFORMATION   ===================" << std::endl;
-		out << TOOL_NAME << " - " << TOOL_DESCRIPTION << std::endl;
-		out << "Version: " << TOOL_VERSION << std::endl;
-		out << "=================== ROAD NETWORK SIMULATION ===================" << std::endl;
-		out << "Iterations number: " << iterations << std::endl;
-		out << "Initial road density: " << initial_density << std::endl;
-		out << "Final road density: " << final_density << std::endl;
-		out << "Density Step: " << density_step << std::endl;
-		out << "Data accumulation time: " << data_accumulation_time << " iterations" << std::endl;
-		out << "Roads count: " << network->roads_factory->count();
+		if(!out.is_open())
+			return;
+		print_header("CATSIM INFORMATION");
+		out << " " << TOOL_NAME << " - " << TOOL_DESCRIPTION << std::endl;
+		print_value("Version", TOOL_VERSION);
+		print_header("ROAD NETWORK SIMULATION");
+		print_value("Iterations number", iterations);
+		print_value("Initial road density", initial_density);
+		print_value("Final road density", final_density);
+		print_value("Density Step", density_step);
+		print_value_with_postfix("","Data accumulation time", data_accumulation_time, "iterations");
+		print_value("Roads count", network->roads_factory->count());
+		print_header("SIMULATION STEPS");
 	};
 
-	void print_simulation_data(road_network_model_ptr network)
+	void print_simulation_data(float current_density, road_network_model_ptr network)
 	{
+		if(!out.is_open())
+			return;
+		road_stat_data_map stat_data = network->get_stat_data_map();
+		print_delimeter();
+		print_value("Current roads density", current_density);
+		road_stat_data_map::iterator it;
+		for (it = stat_data.begin(); it != stat_data.end();++it)
+		{
+			std::string road_id = it->first;
+			road_stat_data_ptr data = it->second;
+			out << std::endl;
+			print_subheader("Road ID", road_id);
+			print_value("Average road flow", data->get_road_flow());
+			print_value("Current vehicles", data->get_current_vehicles_number());
+			print_value("Passed vehicles", data->get_passed_vehicles_number());
+			print_table_header();
+			BOOST_FOREACH(boost::container::set<DATA_PARAMS>::value_type param, data_params)
+			{
+				switch(param)
+				{
+					case ROAD_DENSITY:
+						print_data(" Road density", data->get_density());
+						break;
+					case SPEED:
+						print_data(" Speed", data->get_total_speed());
+						break;
+					case PASSAGE_TIME:
+						print_data(" Passage time", data->get_passage_time());
+						break;
+					case VEHICLES:
+						print_data(" Passed vehicles", data->get_passed_vehicles());
+						break;
+					case ROAD_QUEUE:
+						print_data(" Road queue", data->get_queue());
+						break;
+					default:
+						break;
+				}
+			}
 
+			out << std::endl;
+		}
 	};
+
+private:
+	void print_data(const char *name, stat_data_params params)
+	{
+		if(!out.is_open())
+			return;
+		char *sym = " |";
+		int tabwidth = 12;
+		out.unsetf(std::ios::right);
+		out.setf(std::ios::left);
+		out << std::setw(20) << name << sym;
+		out.unsetf(std::ios::left);
+		out.setf(std::ios::right);
+		BOOST_FOREACH(boost::container::set<STAT_PARAMS>::value_type param, stat_params)
+		{
+			switch(param)
+			{
+				case MIN:
+					out << std::setw(tabwidth) << params.min << sym;
+					break;
+				case MAX:
+					out << std::setw(tabwidth) << params.max << sym;
+					break;
+				case SUM:
+					out << std::setw(tabwidth) << params.sum << sym;
+					break;
+				case MEAN:
+					out << std::setw(tabwidth) << params.mean << sym;
+					break;
+				case MEDIAN:
+					out << std::setw(tabwidth) << params.median << sym;
+					break;
+				case KURTOSIS:
+					out << std::setw(tabwidth) << params.kurtosis << sym;
+					break;
+				case VARIANCE:
+					out << std::setw(tabwidth) << params.variance << sym;
+					break;
+				case DEVIATION:
+					out << std::setw(tabwidth) << params.deviation << sym;
+					break;
+				default:
+					break;
+			}
+		}
+		out << std::endl;
+	};
+
+	void print_header(const char* string)
+	{
+		if(!out.is_open())
+			return;
+		out << std::endl;
+		out.width(80);
+		out.setf(std::ios::right);
+		out << std::setw(30) << std::setfill(' ') << string << std::endl;
+		out << std::endl;
+	}
+
+
+	template <class T>
+	void print_value_with_postfix(const char *prefix, const char *name, const T value, const char *postfix)
+	{
+		if(!out.is_open())
+			return;
+		out.unsetf(std::ios::right);
+		out.setf(std::ios::left);
+		out << prefix << " ";
+		out << std::setw(25) << name << ": ";
+		out.unsetf(std::ios::left);
+		out.setf(std::ios::right);
+		out << std::setw(10) << value << ' ';
+		out.unsetf(std::ios::right);
+		out.setf(std::ios::left);
+		out << std::setw(10) << postfix << std::endl;
+	};
+
+	template <class T>
+	void print_subheader(const char *string, const T value)
+	{
+		if(!out.is_open())
+			return;
+		out << " ==== " << string << ": " << value << std::endl;
+	};
+
+	template <class T>
+	void print_value(const char *name, const T value)
+	{
+		print_value_with_postfix<T>("", name, value, "");
+	};
+
+	void print_delimeter()
+	{
+		if(!out.is_open())
+			return;
+		out << "==================================================";
+		out << "==================================================";
+		out << "==================================";
+		out << std::endl;
+	};
+
+	void print_table_header()
+	{
+		if(!out.is_open())
+			return;
+		char *sym = " |";
+		int tabwidth = 12;
+		out.unsetf(std::ios::right);
+		out.setf(std::ios::left);
+		out << std::setw(20) << ' ' << sym;
+		out.unsetf(std::ios::left);
+		out.setf(std::ios::right);
+		BOOST_FOREACH(boost::container::set<STAT_PARAMS>::value_type param, stat_params)
+		{
+			switch(param)
+			{
+				case MIN:
+					out << std::setw(tabwidth) << "MIN" << sym;
+					break;
+				case MAX:
+					out << std::setw(tabwidth) << "MAX" << sym;
+					break;
+				case SUM:
+					out << std::setw(tabwidth) << "SUM" << sym;
+					break;
+				case MEAN:
+					out << std::setw(tabwidth) << "MEAN" << sym;
+					break;
+				case MEDIAN:
+					out << std::setw(tabwidth) << "MEDIAN" << sym;
+					break;
+				case KURTOSIS:
+					out << std::setw(tabwidth) << "KURTOSIS" << sym;
+					break;
+				case VARIANCE:
+					out << std::setw(tabwidth) << "VARIANCE" << sym;
+					break;
+				case DEVIATION:
+					out << std::setw(tabwidth) << "DEVIATION" << sym;
+					break;
+				default:
+					break;
+			}
+		}
+		out << std::endl;
+		out << "--------------------------------------------------";
+		out << "--------------------------------------------------";
+		out << "----------------------------------";
+		out << std::endl;
+	}
 };
 
 typedef boost::shared_ptr<statistics_model> statistics_model_ptr;

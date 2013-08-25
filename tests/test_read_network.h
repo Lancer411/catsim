@@ -33,7 +33,15 @@ public:
 		stat_model->add_data_param(VEHICLES);
 		stat_model->add_data_param(PASSAGE_TIME);
 		stat_model->add_data_param(ROAD_QUEUE);
+
+		stat_model->add_stat_param(MIN);
+		stat_model->add_stat_param(MAX);
+		stat_model->add_stat_param(SUM);
 		stat_model->add_stat_param(MEAN);
+		stat_model->add_stat_param(MEDIAN);
+		stat_model->add_stat_param(DEVIATION);
+		stat_model->add_stat_param(VARIANCE);
+		stat_model->add_stat_param(KURTOSIS);
 
 		sim_model->launch_simulation(network_model, stat_model);
 	};

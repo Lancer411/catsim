@@ -137,6 +137,11 @@ public:
 		}
 	};
 
+	road_stat_data_map get_stat_data_map()
+	{
+		return roads_factory->get_stat_data_handler().get_data_map();
+	}
+
 	void iterate()
 	{
 		vehicles_feeder->feed_roads();

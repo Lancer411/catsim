@@ -33,6 +33,7 @@ public:
 	stat_data_handler();
 	road_stat_data_ptr register_data(std::string road_id, int16 lanes, int16 len);
 	road_stat_data_ptr get_road_data(std::string road_id);
+	road_stat_data_map get_data_map() const{return data;};
 	void delete_data(std::string road_id);
 	virtual ~stat_data_handler();
 };

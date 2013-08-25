@@ -149,6 +149,13 @@ public:
 	float get_avg_road_passage_time() const{return passage_time.mean;};
 	float get_road_flow () const {return passed_vehicles.mean;};
 
+	stat_data_params get_density() const {return density;};
+	stat_data_params get_speed() const {return speed;};
+	stat_data_params get_total_speed() const {return speed_total;};
+	stat_data_params get_passage_time() const {return passage_time;};
+	stat_data_params get_passed_vehicles() const {return passed_vehicles;};
+	stat_data_params get_queue() const {return queue;};
+
 	position_time_interval_map get_time_intervals() const {return markers_time_intervals;};
 	// подсчет параметров, вызывается раз в итерацию
 	void update_parameters();

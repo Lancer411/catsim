@@ -72,7 +72,7 @@ public:
 				iteration++;
 				network_model->iterate();
 			}
-			statistics_model->print_simulation_data(network_model);
+			statistics_model->print_simulation_data(initial_density, network_model);
 			initial_density += simulation_density_step;
 		}
 	}
