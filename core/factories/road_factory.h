@@ -38,11 +38,13 @@ public:
 	road_factory();
 	road_ptr create_road(int16 linesnum, int16 length);
 	road_ptr create_road(int16 linesnum, int16 length, short velocity_limit);
+	road_ptr create_road(int16 linesnum, int16 length, short velocity_limit, std::string id);
 	void delete_road(std::string id);
 	const road_ptr get_road(std::string id);
 	const road_stat_data_ptr get_road_statistics(std::string id);
 	const stat_data_handler& get_stat_data_handler(){return stat_data;};
 	crossroad_ptr get_crossroad(std::string road_id);
+	void put_crossroad(crossroad_ptr crossroad, const std::string road_id);
 	size_t count();
 	void iterate();
 	virtual ~road_factory();

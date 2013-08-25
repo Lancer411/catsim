@@ -19,10 +19,10 @@ public:
 	road_network_json_reader(){};
 	virtual ~road_network_json_reader(){};
 
-	static road_network_data read(const std::string filename)
+	static road_network_data_ptr read(const std::string filename)
 	{
 		ptree network_tree;
-		road_network_data data;
+		road_network_data_ptr data(new road_network_data());
 		try
 		{
 			boost::property_tree::read_json(filename, network_tree);
@@ -31,24 +31,24 @@ public:
 			BOOST_FOREACH(tree_value &v, network_tree.get_child(RN_ROADS))
 			{
 				ptree road = v.second;
-				data.parse_road(road);
+				data->parse_road(road);
 			}
 
 			BOOST_FOREACH(tree_value &v, network_tree.get_child(RN_CROSSROADS))
 			{
 				ptree crossroad = v.second;
-				data.parse_crossroad(crossroad);
+				data->parse_crossroad(crossroad);
 			}
 
 			BOOST_FOREACH(tree_value &v, network_tree.get_child(RN_FEEDERS))
 			{
 				ptree feeder = v.second;
-				data.parse_feeder(feeder);
+				data->parse_feeder(feeder);
 			}
-
 		} catch (std::exception const& e) {
 			std::cerr << e.what() << std::endl;
 		}
+
 		return data;
 	};
 };

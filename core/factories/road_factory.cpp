@@ -61,6 +61,16 @@ road_ptr road_factory::create_road(int16 linesnum, int16 length, short velocity_
 	return p;
 }
 
+road_ptr road_factory::create_road(int16 linesnum, int16 length, short velocity_limit, std::string id)
+{
+	road_ptr p(new road(linesnum, length, velocity_limit));
+	p->set_id(id);
+	road_stat_data_ptr data = stat_data.register_data(id, linesnum, length);
+	p->set_road_stat_data(data);
+	roads[id] = p;
+	return p;
+}
+
 void road_factory::delete_road(std::string id)
 {
 	roads[id].reset();
@@ -90,6 +100,11 @@ void road_factory::iterate()
 crossroad_ptr road_factory::get_crossroad(std::string road_id)
 {
 	return crossroads[road_id];
+}
+
+void road_factory::put_crossroad(crossroad_ptr crossroad, const std::string road_id)
+{
+	crossroads[road_id] = crossroad;
 }
 
 const road_stat_data_ptr road_factory::get_road_statistics(std::string id)

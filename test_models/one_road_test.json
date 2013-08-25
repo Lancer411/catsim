@@ -21,13 +21,20 @@
 	[
 		{
 			"feeder_id":"feeder_1",
-			"feeding_roads":["road_1"],
-			"deadend_roads":[],
+			"feeder_roads":
+			[
+				{
+					"feeding_road":"road_1",
+					"deadend_road":"none"
+				}
+			],
+			"feeder_mode":"saving",
 			"params":
 			[				
 				{
 					"road_id":"road_1",
 					"mode":"initial",
+					"distribution":"none",
 					"density":0.1,
 					"init_speed":20,
 					"max_speed":100,

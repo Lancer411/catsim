@@ -9,6 +9,7 @@
 #define TEST_READ_NETWORK_H_
 #include "test.h"
 #include "io/road_network_json_reader.h"
+#include "model/roadnetworkmodel.h"
 
 class test_read_network : public test
 {
@@ -17,7 +18,9 @@ public:
 	virtual ~test_read_network(){};
 	void runtest()
 	{
-		road_network_json_reader::read("test_models/one_road_test.json");
+		road_network_data_ptr network_data = road_network_json_reader::read("test_models/one_road_test.json");
+		roadnetwork_model network_model;
+		network_model.build_network(network_data);
 	};
 };
 

@@ -152,7 +152,7 @@ relative_direction crossroad::get_any_available_direction(int position)
 		case 7:
 			return (random::std_random(0,2) == 0 ?
 					DIRECTION_RIGHT :
-					(random::std_random(0,2) == 0) ? DIRECTION_LEFT : DIRECTION_STRAIGHT);;
+					(random::std_random(0,2) == 0) ? DIRECTION_LEFT : DIRECTION_STRAIGHT);
 		default:
 			break;
 	}

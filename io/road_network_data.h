@@ -25,15 +25,27 @@ const char * RN_CROSSROADS = "crossroads";
 const char * RN_CROSSROAD_ID = "crossroad_id";
 const char * RN_CROSSROAD_ROADS_IN = "roads_in";
 const char * RN_CROSSROAD_ROADS_OUT = "roads_out";
-const char * RN_CROSSROAD_ROAD_NONE = "none";
+
+const char * RN_PARAM_NONE = "none";
 
 const char * RN_FEEDERS = "vehicle_feeders";
 const char * RN_FEEDER_ID = "feeder_id";
-const char * RN_FEEDING_ROADS = "feeding_roads";
-const char * RN_DEADEND_ROADS = "deadend_roads";
+const char * RN_FEEDER_ROADS = "feeder_roads";
+const char * RN_PAIR_FEEDING_ROAD = "feeding_road";
+const char * RN_PAIR_DEADEND_ROAD = "deadend_road";
+const char * RN_FEEDER_MODE = "feeder_mode";
+const char * RN_FEEDER_MODE_SAVING = "saving";
+const char * RN_FEEDER_MODE_DELETING = "deleting";
 const char * RN_FEEDER_PARAMS = "params";
 const char * RN_FEEDER_PARAM_ROAD_ID = "road_id";
 const char * RN_FEEDER_PARAM_MODE = "mode";
+const char * RN_FEEDER_PARAM_MODE_INITIAL = "initial";
+const char * RN_FEEDER_PARAM_MODE_CONTINUOUS = "continuous";
+const char * RN_FEEDER_PARAM_MODE_DISTRIBUTIVE = "distributive";
+const char * RN_FEEDER_PARAM_DISTRIBUTION = "distribution";
+const char * RN_FEEDER_PARAM_DISTRIBUTION_UNIFORM = "uniform";
+const char * RN_FEEDER_PARAM_DISTRIBUTION_POISSON = "poisson";
+const char * RN_FEEDER_PARAM_DISTRIBUTION_TRIANGLE = "triangle";
 const char * RN_FEEDER_PARAM_DENSITY = "density";
 const char * RN_FEEDER_PARAM_INIT_SPEED = "init_speed";
 const char * RN_FEEDER_PARAM_MAX_SPEED = "max_speed";
@@ -61,6 +73,7 @@ struct vehicle_feeder_params
 {
 	std::string road_id;
 	std::string mode;
+	std::string distribution;
 	float density;
 	int init_speed;
 	int max_speed;
@@ -68,22 +81,29 @@ struct vehicle_feeder_params
 	float bus_prob;
 };
 
+struct roads_pair
+{
+	std::string feeding_road;
+	std::string deadend_road;
+};
+
 struct vehicle_feeder_raw
 {
 	std::string id;
-	boost::container::list<std::string> feeding_roads;
-	boost::container::list<std::string> deadend_roads;
+	boost::container::list<roads_pair> roads;
+	std::string feeder_mode;
 	boost::container::list<vehicle_feeder_params> params;
 };
 
+
 typedef boost::container::list<road_raw> raw_roads_list;
 typedef boost::container::list<crossroad_raw> raw_crossroads_list;
-typedef boost::container::list<vehicle_feeder_raw> raw_feeder_list;
+typedef boost::container::list<vehicle_feeder_raw> raw_feeders_list;
 
 class road_network_data {
 	raw_roads_list roads_raw;
 	raw_crossroads_list crossroads_raw;
-	raw_feeder_list feeders_raw;
+	raw_feeders_list feeders_raw;
 public:
 	road_network_data(){};
 	~road_network_data()
@@ -101,6 +121,11 @@ public:
 		return crossroads_raw;
 	};
 
+	raw_feeders_list get_feeders() const
+	{
+		return feeders_raw;
+	};
+
 	void parse_road(const boost::property_tree::ptree ptree)
 	{
 		road_raw road;
@@ -109,7 +134,8 @@ public:
 		road.lanes = ptree_get<int>(ptree, RN_ROAD_LANES);
 		road.name = ptree_get<std::string>(ptree, RN_ROAD_NAME);
 		road.velocity_limit = ptree_get<int>(ptree, RN_ROAD_VELOCITY_LIMIT);
-		roads_raw.push_front(road);
+		raw_roads_list::iterator it = roads_raw.end();
+		roads_raw.insert(it, road);
 	};
 
 	void parse_crossroad(const boost::property_tree::ptree ptree)
@@ -120,19 +146,37 @@ public:
 		boost::property_tree::ptree roads_out = ptree.get_child(RN_CROSSROAD_ROADS_OUT);
 		ptree_fill_array<std::string>(roads_in, EMPTY_PROPERTY, crossroad.roads_in, 4);
 		ptree_fill_array<std::string>(roads_out, EMPTY_PROPERTY, crossroad.roads_out, 4);
+		raw_crossroads_list::iterator it = crossroads_raw.end();
+		crossroads_raw.insert(it, crossroad);
 	}
 
 	void parse_feeder(boost::property_tree::ptree ptree)
 	{
 		vehicle_feeder_raw feeder;
 		feeder.id = ptree_get<std::string>(ptree, RN_FEEDER_ID);
-		ptree_fill_list<std::string>(ptree.get_child(RN_FEEDING_ROADS), EMPTY_PROPERTY, feeder.feeding_roads);
-		ptree_fill_list<std::string>(ptree.get_child(RN_DEADEND_ROADS), EMPTY_PROPERTY, feeder.deadend_roads);
+		BOOST_FOREACH(ptree_value &val, ptree.get_child(RN_FEEDER_ROADS))
+		{
+			boost::container::list<roads_pair>::iterator iter = feeder.roads.end();
+			feeder.roads.insert(iter, parse_road_pair(val.second));
+		}
+
+		feeder.feeder_mode = ptree_get<std::string>(ptree, RN_FEEDER_MODE);
+
 		BOOST_FOREACH(ptree_value &val, ptree.get_child(RN_FEEDER_PARAMS))
 		{
-			feeder.params.push_front(parse_feeder_params(val.second));
+			boost::container::list<vehicle_feeder_params>::iterator iter = feeder.params.end();
+			feeder.params.insert(iter, parse_feeder_params(val.second));
 		}
-		feeders_raw.push_front(feeder);
+		raw_feeders_list::iterator it = feeders_raw.end();
+		feeders_raw.insert(it, feeder);
+	}
+
+	roads_pair parse_road_pair(const boost::property_tree::ptree ptree)
+	{
+		roads_pair pair;
+		pair.feeding_road = ptree_get<std::string>(ptree, RN_PAIR_FEEDING_ROAD);
+		pair.deadend_road = ptree_get<std::string>(ptree, RN_PAIR_DEADEND_ROAD);
+		return pair;
 	}
 
 	vehicle_feeder_params parse_feeder_params(const boost::property_tree::ptree ptree)
@@ -140,6 +184,7 @@ public:
 		vehicle_feeder_params params;
 		params.road_id = ptree_get<std::string>(ptree, RN_FEEDER_PARAM_ROAD_ID);
 		params.mode = ptree_get<std::string>(ptree, RN_FEEDER_PARAM_MODE);
+		params.distribution = ptree_get<std::string>(ptree, RN_FEEDER_PARAM_DISTRIBUTION);
 		params.density = ptree_get<float>(ptree, RN_FEEDER_PARAM_DENSITY);
 		params.init_speed = ptree_get<int>(ptree, RN_FEEDER_PARAM_INIT_SPEED);
 		params.max_speed = ptree_get<int>(ptree, RN_FEEDER_PARAM_MAX_SPEED);
@@ -149,5 +194,7 @@ public:
 	}
 
 };
+
+typedef boost::shared_ptr<road_network_data> road_network_data_ptr;
 
 #endif /* ROAD_NETWORK_DATA_H_ */

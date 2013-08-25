@@ -21,10 +21,11 @@
 #ifndef CROSSROAD_H_
 #define CROSSROAD_H_
 #include "core/connectors/connector.h"
+#include "core/entities/entity.h"
 #include "core/tools/conversion.h"
 #include "boost/algorithm/string/predicate.hpp"
 
-class crossroad : public connector
+class crossroad : public connector, public entity
 {
 	const static int NO_ROAD = -1;
 	// array of roads which are direct inputs for crossroad
@@ -63,6 +64,26 @@ public:
 	bool connect(road_ptr road, std::string road_id, relative_direction direction);
 	bool transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance);
 	road_ptr get_next_road(std::string road_id, relative_direction direction);
+
+	void put_road_input(road_ptr road, const int position)
+	{
+		if(position < 0 || position >= 4)
+			return;
+		roads_direct[position] = road;
+		find_road_and_set_status(position, road->get_id(), DIRECTION_STRAIGHT, ROAD_ABLE);
+		find_road_and_set_status(position, road->get_id(), DIRECTION_RIGHT, ROAD_ABLE);
+		find_road_and_set_status(position, road->get_id(), DIRECTION_LEFT, ROAD_ABLE);
+	};
+
+	void put_road_output(road_ptr road, const int position)
+	{
+		if(position < 0 || position >= 4)
+			return;
+		roads_opposite[position] = road;
+		find_road_and_set_status(position, road->get_id(), DIRECTION_STRAIGHT, ROAD_ABLE);
+		find_road_and_set_status(position, road->get_id(), DIRECTION_RIGHT, ROAD_ABLE);
+		find_road_and_set_status(position, road->get_id(), DIRECTION_LEFT, ROAD_ABLE);
+	};
 private:
 	/**
 	 * Finds position of road in one of road arrays (direct and opposite)
@@ -106,6 +127,17 @@ private:
 	 * and return a random of them.
 	 */
 	relative_direction get_any_available_direction(int position);
+
+	void find_road_and_set_status(const int position, const std::string id,
+			const relative_direction dir, const road_status status)
+	{
+		road_ptr null_ptr;
+		road_ptr next_road = get_next_road(id, dir);
+		if(next_road == null_ptr)
+			return;
+		int next_position = get_road_position(next_road->get_id());
+		set_direction_status(position, next_position, status);
+	};
 };
 
 typedef boost::shared_ptr<crossroad> crossroad_ptr;
