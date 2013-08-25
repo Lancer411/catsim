@@ -12,11 +12,13 @@
 #include "statisticsmodel.h"
 
 const float DEFAULT_INITIAL_DENSITY = 0.01;
+const float DEFAULT_FINAL_DENSITY = 1.0;
 const float DEFAULT_DENSITY_STEP = 0.01;
 
 class simulation_model
 {
 	float initial_density;
+	float final_density;
 	float simulation_density_step;
 	int iterations_number;
 public:
@@ -25,6 +27,7 @@ public:
 	{
 		this->iterations_number = iterations_number;
 		this->initial_density = DEFAULT_INITIAL_DENSITY;
+		this->final_density = DEFAULT_FINAL_DENSITY;
 		this->simulation_density_step = DEFAULT_DENSITY_STEP;
 		random::initialize();
 	};
@@ -42,6 +45,13 @@ public:
 		this->initial_density = density;
 	};
 
+	void set_final_density(const float density)
+	{
+		if(density >=1 || density < 0 || density < initial_density)
+			return;
+		this->final_density = density;
+	};
+
 	void set_simulation_density_step(const float step)
 	{
 		if(step >=1 || step < 0)
@@ -51,6 +61,7 @@ public:
 
 	void launch_simulation(road_network_model_ptr network_model, statistics_model_ptr statistics_model)
 	{
+		statistics_model->print_model_data(iterations_number, initial_density, final_density, simulation_density_step, network_model);
 		while(initial_density <= 1)
 		{
 			network_model->reset_to_density(initial_density);
@@ -61,7 +72,7 @@ public:
 				iteration++;
 				network_model->iterate();
 			}
-			network_model->print();
+			statistics_model->print_simulation_data(network_model);
 			initial_density += simulation_density_step;
 		}
 	}

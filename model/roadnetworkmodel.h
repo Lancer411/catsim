@@ -14,6 +14,8 @@
 #include "core/connectors/feeder_params.h";
 #include "io/road_network_data.h"
 
+class statistics_model;
+
 class roadnetwork_model {
 	road_factory_ptr roads_factory;
 	vehicle_factory_ptr vehicles_factory;
@@ -141,22 +143,6 @@ public:
 		roads_factory->iterate();
 	};
 
-	void print()
-	{
-//		road_ptr road = roads_factory->get_road("road_1");
-//		std::cout << road << std::endl;
-		road_stat_data_ptr  stat = roads_factory->get_road_statistics("road_1");
-		std::cout.precision(5);
-		std::cout<<stat->get_current_road_density()<<"|"
-			<<stat->get_avg_road_density()<<"|"
-			<<stat->get_avg_road_speed_total()<<"|"
-			<<stat->get_road_flow()<<"|"
-			<<stat->get_passed_vehicles_number()<<"|"
-			<<stat->get_current_vehicles_number()<<"|"
-			<<stat->get_avg_road_passage_time()<<"|"
-			<<std::endl;
-	};
-
 	void reset_to_density(float density)
 	{
 		roads_factory->clear();
@@ -176,6 +162,8 @@ public:
 		lightsignals_factory.reset();
 		vehicles_feeder.reset();
 	};
+
+	friend class statistics_model;
 };
 
 typedef boost::shared_ptr<roadnetwork_model> road_network_model_ptr;

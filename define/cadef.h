@@ -35,7 +35,6 @@
 
 #include "core/data_structures/data.h"
 
-
 const float DEFAULT_CELL_LENGTH = 5.5;					// Размер ячейки в метрах по умолчанию
 const short DEFAULT_MAX_VEH_VELOCITY = 100;				// Максимальная скорость ТС п.у.
 const short DEFAULT_VELOCITY_LIMIT = 60;				// Ограничение скорости п.у.

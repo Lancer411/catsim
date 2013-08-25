@@ -1,0 +1,9 @@
+===================   CATSIM INFORMATION   ===================
+CATSim - Cellular Automata Traffic Simulator
+Version: 0.1b
+=================== ROAD NETWORK SIMULATION ===================
+Iterations number: 800
+Initial road density: 0.01
+Final road density: 1
+Density Step: 0.01
+Data accumulation time: 200 iterations

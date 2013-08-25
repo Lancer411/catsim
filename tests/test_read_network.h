@@ -25,7 +25,7 @@ public:
 		road_network_model_ptr network_model(new roadnetwork_model());
 		network_model->build_network(network_data);
 		simulation_model_ptr sim_model(new simulation_model(iterations));
-		statistics_model_ptr stat_model(new statistics_model());
+		statistics_model_ptr stat_model(new statistics_model("test_models/one_road_test_out.dat"));
 		stat_model->set_data_accumulation_time(iterations/4);
 		stat_model->add_data_param(ROAD_DENSITY);
 		stat_model->add_data_param(SPEED);
