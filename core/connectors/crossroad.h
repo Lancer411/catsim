@@ -24,6 +24,7 @@
 #include "core/tools/conversion.h"
 #include "boost/algorithm/string/predicate.hpp"
 #include "core/entities/lightsignal.h"
+#include "define/cadef.h"
 enum lightsignal_mode
 {
 	FIXED,
@@ -33,13 +34,13 @@ class crossroad : public connector
 {
 	const static int NO_ROAD = -1;
 	//array inputs roads
-	road_ptr roads_in [ROAD_COUNT];
+	road_ptr roads_in [cadef::road_count];
 	// array of roads which are direct inputs for crossroad
-	road_ptr roads_direct[ROAD_COUNT][ROAD_COUNT];
+	road_ptr roads_direct[cadef::road_count][cadef::road_count];
 	// array of roads which are opposite to direct ones
-	road_ptr roads_opposite[ROAD_COUNT][ROAD_COUNT];
+	road_ptr roads_opposite[cadef::road_count][cadef::road_count];
 	// matrix represents road to road state (ABLE, UNABLE, NONE)
-	short road_mtx[ROAD_COUNT][ROAD_COUNT];
+	short road_mtx[cadef::road_count][cadef::road_count];
 
 	bool controlled;
 	lightsignal_ptr ls;

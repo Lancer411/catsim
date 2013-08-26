@@ -20,11 +20,12 @@
 
 #include "crossroad.h"
 #include "core/entities/road.h"
+#include "define/cadef.h"
 
 crossroad::crossroad()
 {
-	for (int i = 0; i < ROAD_COUNT; ++i)
-		for (int j = 0; j < ROAD_COUNT; ++j)
+	for (int i = 0; i < cadef::road_count; ++i)
+		for (int j = 0; j < cadef::road_count; ++j)
 			(i != j) ?
 			road_mtx[i][j] = ROAD_UNABLE:
 			road_mtx[i][j] = ROAD_ABLE;
@@ -91,7 +92,7 @@ bool crossroad::connect(road_ptr road, std::string road_id, relative_direction d
 bool crossroad::connect_in(road_ptr input_road)
 {
 	road_ptr null_ptr;
-	for (int i=0; i<ROAD_COUNT;i++)
+	for (int i=0; i<cadef::road_count;i++)
 		if (roads_in[i]==null_ptr)
 		{
 			roads_direct[i][0] = input_road;
@@ -129,7 +130,7 @@ road_ptr crossroad::get_next_road(std::string road_id, relative_direction direct
 int crossroad::get_input_road_position(std::string road_id)
 {
 	road_ptr null_ptr;
-	for (int i = 0; i < ROAD_COUNT; ++i)
+	for (int i = 0; i < cadef::road_count; ++i)
 	{
 		if (roads_in[i]!= null_ptr)
 			if(boost::algorithm::equals(road_id, roads_in[i]->get_id()))
@@ -141,7 +142,7 @@ int crossroad::get_input_road_position(std::string road_id)
 int crossroad::get_output_road_position(std::string road_id, int x)
 {
 	road_ptr null_ptr;
-	for (int i = 0; i < ROAD_COUNT; ++i)
+	for (int i = 0; i < cadef::road_count; ++i)
 	{
 		if(roads_direct[x][i] != null_ptr)
 		if(boost::algorithm::equals(road_id, roads_direct[x][i]->get_id()))
@@ -266,7 +267,7 @@ void crossroad::iterate()
 	{
 	if (ls->getSignal()==Green)
 	{
-	//	std::cout<<"Зеленый"<<std::endl;
+		//std::cout<<"Зеленый"<<std::endl;
 		//Green
 		set_direction_road_status(0,ROAD_ABLE);
 		set_direction_road_status(2,ROAD_ABLE);
@@ -328,6 +329,7 @@ void crossroad::iterate()
 
 		if (reset)
 		{
+//			std::cout<<"aDAPTIVE1"<<std::endl;
 			ls->setSignal(Green);
 			ls->resetCounter();//включить заново
 		}
@@ -345,7 +347,7 @@ void crossroad::iterate()
 	}
 	}
 	if (ls->getSignal()==Yellow)
-		{	//std::cout<<"Желтый"<<std::endl;
+		{//	std::cout<<"Желтый"<<std::endl;
 		//Green
 		set_direction_road_status(0,ROAD_UNABLE);
 		set_direction_road_status(2,ROAD_UNABLE);
@@ -354,7 +356,7 @@ void crossroad::iterate()
 		set_direction_road_status(3,ROAD_ABLE);
 		}
 	if (ls->getSignal()==Red)
-		{//	std::cout<<"Красный"<<std::endl;
+		{	//std::cout<<"Красный"<<std::endl;
 			//Green
 		set_direction_road_status(0,ROAD_UNABLE);
 		set_direction_road_status(2,ROAD_UNABLE);
@@ -363,7 +365,7 @@ void crossroad::iterate()
 		set_direction_road_status(3,ROAD_ABLE);
 		}
 	if (ls->getSignal()==GetReady)
-		{	//std::cout<<"Предупреждающий"<<std::endl;
+		{//	std::cout<<"Предупреждающий"<<std::endl;
 	if (ls_mode==FIXED)
 	{
 		//Green
@@ -414,6 +416,7 @@ void crossroad::iterate()
 
 		if (reset)
 		{
+//			std::cout<<"aDAPTIVE"<<std::endl;
 			ls->setSignal(Red);
 			ls->resetCounter();//включить заново
 		}

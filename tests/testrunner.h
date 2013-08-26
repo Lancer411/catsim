@@ -47,8 +47,8 @@ void runtests()
 //	vehptrtest.runtest();
 //	test_road_infinity inftest;
 //	inftest.runtest();
-	test_crossroad crosstest;
-	crosstest.runtest();
+//	test_crossroad crosstest;
+//	crosstest.runtest();
 //	test_vehicle_feeder feedertest;
 //	feedertest.runtest();
 //	test_poisson_flow flowtest;

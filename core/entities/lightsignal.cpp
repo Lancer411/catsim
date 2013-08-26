@@ -7,6 +7,7 @@
 
 #include "lightsignal.h"
 
+
 lightsignal::lightsignal() {
 	// TODO Auto-generated constructor stub
 
@@ -24,7 +25,7 @@ void lightsignal::setDurations(int durationGreen, int durationYellow, int durati
 	this->durationGreen = durationGreen;
 	this->durationYellow = durationYellow;
 	this->durationRed = durationRed;
-	totalDuration = durationGreen + durationYellow + durationRed + DEFAULT_GET_READY_DURATION;
+	totalDuration = durationGreen + durationYellow + durationRed + cadef::get_ready_duration;
 }
 
 void lightsignal::iterate()
@@ -47,26 +48,26 @@ void lightsignal::resetCounter()
 	if (currentSignal == Green)
 		counter = 0;
 	else if (currentSignal == GreenBlink)
-		counter = durationGreen - DEFAULT_BLINK_DURATION;
+		counter = durationGreen - cadef::blink_duration;
 	else if (currentSignal == Yellow)
 		counter = durationGreen;
 	else if (currentSignal == Red)
 		counter = durationGreen + durationYellow;
 	else if (currentSignal == GetReady)
-		counter = totalDuration - DEFAULT_GET_READY_DURATION;
+		counter = totalDuration - cadef::get_ready_duration;
 }
 
 void lightsignal::resetSignal()
 {
-	if ((counter >= 0) && (counter <= durationGreen - DEFAULT_BLINK_DURATION))
+	if ((counter >= 0) && (counter <= durationGreen - cadef::blink_duration))
 		currentSignal = Green;
-	else if ((counter > durationGreen - DEFAULT_BLINK_DURATION) && (counter <= durationGreen))
+	else if ((counter > durationGreen - cadef::blink_duration) && (counter <= durationGreen))
 		currentSignal = GreenBlink;
 	else if ((counter > durationGreen) && (counter <= durationGreen + durationYellow))
 		currentSignal = Yellow;
-	else if ((counter > durationGreen + durationYellow) && (counter <= totalDuration - DEFAULT_GET_READY_DURATION))
+	else if ((counter > durationGreen + durationYellow) && (counter <= totalDuration - cadef::get_ready_duration))
 		currentSignal = Red;
-	else if (counter > totalDuration - DEFAULT_GET_READY_DURATION)
+	else if (counter > totalDuration - cadef::get_ready_duration)
 		currentSignal = GetReady;
 }
 

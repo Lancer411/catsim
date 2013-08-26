@@ -20,8 +20,8 @@
 #include "random.h"
 
 boost::random::mt19937 random::gen(std::time(0));
-boost::random::uniform_int_distribution<> random::uniform_int_dist(0, 10);
-boost::random::poisson_distribution<int> random::poisson_int_dist(5);
+boost::random::uniform_int_distribution<> random::uniform_int_dist(0, 5);
+boost::random::poisson_distribution<int> random::poisson_int_dist(2);
 boost::random::triangle_distribution<> random::triangle_int_dist(1,5,10);
 
 int random::next_int_uniform()

@@ -19,9 +19,13 @@
 */
 
 #include "tests/testrunner.h"
+#include "command_line.h"
 
 int main(int ac, char* av[])
 {
-	runtests();
+
+//	runtests();
+	command_line cl;
+	cl.parser(ac, av);
 	return 0;
 }

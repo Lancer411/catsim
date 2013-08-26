@@ -100,7 +100,7 @@ void road_stat_data::reset()
 	current_road_density = avg_road_density =
 	avg_road_speed = avg_road_speed_total =
 	avg_road_passage_time = road_flow_as_speeddensity = passed_veh_flow = 0;
-	stat_accumulation_time = DEFAULT_STAT_ACCUMULATION_TIME;
+	stat_accumulation_time = cadef::stat_accumulation_time;
 	reset_timer();
 }
 

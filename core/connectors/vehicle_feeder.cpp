@@ -56,6 +56,7 @@ bool vehicle_feeder::transfer(std::string from_road_id, road_ptr to_road, vehicl
 	    }
 	    default:
 	      break;
+	}
 }
 
 road_ptr vehicle_feeder::get_next_road(std::string road_id, relative_direction direction)

@@ -22,7 +22,7 @@
 
 vehicle::vehicle()
 {
-	init(DEFAULT_MAX_VEH_VELOCITY, 0, Car);
+	init(cadef::max_veh_velocity, 0, Car);
 }
 
 vehicle::vehicle(int16 max_velocity, int16 start_velocity)
@@ -82,12 +82,12 @@ void vehicle::set_type(vehicle_type t)
 int16 vehicle::update_velocity(short limit)
 {
 	time_on_road++;
-	if(random::std_random() > DEFAULT_PROB_SLOWDOWN) // Случайное торможение
+	if(random::std_random() > cadef::prob_showdown) // Случайное торможение
 	{
 		// Движение / ускорение, превышение скорости
 		current_cell_velocity = std::min(current_cell_velocity + 1, (int)max_cell_velocity);
 		// Ограничение скорости по дороге
-		if(random::std_random() > DEFAULT_PROB_SPEEDING)
+		if(random::std_random() > cadef::prob_speeding)
 			current_cell_velocity = std::min((int)current_cell_velocity, (int)limit);
 	}
 	else

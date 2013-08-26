@@ -23,7 +23,7 @@
 
 road::road(int16 linesnum, int16 length)
 {
-	init(linesnum, length, DEFAULT_VELOCITY_LIMIT);
+	init(linesnum, length, cadef::velocity_limit);
 }
 
 road::road(int16 linesnum, int16 length, short limit)
@@ -83,10 +83,13 @@ void road::iterate()
 				object_ptr obj = temp_roaddata[i][j].get_object();
 				if(obj->is_dynamic())
 				{
-					if (j >= (rl/2))
+					if (j>= (rl-8))
+						free=false;
+					if (j >= (rl-50))
 						stat_data->inc_queue_vehicles_num();
-					else stat_data->reset_queue_vehicles_num();
-					free=false;
+					else
+						stat_data->reset_queue_vehicles_num();
+
 					vehicle_ptr veh = boost::shared_polymorphic_downcast<vehicle>(obj);
 					stat_data->update_avg_speed(veh->get_kmh_velocity());
 					veh->update_velocity(velocity_limit);
@@ -256,7 +259,7 @@ void road::slow_down_vehicle(vehicle_ptr veh, vehicle_ptr front_veh, short dista
 	// Торможение
 	// Если оба авто движутся и скорость тек авто > расстояния
 	// до впереди идущего то тек скорость = расст
-	if(random::std_random() < DEFAULT_PROB_FWD_ANTICIPATION ||
+	if(random::std_random() < cadef::prob_fwd_anticipation ||
 	(veh->get_cell_velocity() > 0
 	&& front_veh->get_cell_velocity() >= 0
 	/*&& veh->get_cell_velocity() >= distance*/))
@@ -268,9 +271,9 @@ void road::slow_down_vehicle(vehicle_ptr veh, vehicle_ptr front_veh, short dista
 	// Медленный старт
 	else
 	{
-		if(random::std_random()<DEFAULT_PROB_SLOW_TO_START ||
+		if(random::std_random()<cadef::prob_slow_to_start ||
 		(veh->get_cell_velocity() == 0
-		/*&&	distance <= MIN_POSSIBLE_DISTANCE*/))
+		/*&&	distance <= cadef::min_possible_distance*/))
 		{
 			veh->set_cell_velocity(0);
 		}

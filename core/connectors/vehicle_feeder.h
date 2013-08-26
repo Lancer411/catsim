@@ -29,12 +29,6 @@
 #include <boost/algorithm/string/predicate.hpp>
 
 
-enum feeder_trasfer_mode
-{
-	SAVING,
-	DELETING,
-};
-
 typedef boost::container::map<std::string, road_ptr> road_map;
 typedef boost::container::map<std::string, feeder_params_ptr> params_map;
 
