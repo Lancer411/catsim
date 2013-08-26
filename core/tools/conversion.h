@@ -55,7 +55,7 @@ public:
 	};
 
 // проверка координат на выход за границы i и j и их поправка
-	static void check_coord (COORD &coord, int16 i, int16 j)
+	static void check_coord (CA_COORD &coord, int16 i, int16 j)
 	{
 		coord.x = (coord.x >= i) ? i-1:coord.x;
 		coord.y = (coord.y >= j) ? j-1:coord.y;

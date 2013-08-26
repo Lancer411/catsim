@@ -93,21 +93,21 @@ private:
 	void put_vehicle2(vehicle_ptr veh, int16 w, int16 l);
 	void init (int16 linesnum, int16 length, short limit);
 	// свободное место в начале дороги
-	bool has_free_space(short len, short velocity, COORD *coord);
-	bool has_free_space_at_lane(cell** &data, int lane, short len, short velocity, COORD *coord);
+	bool has_free_space(short len, short velocity, CA_COORD *coord);
+	bool has_free_space_at_lane(cell** &data, int lane, short len, short velocity, CA_COORD *coord);
 	// выпустить машины в очереди на дорогу (кол-во машин = кол-во полос)
 	void release_vehicles_source();
 	// переместить машину veh со start на end
 	// start, end - координаты старой и новой позиции носа машины
-	void move_vehicle(vehicle_ptr veh, COORD end);
+	void move_vehicle(vehicle_ptr veh, CA_COORD end);
 	// затормозить машину
-	void slow_down_vehicle(vehicle_ptr veh, vehicle_ptr front_veh, short distance, COORD end);
+	void slow_down_vehicle(vehicle_ptr veh, vehicle_ptr front_veh, short distance, CA_COORD end);
 	// проверка доступности полосы в интервале
 	bool lane_accessible(vehicle_ptr veh, int i, int j);
 	// попытаться пройти перекресток или затормозить
 	void try_crossroad(vehicle_ptr veh, int i, int j);
 	// попытатся сменить полосу
-	bool change_lanes(vehicle_ptr veh, int i, int j, COORD &coord);
+	bool change_lanes(vehicle_ptr veh, int i, int j, CA_COORD &coord);
 	// скопировать дорогу из временной.
 	void copy_roads();
 	// освободить временный массив

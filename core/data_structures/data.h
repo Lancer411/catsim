@@ -48,7 +48,7 @@ typedef struct
 {
 	int x;
 	int y;
-} COORD;
+} CA_COORD;
 
 enum light_signal_state
 {

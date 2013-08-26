@@ -75,6 +75,7 @@ int command_line::parser(int ac, char* av[])
 		if (!ifile)
 		{
 			std::cout << "Can not open input file: " << input_path << "\n";
+			return 1;
 		}
 	}
 
@@ -87,6 +88,9 @@ int command_line::parser(int ac, char* av[])
 		  notify(vm);
 		  if(cadef::init(true))
 		  {
+			  if (cadef::stat_accumulation_time>iterations)
+				  std::cout<<"Error: stat_accumulation_time must be less or equal than number of iterations"
+				  <<std::endl << "Check config file " << config_path << std::endl;
 			  cf.close();
 		  }
 		  cf.close();
@@ -95,9 +99,11 @@ int command_line::parser(int ac, char* av[])
 	  {
 		  cadef::init(false);
 		  std::cout << "Can not open config file: " << config_path << "\n";
+		  return 1;
 	  }
 
 	}
+	return 0;
 
 } catch(std::exception& ex) {
 	std::cout<< "ERROR! "<<ex.what()<<std::endl;

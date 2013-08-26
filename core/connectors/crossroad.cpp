@@ -33,7 +33,7 @@ crossroad::crossroad()
 
 bool crossroad::transfer(std::string from_road_id, road_ptr to_road, vehicle_ptr veh, short passed_distance)
 {
-	COORD coord;
+	CA_COORD coord;
 	int from = get_road_position(from_road_id);
 	int to = get_road_position(to_road->get_id());
 	bool road_able = (get_status(from, to) == ROAD_ABLE);

@@ -35,7 +35,7 @@ bool vehicle_feeder::transfer(std::string from_road_id, road_ptr to_road, vehicl
 	{
 		case SAVING:
 		{
-			COORD coord;
+			CA_COORD coord;
 			bool road_free = to_road->has_free_space(veh->get_length(), veh->get_cell_velocity() - passed_distance + 1, &coord);
 			if(road_free)
 			{

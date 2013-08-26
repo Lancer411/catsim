@@ -13,7 +13,7 @@
 
 const char *TOOL_NAME = "CATSim";
 const char *TOOL_DESCRIPTION = "Cellular Automata Traffic Simulator";
-const char *TOOL_VERSION = "0.1b";
+const char *TOOL_VERSION = "0.1";
 
 enum DATA_PARAMS
 {

@@ -27,7 +27,9 @@ int main(int ac, char* av[])
 
 //	runtests();
 	command_line cl;
-	cl.parser(ac, av);
+	int code = cl.parser(ac, av);
+	if (code == 1)
+		return 0;
 	int iterations = cl.iterations;
 	road_network_data_ptr network_data = road_network_json_reader::read(cl.input_path);
 	road_network_model_ptr network_model(new roadnetwork_model());

@@ -116,7 +116,7 @@ void road::drive(vehicle_ptr veh, int i, int j)
 {
 	// вычислить следующую позицию
 	short veh_length = veh->get_length();
-	COORD start, end;
+	CA_COORD start, end;
 	start.x = i; end.x = i;
 	start.y = j + veh_length; // нос машины + 1
 //	start.y = j + 1; // нос машины + 1
@@ -163,7 +163,7 @@ void road::drive(vehicle_ptr veh, int i, int j)
 
 }
 
-bool road::change_lanes(vehicle_ptr veh, int i, int j, COORD &coord)
+bool road::change_lanes(vehicle_ptr veh, int i, int j, CA_COORD &coord)
 {
 	int16 next_coord_x = i;
 	if(lane_accessible(veh, i+1, j))
@@ -190,7 +190,7 @@ void road::try_crossroad(vehicle_ptr veh, int i, int j)
 //	short velocity_decceleration = veh->get_cell_velocity() - (rl-j-1);
 	if(cr)
 	{
-		COORD coord;
+		CA_COORD coord;
 		road_ptr null_ptr;
 		// выбрать следующую дорогу
 		road_ptr next_road = cr->get_next_road(this->get_id(), DIRECTION_ANY);
@@ -231,7 +231,7 @@ bool road::lane_accessible(vehicle_ptr veh, int i, int j)
 	if(i >= rw || i < 0)
 		return false;
 		// проверить промежуток на соседней полосе, спереди и сзади от тек машины
-	COORD start, end;
+	CA_COORD start, end;
 	start.x = end.x = i;
 	start.y = j - veh->get_length() - velocity_limit;
 	end.y = j + veh->get_cell_velocity();
@@ -240,14 +240,14 @@ bool road::lane_accessible(vehicle_ptr veh, int i, int j)
 	return !road_iterating_tools::vehicle_exists(temp_roaddata, start, end);
 }
 
-void road::move_vehicle(vehicle_ptr veh, COORD end)
+void road::move_vehicle(vehicle_ptr veh, CA_COORD end)
 {
 //	remove_vehicle2(veh, start.x, start.y);
 	put_vehicle2(veh, end.x, end.y);
 //	put_vehicle(veh, end.x, end.y);
 }
 
-void road::slow_down_vehicle(vehicle_ptr veh, vehicle_ptr front_veh, short distance, COORD end)
+void road::slow_down_vehicle(vehicle_ptr veh, vehicle_ptr front_veh, short distance, CA_COORD end)
 {
 	// если торможение не перед машиной
 	if(front_veh==NULL)
@@ -310,7 +310,7 @@ void road::put_vehicle2(vehicle_ptr veh, int16 w, int16 l)
 
 void road::push_vehicle(vehicle_ptr veh)
 {
-	COORD coord;
+	CA_COORD coord;
 	if(has_free_space(veh->get_length(), veh->get_cell_velocity(), &coord))
 	{
 		put_vehicle2(veh, coord.x, coord.y);
@@ -339,7 +339,7 @@ void road::release_vehicles_source()
 	vehicle_ptr veh = vehicles_source.front();
 	for(int i = 0; i < rw; i++)
 	{
-		COORD coord;
+		CA_COORD coord;
 		while(has_free_space_at_lane(roaddata, i, veh->get_length(), veh->get_cell_velocity(), &coord))
 		{
 			put_vehicle2(veh, coord.x, coord.y);
@@ -352,7 +352,7 @@ void road::release_vehicles_source()
 	}
 }
 
-bool road::has_free_space(short len, short velocity, COORD *coord)
+bool road::has_free_space(short len, short velocity, CA_COORD *coord)
 {
 	bool source_empty = vehicles_source.empty();
 	bool has_free_space = false;
@@ -367,7 +367,7 @@ bool road::has_free_space(short len, short velocity, COORD *coord)
 
 
 
-bool road::has_free_space_at_lane(cell** &data, int lane, short len, short velocity, COORD *coord)
+bool road::has_free_space_at_lane(cell** &data, int lane, short len, short velocity, CA_COORD *coord)
 {
 	for(int j = 0; j <= len && j < rl - velocity; j++)
 	{

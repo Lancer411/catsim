@@ -30,8 +30,8 @@ public:
 
 // поиск автомобиля впереди в интервале от start до end.y на полосе start.x
 // найденная машина front_vehicle находится по координате end
-	static bool find_front_vehicle(cell** &cells, COORD start,
-							COORD &end, vehicle_ptr& front_vehicle)
+	static bool find_front_vehicle(cell** &cells, CA_COORD start,
+							CA_COORD &end, vehicle_ptr& front_vehicle)
 	{
 		for (int16 k = start.y; k <= end.y; k++)
 			if(cells[start.x][k].is_occupied())
@@ -49,7 +49,7 @@ public:
 		return false;
 	};
 // есть ли машина впереди в интервале от start.y до end.y (start.y < end.y)
-	static bool vehicle_exists(cell** &cells, COORD start, COORD end)
+	static bool vehicle_exists(cell** &cells, CA_COORD start, CA_COORD end)
 	{
 		for (int16 k = start.y; k <= end.y; k++)
 			if(cells[start.x][k].is_occupied())
