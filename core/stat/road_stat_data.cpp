@@ -102,7 +102,7 @@ void road_stat_data::reset()
 	passage_time.reset();
 	queue.reset();
 
-	stat_accumulation_time = DEFAULT_STAT_ACCUMULATION_TIME;
+	stat_accumulation_time = cadef::stat_accumulation_time;
 	reset_timer();
 }
 

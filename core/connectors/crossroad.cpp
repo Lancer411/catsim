@@ -20,11 +20,12 @@
 
 #include "crossroad.h"
 #include "core/entities/road.h"
+#include "define/cadef.h"
 
 crossroad::crossroad()
 {
-	for (int i = 0; i < ROAD_COUNT; ++i)
-		for (int j = 0; j < ROAD_COUNT; ++j)
+	for (int i = 0; i < cadef::road_count; ++i)
+		for (int j = 0; j < cadef::road_count; ++j)
 			(i != j) ?
 			road_mtx[i][j] = ROAD_NONE :
 			road_mtx[i][j] = ROAD_ABLE;
@@ -111,7 +112,7 @@ road_ptr crossroad::get_next_road(std::string road_id, relative_direction direct
 int crossroad::get_road_position(std::string road_id)
 {
 	road_ptr null_ptr;
-	for (int i = 0; i < ROAD_COUNT; ++i)
+	for (int i = 0; i < cadef::road_count; ++i)
 	{
 		if(roads_direct[i] != null_ptr)
 		if(boost::algorithm::equals(road_id, roads_direct[i]->get_id()))

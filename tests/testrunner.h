@@ -27,7 +27,6 @@
 #include "test_vehicle_behaviour.h"
 #include "test_one_road_simulation.h"
 #include "test_road_infinity.h"
-#include "test_crossroad.h"
 #include "test_vehicle_feeder.h"
 #include "test_poisson_flow.h"
 #include "test_read_network.h"
@@ -48,13 +47,10 @@ void runtests()
 //	vehptrtest.runtest();
 //	test_road_infinity inftest;
 //	inftest.runtest();
-//	test_crossroad crosstest;
-//	crosstest.runtest();
 //	test_vehicle_feeder feedertest;
 //	feedertest.runtest();
 //	test_poisson_flow flowtest;
 //	flowtest.runtest();
-
 	test_read_network nettest;
 	nettest.runtest();
 }

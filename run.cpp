@@ -19,9 +19,40 @@
 */
 
 #include "tests/testrunner.h"
+#include "define/cadef.h"
+#include "command_line.h"
 
 int main(int ac, char* av[])
 {
-	runtests();
+
+//	runtests();
+	command_line cl;
+	cl.parser(ac, av);
+	int iterations = cl.iterations;
+	road_network_data_ptr network_data = road_network_json_reader::read(cl.input_path);
+	road_network_model_ptr network_model(new roadnetwork_model());
+	network_model->build_network(network_data);
+	simulation_model_ptr sim_model(new simulation_model(iterations));
+	statistics_model_ptr stat_model(new statistics_model(cl.output_path));
+
+	stat_model->set_data_accumulation_time(cadef::stat_accumulation_time);
+
+	stat_model->add_data_param(ROAD_DENSITY);
+	stat_model->add_data_param(SPEED);
+	stat_model->add_data_param(FLOW);
+	stat_model->add_data_param(VEHICLES);
+	stat_model->add_data_param(PASSAGE_TIME);
+	stat_model->add_data_param(ROAD_QUEUE);
+
+	stat_model->add_stat_param(MIN);
+	stat_model->add_stat_param(MAX);
+	stat_model->add_stat_param(SUM);
+	stat_model->add_stat_param(MEAN);
+	stat_model->add_stat_param(MEDIAN);
+	stat_model->add_stat_param(DEVIATION);
+	stat_model->add_stat_param(VARIANCE);
+	stat_model->add_stat_param(KURTOSIS);
+
+	sim_model->launch_simulation(network_model, stat_model);
 	return 0;
 }

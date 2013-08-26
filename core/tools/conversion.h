@@ -21,38 +21,37 @@
 #ifndef CONVERSION_H_
 #define CONVERSION_H_
 #include "define/cadef.h"
-
 class conversion
 {
 public:
 	static int16 convert_to_cell_velocity(int16 kmh_velocity)
 	{
-		return std::floor(kmh_velocity/3.6/DEFAULT_CELL_LENGTH);
+		return std::floor(kmh_velocity/3.6/cadef::cell_lenght);
 	};
 
 	static int16 convert_to_kmh_velocity(int16 cell_velocity)
 	{
-		return std::ceil(cell_velocity*3.6*DEFAULT_CELL_LENGTH);
+		return std::ceil(cell_velocity*3.6*cadef::cell_lenght);
 	};
 
 	static short get_car_length()
 	{
-		return std::ceil(5/DEFAULT_CELL_LENGTH);
+		return std::ceil(5/cadef::cell_lenght);
 	};
 
 	static short get_light_truck_length()
 	{
-		return std::ceil(5.5/DEFAULT_CELL_LENGTH);
+		return std::ceil(5.5/cadef::cell_lenght);
 	};
 
 	static short get_truck_length()
 	{
-		return std::ceil(6/DEFAULT_CELL_LENGTH);
+		return std::ceil(6/cadef::cell_lenght);
 	};
 
 	static short get_bus_length()
 	{
-		return std::ceil(11/DEFAULT_CELL_LENGTH);
+		return std::ceil(11/cadef::cell_lenght);
 	};
 
 // проверка координат на выход за границы i и j и их поправка
@@ -101,10 +100,10 @@ public:
 
 	static int fix_position(int position)
 	{
-		if(position > ROAD_COUNT - 1)
-			return position - ROAD_COUNT;
+		if(position > cadef::road_count - 1)
+			return position - cadef::road_count;
 		if(position < 0)
-			return ROAD_COUNT + position;
+			return cadef::road_count + position;
 		return position;
 	};
 

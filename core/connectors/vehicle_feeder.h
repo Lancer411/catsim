@@ -28,11 +28,10 @@
 #include "core/entities/vehicle.h"
 #include <boost/algorithm/string/predicate.hpp>
 
-
-enum feeder_trasfer_mode
+enum feeder_transfer_mode
 {
 	SAVING,
-	DELETING,
+	DELETING
 };
 
 typedef boost::container::map<std::string, road_ptr> road_map;
@@ -49,7 +48,7 @@ class vehicle_feeder : public connector
 	// pointer to existing vehicle factory
 	vehicle_factory_ptr veh_factory;
 	// transfer mode
-	feeder_trasfer_mode transfer_mode;
+	feeder_transfer_mode transfer_mode;
 public:
 	/**
 	 * Constructor of vehicle feeder with vehicle factory as parameter
@@ -84,7 +83,7 @@ public:
 	 * Feeds all the roads with their params
 	 */
 	void feed_roads();
-	void set_transfer_mode(feeder_trasfer_mode mode){this->transfer_mode = mode;};
+	void set_transfer_mode(feeder_transfer_mode mode){this->transfer_mode = mode;};
 	void set_params_to_density(float density);
 private:
 	/**
