@@ -74,17 +74,17 @@ public:
 	{
 		if(!out.is_open())
 			return;
-		print_header("CATSIM INFORMATION");
+		print_header("Информация о программе");
 		out << " " << TOOL_NAME << " - " << TOOL_DESCRIPTION << std::endl;
-		print_value("Version", TOOL_VERSION);
-		print_header("ROAD NETWORK SIMULATION");
-		print_value("Iterations number", iterations);
-		print_value("Initial road density", initial_density);
-		print_value("Final road density", final_density);
-		print_value("Density Step", density_step);
-		print_value_with_postfix("","Data accumulation time", data_accumulation_time, "iterations");
-		print_value("Roads count", network->roads_factory->count());
-		print_header("SIMULATION STEPS");
+		print_value("Версия", TOOL_VERSION);
+		print_header("Моделирование сети дорог");
+		print_value("Количество итераций", iterations);
+		print_value("Начальная плотность", initial_density);
+		print_value("Конечная плотность", final_density);
+		print_value("Шаг плотности", density_step);
+		print_value_with_postfix("","Время накопления данных", data_accumulation_time, "итераций");
+		print_value("Количество дорог", network->roads_factory->count());
+		print_header("Шаги моделирования");
 	};
 
 	void print_simulation_data(float current_density, road_network_model_ptr network)
@@ -100,29 +100,29 @@ public:
 			std::string road_id = it->first;
 			road_stat_data_ptr data = it->second;
 			out << std::endl;
-			print_subheader("Road ID", road_id);
-			print_value("Average road flow", data->get_road_flow());
-			print_value("Current vehicles", data->get_current_vehicles_number());
-			print_value("Passed vehicles", data->get_passed_vehicles_number());
+			print_subheader("ID дороги", road_id);
+			print_value("Среднее значение потока", data->get_road_flow());
+			print_value("Количество авто на дороге", data->get_current_vehicles_number());
+			print_value("Количество авто, проехавших за это время", data->get_passed_vehicles_number());
 			print_table_header();
 			BOOST_FOREACH(boost::container::set<DATA_PARAMS>::value_type param, data_params)
 			{
 				switch(param)
 				{
 					case ROAD_DENSITY:
-						print_data(" Road density", data->get_density());
+						print_data(" Плотность", data->get_density());
 						break;
 					case SPEED:
-						print_data(" Speed", data->get_total_speed());
+						print_data(" Скорость", data->get_total_speed());
 						break;
 					case PASSAGE_TIME:
 						print_data(" Passage time", data->get_passage_time());
 						break;
 					case VEHICLES:
-						print_data(" Passed vehicles", data->get_passed_vehicles());
+						print_data(" Количество проехавших авто", data->get_passed_vehicles());
 						break;
 					case ROAD_QUEUE:
-						print_data(" Road queue", data->get_queue());
+						print_data(" Длина очереди", data->get_queue());
 						break;
 					default:
 						break;
@@ -249,19 +249,19 @@ private:
 			switch(param)
 			{
 				case MIN:
-					out << std::setw(tabwidth) << "MIN" << sym;
+					out << std::setw(tabwidth) << "МИН" << sym;
 					break;
 				case MAX:
-					out << std::setw(tabwidth) << "MAX" << sym;
+					out << std::setw(tabwidth) << "МАКС" << sym;
 					break;
 				case SUM:
 					out << std::setw(tabwidth) << "SUM" << sym;
 					break;
 				case MEAN:
-					out << std::setw(tabwidth) << "MEAN" << sym;
+					out << std::setw(tabwidth) << "СРЕДНЕЕ" << sym;
 					break;
 				case MEDIAN:
-					out << std::setw(tabwidth) << "MEDIAN" << sym;
+					out << std::setw(tabwidth) << "МЕДИАНА" << sym;
 					break;
 				case KURTOSIS:
 					out << std::setw(tabwidth) << "KURTOSIS" << sym;
