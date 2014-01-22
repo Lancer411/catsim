@@ -19,14 +19,14 @@ public:
 	~test_poisson_flow(){};
 	void runtest()
 	{
-		int iteration_num = 10000;
+		int iteration_num = 1000;
 		int road_length = 100;
-		int lane_num = 1;
+		int lane_num = 3;
 		float density = 0.5;
 		road_factory roadf;
 		vehicle_factory_ptr vehf_p(new vehicle_factory());
 		road_ptr road = roadf.create_road(lane_num, road_length);
-		roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(iteration_num/2);
+		roadf.get_road_statistics(road->get_id())->set_stat_accumulation_time(182000);
 		vehicle_feeder_ptr feeder_p(new vehicle_feeder(vehf_p));
 
 		feeder_params_ptr params (new feeder_params(density, 20, 60, 1, 0));
@@ -47,10 +47,10 @@ public:
 
 		while(k < iteration_num)
 		{
-//			std::cout<<"iter "<<k<<std::endl;
+			std::cout<<"iter "<<k<<std::endl;
 			k++;
 			feeder_p->feed_roads();
-//			std::cout<<road;
+			std::cout<<road;
 			roadf.iterate();
 		}
 
@@ -67,16 +67,16 @@ public:
 		std::cout<<"Average Passage Time: "<<stat->get_avg_road_passage_time()<<std::endl;
 
 		time_density_histogram hist = stat->get_time_density_histogram();
-
+		road->coutVehSpeed();
 		double total = 0.0;
-
-		for( int i = 0; i < hist.size(); i++ )
+		/*for( int i = 0; i < hist.size(); i++ )
 		{
 			std::cout << "Bin lower bound: " << hist[i].first << ", Value: " << hist[i].second << std::endl;
 			total += hist[i].second;
-		}
+		}*/
+		
 
-		std::cout << "Total: " << total << std::endl;
+		//std::cout << "Total: " << total << std::endl;
 	};
 };
 
