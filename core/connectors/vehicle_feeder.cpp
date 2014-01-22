@@ -195,7 +195,8 @@ void vehicle_feeder::feed_road_by_distribution(road_ptr road, feeder_params_ptr 
 				next_timer = random::next_int_poisson();
 				break;
 			case TRIANGLE:
-				next_timer = random::next_int_triangle();
+				//next_timer = random::next_int_triangle();
+				next_timer = 6;
 				break;
 			default:
 				break;
